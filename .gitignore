@@ -1,0 +1,31 @@
+# Archivos de configuración locales
+local.properties
+
+# Archivos de caché y compilación de Gradle
+.gradle/
+/build/
+*/build/
+
+# Archivos generados por el IDE (Android Studio)
+.idea/
+*.iml
+*.iws
+*.ipr
+/captures/
+.externalNativeBuild/
+.cxx/
+
+# Archivos de Mac OS
+.DS_Store
+*.swp
+
+# Archivos de Log y sistema operativo
+*.log
+Thumbs.db
+
+# SEGURIDAD: Credenciales, claves API y firmas
+*.jks
+*.keystore
+secrets.properties
+apikeys.properties
+google-services.json
