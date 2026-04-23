@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>UNIGO Transit Database — Diagrama ER</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        h1 { color: #1a1a2e; margin-bottom: 4px; }
+        h2 { color: #666; font-weight: 400; margin-top: 0; }
+        .mermaid { max-width: 100%; }
+        .instructions {
+            background: #f0f4ff;
+            border: 1px solid #c0d0f0;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>UNIGO Transit Database</h1>
+    <h2>Room / SQLite — Routing multimodal (Bus + Bici + Campus)</h2>
+    <div class="mermaid">
+erDiagram
+    agencies ||--o{ routes : "tiene"
+    routes ||--o{ trips : "tiene"
+    trips }o--|| calendar : "opera en"
+    calendar ||--o{ calendar_dates : "excepciones"
+    trips ||--o{ stop_times : "compuesto de"
+    stops ||--o{ stop_times : "servido por"
+    stops ||--o{ transfers : "desde"
+    stops ||--o{ transfers : "hacia"
+
+    agencies {
+        String agency_id PK
+        String agency_name
+        String agency_type
+    }
+
+    routes {
+        String route_id PK
+        String agency_id FK
+        String route_short_name
+        String route_long_name
+        int route_type
+        String route_color
+        String route_text_color
+    }
+
+    trips {
+        String trip_id PK
+        String route_id FK
+        String service_id FK
+        String trip_headsign
+        int direction_id
+        String shape_id
+        int wheelchair_accessible
+    }
+
+    calendar {
+        String service_id PK
+        int monday
+        int tuesday
+        int wednesday
+        int thursday
+        int friday
+        int saturday
+        int sunday
+        String start_date
+        String end_date
+    }
+
+    calendar_dates {
+        long id PK
+        String service_id FK
+        String date
+        int exception_type
+    }
+
+    stops {
+        String stop_id PK
+        String stop_code
+        String stop_name
+        double stop_lat
+        double stop_lon
+        int location_type
+        String parent_station
+        String node_type
+    }
+
+    stop_times {
+        long id PK
+        String trip_id FK
+        String arrival_time
+        String departure_time
+        String stop_id FK
+        int stop_sequence
+        int pickup_type
+        int drop_off_type
+    }
+
+    shapes {
+        long id PK
+        String shape_id
+        double shape_pt_lat
+        double shape_pt_lon
+        int shape_pt_sequence
+        double shape_dist_traveled
+    }
+
+    transfers {
+        long id PK
+        String from_stop_id FK
+        String to_stop_id FK
+        int transfer_type
+        int min_transfer_time
+        double distance_meters
+    }
+    </div>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'default',
+            er: { 
+                useMaxWidth: false,
+                fontSize: 12
+            }
+        });
+    </script>
+</body>
+</html>

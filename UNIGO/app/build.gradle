@@ -53,4 +53,8 @@ dependencies {
     // Google Maps y Localización (Para renderizar el mapa y obtener el GPS del usuario)
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
+
+    // Room (Base de datos local para GTFS, estaciones bici y centros universitarios)
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
 }
