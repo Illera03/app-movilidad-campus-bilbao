@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">UniGo</string>
+    <string name="welcome_title">ONGI ETORRI UniGo-RA!</string>
+    <string name="welcome_subtitle">Unibertsitateen arteko mugikortasuna errazten dizun Eusko Jaurlaritzaren aplikazioa.</string>
+    <string name="prompt_destino">Hautatu helmugako campusa...</string>
+    <string name="label_idioma">Hizkuntza:</string>
+    <string name="btn_confirmar">Ibilbidea berretsi</string>
+    <string name="tiempo_estimado">(Aurreikusitako denbora)</string>
+
+    <string name="transport_walk">🚶 Oinez</string>
+    <string name="transport_bus">🚌 Autobusa</string>
+    <string name="transport_bike">🚲 Bizikleta</string>
+
+    <string name="campus_ing_bilbao">Bilboko Ingeniaritza Eskola</string>
+    <string name="campus_ing_nautica">Bilboko Ingeniaritza Eskola (Nautika)</string>
+    <string name="campus_bellas_artes">Arte Ederren Fakultatea</string>
+    <string name="campus_ciencia_tecnologia">Zientzia eta Teknologia Fakultatea</string>
+    <string name="campus_sociales_comunicacion">Gizarte eta Komunikazio Zientzien Fakultatea</string>
+    <string name="campus_derecho">Zuzenbide Fakultatea</string>
+    <string name="campus_economia_empresa">Ekonomia eta Enpresa Fakultatea</string>
+    <string name="campus_economia_elkano">Ekonomia eta Enpresa Fakultatea (Elkano Atala)</string>
+    <string name="campus_educacion">Bilboko Hezkuntza Fakultatea</string>
+    <string name="campus_medicina">Medikuntza eta Erizaintza Fakultatea</string>
+    <string name="campus_ud_galdakao">Medikuntza eta Erizaintza Fakultateko Irakaskuntza Unitatea (Galdakao)</string>
+    <string name="campus_ud_basurto">Medikuntza eta Erizaintza Fakultateko Irakaskuntza Unitatea (Basurto)</string>
+    <string name="campus_ud_cruces">Medikuntza eta Erizaintza Fakultateko Irakaskuntza Unitatea (Gurutzetako)</string>
+    <string name="campus_aulas_experiencia">Esperientziaren Gelak</string>
+    <string name="campus_bbf_empresariales">BBF: Enpresagintza Fakultatea</string>
+    <string name="campus_bbf_leinn">BBF: LEINN</string>
+    <string name="campus_asfabrik_politecnica">AS Fabrik: Goi Eskola Politeknikoa</string>
+    <string name="campus_asfabrik_humanidades">AS Fabrik: Humanitate eta Hezkuntza Zientzien Fakultatea</string>
+    <string name="campus_deusto">Deustuko Unibertsitatea</string>
+
+    <string name="lang_es">Gaztelania</string>
+    <string name="lang_eu">Euskara</string>
+    <string name="lang_en">Ingelesa</string>
+</resources>

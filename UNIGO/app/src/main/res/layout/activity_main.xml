@@ -2,18 +2,151 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="#2A9D8F"
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/tv_welcome_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="40dp"
+        android:text="@string/welcome_title"
+        android:textColor="#FFFFFF"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_welcome_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/welcome_subtitle"
+        android:textColor="#E0F7FA"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_welcome_title" />
+
+    <Spinner
+        android:id="@+id/spinner_destination"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginHorizontal="16dp"
+        android:background="@drawable/bg_spinner_suave"
+        android:popupBackground="@drawable/bg_popup_redondeado"
+        android:dropDownVerticalOffset="55dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_welcome_subtitle" />
+
+    <LinearLayout
+        android:id="@+id/layout_transport_options"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginHorizontal="16dp"
+        android:alpha="0.5"
+        android:background="@drawable/bg_transport_container"
+        android:orientation="vertical"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_destination">
+
+        <RadioGroup
+            android:id="@+id/rg_transport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/rb_walk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/transport_walk"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:buttonTint="#FFFFFF"
+                android:enabled="false"/>
+
+            <RadioButton
+                android:id="@+id/rb_bus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/transport_bus"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:buttonTint="#FFFFFF"
+                android:enabled="false"/>
+
+            <RadioButton
+                android:id="@+id/rb_bike"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/transport_bike"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:buttonTint="#FFFFFF"
+                android:enabled="false"/>
+        </RadioGroup>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_confirmar_ruta"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/bg_btn_confirmar_oscuro"
+        app:backgroundTint="@null"
+        android:text="@string/btn_confirmar"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        android:elevation="8dp"
+        android:stateListAnimator="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_transport_options" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tv_label_idioma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_idioma"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginEnd="8dp"/>
+
+        <Spinner
+            android:id="@+id/spinner_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_spinner_suave"
+            android:popupBackground="@drawable/bg_popup_redondeado" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

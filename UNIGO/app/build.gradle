@@ -48,7 +48,7 @@ dependencies {
 
     // Retrofit y Gson (Para conectarse a Open Data Euskadi y leer los JSON)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation('com.google.code.gson:gson:2.10.1')
 
     // Google Maps y Localización (Para renderizar el mapa y obtener el GPS del usuario)
     implementation("com.google.android.gms:play-services-maps:18.2.0")

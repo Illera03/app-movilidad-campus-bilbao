@@ -1,3 +1,37 @@
 <resources>
-    <string name="app_name">UNIGO</string>
+    <string name="app_name">UniGo</string>
+    <string name="welcome_title">¡Bienvenido a UniGo!</string>
+    <string name="welcome_subtitle">La aplicación del Gobierno Vasco que facilita tu movilidad entre campus universitarios.</string>
+    <string name="prompt_destino">Selecciona campus de destino...</string>
+    <string name="label_idioma">Idioma:</string>
+    <string name="btn_confirmar">Confirmar ruta</string>
+    <string name="tiempo_estimado">(Tiempo estimado)</string>
+
+    <string name="transport_walk">🚶 Andando</string>
+    <string name="transport_bus">🚌 Autobús</string>
+    <string name="transport_bike">🚲 Bicicleta</string>
+
+    <string name="campus_ing_bilbao">Escuela de Ingeniería de Bilbao</string>
+    <string name="campus_ing_nautica">Escuela de Ingeniería de Bilbao (Náutica)</string>
+    <string name="campus_bellas_artes">Facultad de Bellas Artes</string>
+    <string name="campus_ciencia_tecnologia">Facultad de Ciencia y Tecnología</string>
+    <string name="campus_sociales_comunicacion">Facultad de Ciencias Sociales y Comunicación</string>
+    <string name="campus_derecho">Facultad de Derecho</string>
+    <string name="campus_economia_empresa">Facultad de Economía y Empresa</string>
+    <string name="campus_economia_elkano">Facultad de Economía y Empresa (Sección Elkano)</string>
+    <string name="campus_educacion">Facultad de Educación de Bilbao</string>
+    <string name="campus_medicina">Facultad de Medicina y Enfermería</string>
+    <string name="campus_ud_galdakao">Unidad Docente de Medicina y Enfermería (Galdakao)</string>
+    <string name="campus_ud_basurto">Unidad Docente de Medicina y Enfermería (Basurto)</string>
+    <string name="campus_ud_cruces">Unidad Docente de Medicina y Enfermería (Cruces)</string>
+    <string name="campus_aulas_experiencia">Aulas de la Experiencia</string>
+    <string name="campus_bbf_empresariales">BBF: Facultad de Empresariales</string>
+    <string name="campus_bbf_leinn">BBF: LEINN</string>
+    <string name="campus_asfabrik_politecnica">AS Fabrik: Escuela Politécnica Superior</string>
+    <string name="campus_asfabrik_humanidades">AS Fabrik: Facultad de Humanidades y Ciencias de la Educación</string>
+    <string name="campus_deusto">Universidad de Deusto</string>
+
+    <string name="lang_es">Castellano</string>
+    <string name="lang_eu">Euskera</string>
+    <string name="lang_en">Inglés</string>
 </resources>

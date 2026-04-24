@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">UniGo</string>
+    <string name="welcome_title">WELCOME TO UniGo!</string>
+    <string name="welcome_subtitle">The Basque Government app that facilitates mobility between university campuses.</string>
+    <string name="prompt_destino">Select destination campus...</string>
+    <string name="label_idioma">Language:</string>
+    <string name="btn_confirmar">Confirm route</string>
+    <string name="tiempo_estimado">(Estimated time)</string>
+
+    <string name="transport_walk">🚶 Walking</string>
+    <string name="transport_bus">🚌 Bus</string>
+    <string name="transport_bike">🚲 Bicycle</string>
+
+    <string name="campus_ing_bilbao">Bilbao School of Engineering</string>
+    <string name="campus_ing_nautica">Bilbao School of Engineering (Nautical)</string>
+    <string name="campus_bellas_artes">Faculty of Fine Arts</string>
+    <string name="campus_ciencia_tecnologia">Faculty of Science and Technology</string>
+    <string name="campus_sociales_comunicacion">Faculty of Social Sciences and Communication</string>
+    <string name="campus_derecho">Faculty of Law</string>
+    <string name="campus_economia_empresa">Faculty of Economics and Business</string>
+    <string name="campus_economia_elkano">Faculty of Economics and Business (Elkano Section)</string>
+    <string name="campus_educacion">Faculty of Education of Bilbao</string>
+    <string name="campus_medicina">Faculty of Medicine and Nursing</string>
+    <string name="campus_ud_galdakao">Teaching Unit of Medicine and Nursing (Galdakao)</string>
+    <string name="campus_ud_basurto">Teaching Unit of Medicine and Nursing (Basurto)</string>
+    <string name="campus_ud_cruces">Teaching Unit of Medicine and Nursing (Cruces)</string>
+    <string name="campus_aulas_experiencia">Classrooms of Experience</string>
+    <string name="campus_bbf_empresariales">BBF: Faculty of Business</string>
+    <string name="campus_bbf_leinn">BBF: LEINN</string>
+    <string name="campus_asfabrik_politecnica">AS Fabrik: Higher Polytechnic School</string>
+    <string name="campus_asfabrik_humanidades">AS Fabrik: Faculty of Humanities and Education Sciences</string>
+    <string name="campus_deusto">University of Deusto</string>
+
+    <string name="lang_es">Spanish</string>
+    <string name="lang_eu">Basque</string>
+    <string name="lang_en">English</string>
+</resources>

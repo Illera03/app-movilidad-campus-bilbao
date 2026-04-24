@@ -1,0 +1,29 @@
+<resources>
+    <string-array name="campus_array">
+        <item>@string/prompt_destino</item> <item>@string/campus_ing_bilbao</item>
+        <item>@string/campus_ing_nautica</item>
+        <item>@string/campus_bellas_artes</item>
+        <item>@string/campus_ciencia_tecnologia</item>
+        <item>@string/campus_sociales_comunicacion</item>
+        <item>@string/campus_derecho</item>
+        <item>@string/campus_economia_empresa</item>
+        <item>@string/campus_economia_elkano</item>
+        <item>@string/campus_educacion</item>
+        <item>@string/campus_medicina</item>
+        <item>@string/campus_ud_galdakao</item>
+        <item>@string/campus_ud_basurto</item>
+        <item>@string/campus_ud_cruces</item>
+        <item>@string/campus_aulas_experiencia</item>
+        <item>@string/campus_bbf_empresariales</item>
+        <item>@string/campus_bbf_leinn</item>
+        <item>@string/campus_asfabrik_politecnica</item>
+        <item>@string/campus_asfabrik_humanidades</item>
+        <item>@string/campus_deusto</item>
+    </string-array>
+
+    <string-array name="languages_array">
+        <item>@string/lang_es</item>
+        <item>@string/lang_eu</item>
+        <item>@string/lang_en</item>
+    </string-array>
+</resources>
