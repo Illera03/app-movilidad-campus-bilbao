@@ -1,0 +1,143 @@
+{
+  "destinos_universitarios": {
+    "EHU": [
+      {
+        "nombre": "Escuela de Ingeniería de Bilbao (Edif I)",
+        "codigo": "345",
+        "ubicacion": "San Mamés",
+        "latitud": 43.262237,
+        "longitud": -2.948331
+      },
+      {
+        "nombre": "Escuela de Ingeniería de Bilbao (Náutica)",
+        "codigo": "350",
+        "ubicacion": "Portugalete",
+        "latitud": 43.326522,
+        "longitud": -3.023296
+      },
+      {
+        "nombre": "Escuela de Ingeniería de Bilbao (Edif II) I",
+        "codigo": "363",
+        "ubicacion": "San Mamés",
+        "latitud": 43.263717,
+        "longitud": -2.951048
+      },
+      {
+        "nombre": "Escuela de Ingeniería de Bilbao (Edif II) M",
+        "codigo": "364",
+        "ubicacion": "San Mamés",
+        "latitud": 43.263399,
+        "longitud": -2.950305
+      },
+      {
+        "nombre": "Facultad de Bellas Artes",
+        "codigo": "320",
+        "ubicacion": "Leioa",
+        "latitud": 43.331161,
+        "longitud": -2.973035
+      },
+      {
+        "nombre": "Facultad de Ciencia y Tecnología",
+        "codigo": "310",
+        "ubicacion": "Leioa",
+        "latitud": 43.330762,
+        "longitud": -2.970121
+      },
+      {
+        "nombre": "Facultad de Ciencias Sociales y Comunicación",
+        "codigo": "323",
+        "ubicacion": "Leioa",
+        "latitud": 43.331583,
+        "longitud": -2.967318
+      },
+      {
+        "nombre": "Facultad de Derecho. Sección Bizkaia",
+        "codigo": "324",
+        "ubicacion": "Leioa",
+        "latitud": 43.331162,
+        "longitud": -2.965637
+      },
+      {
+        "nombre": "Facultad de Economía y Empresa (Sarriko)",
+        "codigo": "321",
+        "ubicacion": "Bilbao",
+        "latitud": 43.273484,
+        "longitud": -2.95865
+      },
+      {
+        "nombre": "Facultad de Economía y Empresa (Elkano)",
+        "codigo": "351",
+        "ubicacion": "Bilbao",
+        "latitud": 43.260078,
+        "longitud": -2.933198
+      },
+      {
+        "nombre": "Facultad de Educación de Bilbao",
+        "codigo": "354",
+        "ubicacion": "Leioa",
+        "latitud": 43.333413,
+        "longitud": -2.973041
+      },
+      {
+        "nombre": "Facultad de Medicina y Enfermería",
+        "codigo": "327",
+        "ubicacion": "Leioa",
+        "latitud": 43.329296,
+        "longitud": -2.965941
+      },
+      {
+        "nombre": "U.D. Facultad de Medicina - Galdakao",
+        "codigo": "332",
+        "ubicacion": "Galdakao",
+        "latitud": 43.223607168350135,
+        "longitud": -2.817969615339516
+      },
+      {
+        "nombre": "U.D. Facultad de Medicina - Basurto",
+        "codigo": "328",
+        "ubicacion": "Bilbao",
+        "latitud": 43.260955,
+        "longitud": -2.951285
+      },
+      {
+        "nombre": "U.D. Facultad de Medicina - Cruces",
+        "codigo": "329",
+        "ubicacion": "Barakaldo",
+        "latitud": 43.282732833614396,
+        "longitud": -2.9844059865046377
+      },
+      {
+        "nombre": "Aulas de la Experiencia",
+        "codigo": "1",
+        "ubicacion": "Casco Viejo",
+        "latitud": 43.257773,
+        "longitud": -2.923142
+      }
+    ],
+    "Mondragon": [
+      {
+        "nombre": "BBF: Facultad de Empresariales / LEINN",
+        "codigo": "2",
+        "ubicacion": "Uribitarte, 6",
+        "latitud": 43.264603644733285,
+        "longitud": -2.9270118832982077
+      },
+      {
+        "nombre": "As Fabrik: Politécnica / Humanidades / Ciencias de la Educación",
+        "codigo": "3",
+        "ubicacion": "Zorrotzaurre",
+        "latitud": 43.271878,
+        "longitud": -2.964181
+      }
+    ],
+    "Deusto": [
+      {
+        "nombre": "Universidad de Deusto",
+        "codigo": "4",
+        "ubicacion": "Deusto",
+        "latitud": 43.27151128516288,
+        "longitud": -2.9397604467153404
+      }
+    ]
+  }
+}
