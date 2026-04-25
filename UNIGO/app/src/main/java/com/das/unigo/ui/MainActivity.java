@@ -1,4 +1,4 @@
-package com.das.unigo;
+package com.das.unigo.ui;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
+import com.das.unigo.R;
 import com.das.unigo.data.TransitDatabase;
 import com.das.unigo.data.entity.StopEntity;
 
