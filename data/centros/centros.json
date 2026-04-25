@@ -86,11 +86,11 @@
         "longitud": -2.965941
       },
       {
-        "nombre": "U.D. Facultad de Medicina - Galdakao??",
+        "nombre": "U.D. Facultad de Medicina - Galdakao",
         "codigo": "332",
         "ubicacion": "Galdakao",
-        "latitud": 43.223443,
-        "longitud": -2.818019
+        "latitud": 43.223607168350135,
+        "longitud": -2.817969615339516
       },
       {
         "nombre": "U.D. Facultad de Medicina - Basurto",
@@ -100,15 +100,15 @@
         "longitud": -2.951285
       },
       {
-        "nombre": "U.D. Facultad de Medicina - Cruces??",
+        "nombre": "U.D. Facultad de Medicina - Cruces",
         "codigo": "329",
         "ubicacion": "Barakaldo",
-        "latitud": 43.282549,
-        "longitud": -2.984399
+        "latitud": 43.282732833614396,
+        "longitud": -2.9844059865046377
       },
       {
         "nombre": "Aulas de la Experiencia",
-        "codigo": null,
+        "codigo": "1",
         "ubicacion": "Casco Viejo",
         "latitud": 43.257773,
         "longitud": -2.923142
@@ -117,12 +117,14 @@
     "Mondragon": [
       {
         "nombre": "BBF: Facultad de Empresariales / LEINN",
+        "codigo": "2",
         "ubicacion": "Uribitarte, 6",
         "latitud": 43.264603644733285,
         "longitud": -2.9270118832982077
       },
       {
         "nombre": "As Fabrik: Politécnica / Humanidades / Ciencias de la Educación",
+        "codigo": "3",
         "ubicacion": "Zorrotzaurre",
         "latitud": 43.271878,
         "longitud": -2.964181
@@ -131,6 +133,7 @@
     "Deusto": [
       {
         "nombre": "Universidad de Deusto",
+        "codigo": "4",
         "ubicacion": "Deusto",
         "latitud": 43.27151128516288,
         "longitud": -2.9397604467153404

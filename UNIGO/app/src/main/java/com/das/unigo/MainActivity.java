@@ -15,6 +15,12 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+
+import com.das.unigo.data.TransitDatabase;
+import com.das.unigo.data.entity.StopEntity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,10 +49,32 @@ public class MainActivity extends AppCompatActivity {
         rbBike = findViewById(R.id.rb_bike);
         btnConfirmar = findViewById(R.id.btn_confirmar_ruta);
 
-        ArrayAdapter<CharSequence> adapterDest = ArrayAdapter.createFromResource(this,
-                R.array.campus_array, android.R.layout.simple_spinner_item);
-        adapterDest.setDropDownViewResource(R.layout.item_spinner_dropdown);
-        spinnerDest.setAdapter(adapterDest);
+        Executors.newSingleThreadExecutor().execute(() -> {
+            TransitDatabase db = TransitDatabase.getInstance(MainActivity.this);
+            List<StopEntity> stops = db.transitDao().getCampusStops();
+            
+            List<String> destinationNames = new ArrayList<>();
+            destinationNames.add(getString(R.string.prompt_destino));
+            
+            for (StopEntity stop : stops) {
+                String resourceName = "campus_" + stop.stopCode;
+                int resId = getResources().getIdentifier(resourceName, "string", getPackageName());
+                
+                if (resId != 0) {
+                    destinationNames.add(getString(resId));
+                } else {
+                    // Fallback to database value if resource not found
+                    destinationNames.add(stop.stopName);
+                }
+            }
+            
+            runOnUiThread(() -> {
+                ArrayAdapter<String> adapterDest = new ArrayAdapter<>(MainActivity.this,
+                        android.R.layout.simple_spinner_item, destinationNames);
+                adapterDest.setDropDownViewResource(R.layout.item_spinner_dropdown);
+                spinnerDest.setAdapter(adapterDest);
+            });
+        });
 
         ArrayAdapter<CharSequence> adapterLang = ArrayAdapter.createFromResource(this,
                 R.array.languages_array, android.R.layout.simple_spinner_item);

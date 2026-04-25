@@ -51,7 +51,9 @@ public abstract class TransitDatabase extends RoomDatabase {
                             context.getApplicationContext(),
                             TransitDatabase.class,
                             "unigo_transit.db"
-                    ).build();
+                    )
+                    .createFromAsset("databases/unigo_transit.db")
+                    .build();
                 }
             }
         }

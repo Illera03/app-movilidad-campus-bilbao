@@ -29,3 +29,5 @@ Thumbs.db
 secrets.properties
 apikeys.properties
 google-services.json
+.vscode/settings.json
+/UNIGO/app/src/main/assets/databases
