@@ -2,6 +2,12 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+def secretsFile = rootProject.file("secrets.properties")
+def secrets = new Properties()
+if (secretsFile.exists()) {
+    secrets.load(new FileInputStream(secretsFile))
+}
+
 android {
     namespace 'com.das.unigo'
     compileSdk {
@@ -18,6 +24,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [ MAPS_API_KEY: secrets.getProperty("MAPS_API_KEY", "CLAVE_NO_ENCONTRADA") ]
     }
 
     buildTypes {

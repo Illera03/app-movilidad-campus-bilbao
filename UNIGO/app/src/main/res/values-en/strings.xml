@@ -34,4 +34,6 @@
     <string name="lang_es">Spanish</string>
     <string name="lang_eu">Basque</string>
     <string name="lang_en">English</string>
+
+    <string name="calculating">Calculating...</string>
 </resources>

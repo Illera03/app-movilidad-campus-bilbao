@@ -34,4 +34,6 @@
     <string name="lang_es">Gaztelania</string>
     <string name="lang_eu">Euskara</string>
     <string name="lang_en">Ingelesa</string>
+
+    <string name="calculating">Kalkulatzen...</string>
 </resources>

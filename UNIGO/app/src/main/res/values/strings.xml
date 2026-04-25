@@ -7,7 +7,7 @@
     <string name="btn_confirmar">Confirmar ruta</string>
     <string name="tiempo_estimado">(Tiempo estimado)</string>
 
-    <string name="transport_walk">🚶 Andando</string>
+    <string name="transport_walk">🚶 A pie</string>
     <string name="transport_bus">🚌 Autobús</string>
     <string name="transport_bike">🚲 Bicicleta</string>
 
@@ -34,4 +34,6 @@
     <string name="lang_es">Castellano</string>
     <string name="lang_eu">Euskera</string>
     <string name="lang_en">Inglés</string>
+
+    <string name="calculating">Calculando...</string>
 </resources>
