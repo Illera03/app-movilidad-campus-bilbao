@@ -39,4 +39,16 @@
 
     <string name="error_ubicacion">Ezin izan da uneko kokapena lortu</string>
     <string name="error_selecciona_transporte">Hautatu garraio-modu bat</string>
+
+    <!-- Map info bar -->
+    <string name="weather_label">Eguraldia: %1$s °C</string>
+    <string name="weather_loading">Eguraldia: …</string>
+    <string name="pollution_label">Kutsadura: %1$s</string>
+    <string name="pollution_loading">Kutsadura: …</string>
+    <string name="air_quality_good">Ona</string>
+    <string name="air_quality_moderate">Ertaina</string>
+    <string name="air_quality_unhealthy_sensitive">Txarra (sentikorrak)</string>
+    <string name="air_quality_unhealthy">Txarra</string>
+    <string name="air_quality_very_unhealthy">Oso txarra</string>
+    <string name="air_quality_hazardous">Arriskutsua</string>
 </resources>
