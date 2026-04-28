@@ -16,6 +16,8 @@ import com.das.unigo.R;
 import com.das.unigo.data.api.DirectionsApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -82,23 +84,35 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
             if (location != null) {
-                LatLng origen = new LatLng(location.getLatitude(), location.getLongitude());
-                LatLng destino = new LatLng(destLat, destLng);
-
-                // Añadir marcador en el destino
-                mMap.addMarker(new MarkerOptions()
-                        .position(destino)
-                        .title(destNombre)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-
-                // Llamada a tu API Client
-                llamarAPIDirections(origen, destino);
-
+                configurarMapaYRuta(location.getLatitude(), location.getLongitude());
             } else {
-                Toast.makeText(this, "Activando GPS, reintentando...", Toast.LENGTH_SHORT).show();
-                // Opcional: Podrías usar un LocationRequest si getLastLocation devuelve null
+                // Fallback: solicitar ubicación actual al GPS
+                CancellationTokenSource cts = new CancellationTokenSource();
+                fusedLocationClient.getCurrentLocation(
+                        Priority.PRIORITY_HIGH_ACCURACY, cts.getToken()
+                ).addOnSuccessListener(loc -> {
+                    if (loc != null) {
+                        configurarMapaYRuta(loc.getLatitude(), loc.getLongitude());
+                    } else {
+                        Toast.makeText(this, getString(R.string.error_ubicacion), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
+    }
+
+    private void configurarMapaYRuta(double lat, double lng) {
+        LatLng origen = new LatLng(lat, lng);
+        LatLng destino = new LatLng(destLat, destLng);
+
+        // Añadir marcador en el destino
+        mMap.addMarker(new MarkerOptions()
+                .position(destino)
+                .title(destNombre)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+        // Llamada al API Client
+        llamarAPIDirections(origen, destino);
     }
 
     private void llamarAPIDirections(LatLng origen, LatLng destino) {

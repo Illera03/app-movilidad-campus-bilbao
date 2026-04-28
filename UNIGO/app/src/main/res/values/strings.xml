@@ -36,4 +36,7 @@
     <string name="lang_en">Inglés</string>
 
     <string name="calculating">Calculando...</string>
+
+    <string name="error_ubicacion">No se pudo obtener la ubicación actual</string>
+    <string name="error_selecciona_transporte">Selecciona un medio de transporte</string>
 </resources>

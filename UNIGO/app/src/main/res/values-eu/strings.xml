@@ -36,4 +36,7 @@
     <string name="lang_en">Ingelesa</string>
 
     <string name="calculating">Kalkulatzen...</string>
+
+    <string name="error_ubicacion">Ezin izan da uneko kokapena lortu</string>
+    <string name="error_selecciona_transporte">Hautatu garraio-modu bat</string>
 </resources>

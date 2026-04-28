@@ -35,7 +35,9 @@ import com.das.unigo.data.api.DirectionsApiClient;
 import com.das.unigo.data.entity.StopEntity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.CancellationTokenSource;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
 
+    // Cliente reutilizable para la API de Directions (evita crear threads innecesarios)
+    private DirectionsApiClient apiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        apiClient = new DirectionsApiClient();
 
         spinnerDest = findViewById(R.id.spinner_destination);
         spinnerLang = findViewById(R.id.spinner_language);
@@ -184,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
         // Acción al confirmar ruta
         btnConfirmar.setOnClickListener(v -> {
             if (radioSeleccionadoId == -1) {
-                Toast.makeText(this, "Selecciona un medio de transporte", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.error_selecciona_transporte), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -214,33 +220,43 @@ public class MainActivity extends AppCompatActivity {
 
         fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
             if (location != null) {
-                double latOrigen = location.getLatitude();
-                double lngOrigen = location.getLongitude();
-
-                try {
-                    ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
-                    String apiKey = appInfo.metaData.getString("com.google.android.geo.API_KEY");
-                    DirectionsApiClient apiClient = new DirectionsApiClient();
-
-                    // Andando (Única llamada a la API en esta pantalla)
-                    apiClient.getRoute(latOrigen, lngOrigen, destino.stopLat, destino.stopLon, "walking", apiKey, new DirectionsApiClient.RouteCallback() {
-                        @Override
-                        public void onSuccess(List<LatLng> routeDecoded, String duration) {
-                            rbWalk.setText(getString(R.string.transport_walk) + " (" + duration + ")");
-                        }
-                        @Override
-                        public void onError(String errorMessage) {
-                            rbWalk.setText(getString(R.string.transport_walk) + " (-)");
-                        }
-                    });
-
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
+                lanzarCalculoRuta(location.getLatitude(), location.getLongitude(), destino);
             } else {
-                Toast.makeText(this, "No se pudo obtener la ubicación actual", Toast.LENGTH_SHORT).show();
+                // Fallback: solicitar ubicación actual al GPS
+                CancellationTokenSource cts = new CancellationTokenSource();
+                fusedLocationClient.getCurrentLocation(
+                        Priority.PRIORITY_HIGH_ACCURACY, cts.getToken()
+                ).addOnSuccessListener(loc -> {
+                    if (loc != null) {
+                        lanzarCalculoRuta(loc.getLatitude(), loc.getLongitude(), destino);
+                    } else {
+                        Toast.makeText(this, getString(R.string.error_ubicacion), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
+    }
+
+    private void lanzarCalculoRuta(double latOrigen, double lngOrigen, StopEntity destino) {
+        try {
+            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+            String apiKey = appInfo.metaData.getString("com.google.android.geo.API_KEY");
+
+            // Andando (Única llamada a la API en esta pantalla)
+            apiClient.getRoute(latOrigen, lngOrigen, destino.stopLat, destino.stopLon, "walking", apiKey, new DirectionsApiClient.RouteCallback() {
+                @Override
+                public void onSuccess(List<LatLng> routeDecoded, String duration) {
+                    rbWalk.setText(getString(R.string.transport_walk) + " (" + duration + ")");
+                }
+                @Override
+                public void onError(String errorMessage) {
+                    rbWalk.setText(getString(R.string.transport_walk) + " (-)");
+                }
+            });
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
