@@ -36,4 +36,19 @@
     <string name="lang_en">Inglés</string>
 
     <string name="calculating">Calculando...</string>
+
+    <string name="error_ubicacion">No se pudo obtener la ubicación actual</string>
+    <string name="error_selecciona_transporte">Selecciona un medio de transporte</string>
+
+    <!-- Map info bar -->
+    <string name="weather_label">Tiempo: %1$s °C</string>
+    <string name="weather_loading">Tiempo: …</string>
+    <string name="pollution_label">Contaminación: %1$s</string>
+    <string name="pollution_loading">Contaminación: …</string>
+    <string name="air_quality_good">Buena</string>
+    <string name="air_quality_moderate">Moderada</string>
+    <string name="air_quality_unhealthy_sensitive">Mala (sensibles)</string>
+    <string name="air_quality_unhealthy">Mala</string>
+    <string name="air_quality_very_unhealthy">Muy mala</string>
+    <string name="air_quality_hazardous">Peligrosa</string>
 </resources>
