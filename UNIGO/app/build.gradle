@@ -10,11 +10,7 @@ if (secretsFile.exists()) {
 
 android {
     namespace 'com.das.unigo'
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.das.unigo"
@@ -53,11 +49,6 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
-
-    // Arquitectura MVVM (ViewModel y LiveData para gestionar los datos en pantalla)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
-    implementation("androidx.activity:activity-ktx:1.8.0") // Facilita la instanciación de ViewModels
 
     // Retrofit y Gson (Para conectarse a Open Data Euskadi y leer los JSON)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
