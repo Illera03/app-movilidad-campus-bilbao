@@ -2,7 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.UNIGO" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/unigo_green</item>
+        <item name="colorPrimaryVariant">#21867A</item> <!-- A slightly darker shade if needed -->
     </style>
 
     <style name="Theme.UNIGO" parent="Base.Theme.UNIGO" />

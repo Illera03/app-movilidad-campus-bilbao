@@ -10,6 +10,7 @@
     <string name="transport_walk">🚶 A pie</string>
     <string name="transport_bus">🚌 Autobús</string>
     <string name="transport_bike">🚲 Bicicleta</string>
+    <string name="transport_tram">🚃 Tranvía</string>
 
     <string name="campus_345">Escuela de Ingeniería de Bilbao</string>
     <string name="campus_350">Escuela de Ingeniería de Bilbao (Náutica)</string>
