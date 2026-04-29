@@ -133,14 +133,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void configurarMapaYRuta(double lat, double lng) {
+        mMap.clear(); // Limpiar el mapa antes de trazar nueva ruta o marcadores
         LatLng origen = new LatLng(lat, lng);
         LatLng destino = new LatLng(destLat, destLng);
 
         // Añadir marcador en el destino
-        mMap.addMarker(new MarkerOptions()
-                .position(destino)
-                .title(destNombre)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        agregarMarcadorDestino(destino, destNombre);
 
         // Llamada al API Client
         llamarAPIDirections(origen, destino);
@@ -173,25 +171,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     @Override
                                     public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike, String d2, List<LatLng> walk2, String d3, String totalDuration) {
                                         runOnUiThread(() -> {
-                                            mMap.clear();
-
                                             // Dibujado de los tres tramos con sus respectivos colores
                                             pintarTramo(walk1, Color.BLUE);
                                             pintarTramo(bike, Color.GREEN);
                                             pintarTramo(walk2, Color.BLUE);
 
+                                            // Marcadores de las estaciones de bici
+                                            agregarMarcadorBici(new LatLng(bO.stopLat, bO.stopLon), bO.stopName);
+                                            agregarMarcadorBici(new LatLng(bD.stopLat, bD.stopLon), bD.stopName);
+
                                             // Indicador de tiempos desglosados en el centro del tramo de bicicleta
                                             if (bike != null && !bike.isEmpty()) {
-                                                LatLng medioBici = bike.get(bike.size() / 2);
-                                                String desgloseTiempos = "🚶 " + d1 + "  |  🚲 " + d2 + "  |  🚶 " + d3;
-                                                mMap.addMarker(new MarkerOptions()
-                                                        .position(medioBici)
-                                                        .alpha(0.0f)
-                                                        .infoWindowAnchor(0.5f, 0.5f)
-                                                        .title(desgloseTiempos)).showInfoWindow();
+                                                mostrarInfoTiempo(bike.get(bike.size() / 2), "🚶 " + d1 + "  |  🚲 " + d2 + "  |  🚶 " + d3);
                                             }
 
-                                            // (Resto de marcadores y configuración de cámara...)
+                                            // Ajuste de cámara para que se vea toda la ruta multimodal
+                                            enfocarRuta(origen, destino, java.util.Arrays.asList(walk1, bike, walk2));
                                         });
                                     }
                                     @Override public void onError(String msg) {
@@ -204,23 +199,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 // Ruta normal azul/roja para andar o bus
                 apiClient.getRoute(origen.latitude, origen.longitude, destino.latitude, destino.longitude, modoTransporte, apiKey, new DirectionsApiClient.RouteCallback() {
                     @Override public void onSuccess(List<LatLng> p, String d) {
-                        pintarRutaFinal(p, "transit".equals(modoTransporte) ? Color.RED : Color.BLUE, origen, destino);
+                        runOnUiThread(() -> {
+                            pintarTramo(p, "transit".equals(modoTransporte) ? Color.RED : Color.BLUE);
 
-                        // En ruta normal también mostramos el tiempo en el medio
-                        if (p != null && !p.isEmpty()) {
-                            LatLng medio = p.get(p.size() / 2);
-                            mMap.addMarker(new MarkerOptions()
-                                    .position(medio)
-                                    .alpha(0.0f)
-                                    .infoWindowAnchor(0.5f, 0.5f)
-                                    .title("Tiempo estimado: " + d)).showInfoWindow();
-                        }
+                            // En ruta normal también mostramos el tiempo en el medio
+                            if (p != null && !p.isEmpty()) {
+                                mostrarInfoTiempo(p.get(p.size() / 2), "Tiempo estimado: " + d);
+                            }
+                            
+                            enfocarRuta(origen, destino, java.util.Arrays.asList(p));
+                        });
                     }
 
                     @Override
                     public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike, String d2, List<LatLng> walk2, String d3, String totalDuration) {}
 
-                    @Override public void onError(String msg) { Toast.makeText(MapActivity.this, msg, Toast.LENGTH_SHORT).show(); }
+                    @Override public void onError(String msg) { runOnUiThread(() -> Toast.makeText(MapActivity.this, msg, Toast.LENGTH_SHORT).show()); }
                 });
             }
         } catch (Exception e) { e.printStackTrace(); }
@@ -235,28 +229,43 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    /**
-     * Pinta la ruta y ajusta la cámara asegurando que se incluyan todos los puntos.
-     */
-    private void pintarRutaFinal(List<LatLng> puntos, int color, LatLng origen, LatLng destino) {
-        if (puntos == null || puntos.isEmpty()) return;
+    private void agregarMarcadorDestino(LatLng destino, String nombre) {
+        mMap.addMarker(new MarkerOptions()
+                .position(destino)
+                .title(nombre)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+    }
 
-        runOnUiThread(() -> {
-            mMap.addPolyline(new PolylineOptions().addAll(puntos).width(12f).color(color).geodesic(true));
+    private void mostrarInfoTiempo(LatLng posicion, String mensaje) {
+        if (posicion != null) {
+            mMap.addMarker(new MarkerOptions()
+                    .position(posicion)
+                    .alpha(0.0f)
+                    .infoWindowAnchor(0.5f, 0.5f)
+                    .title(mensaje)).showInfoWindow();
+        }
+    }
 
-            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            builder.include(origen);
-            builder.include(destino);
-            for (LatLng p : puntos) builder.include(p);
-
-            try {
-                // Reducimos el padding a 100 para evitar desbordamientos en pantallas pequeñas
-                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
-            } catch (IllegalStateException e) {
-                // Si el mapa aún no tiene tamaño (size 0), evitamos hacer un moveCamera idéntico
-                Log.e("MapActivity", "Error al centrar la cámara: el layout del mapa no está listo aún.");
+    private void enfocarRuta(LatLng origen, LatLng destino, List<List<LatLng>> tramos) {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(origen);
+        builder.include(destino);
+        if (tramos != null) {
+            for (List<LatLng> tramo : tramos) {
+                if (tramo != null) {
+                    for (LatLng p : tramo) {
+                        builder.include(p);
+                    }
+                }
             }
-        });
+        }
+        try {
+            // Reducimos el padding a 100 para evitar desbordamientos en pantallas pequeñas
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
+        } catch (IllegalStateException e) {
+            // Si el mapa aún no tiene tamaño (size 0), evitamos hacer un moveCamera idéntico
+            Log.e("MapActivity", "Error al centrar la cámara: el layout del mapa no está listo aún.");
+        }
     }
 
     /**
