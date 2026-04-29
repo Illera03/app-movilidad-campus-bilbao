@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="#2A9D8F"
+    android:background="?attr/colorPrimary"
     tools:context=".ui.MainActivity">
 
     <TextView
@@ -94,6 +94,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/transport_bike"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:buttonTint="#FFFFFF"
+                android:enabled="false"/>
+
+            <RadioButton
+                android:id="@+id/rb_tram"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/transport_tram"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:padding="12dp"

@@ -17,6 +17,8 @@ Estructura esperada:
                            shapes.csv, calendar.csv, calendar_dates.csv
         bizkaibus_gtfs/  → routes.csv, stops.csv, trips.csv, stop_times.csv,
                            shapes.csv, calendar.csv, calendar_dates.csv
+        tranvia_gtfs/    → agency.csv, routes.csv, stops.csv, trips.csv,
+                           stop_times.csv, shapes.csv, calendar.csv
         bici/            → EstacionesPrestamo.json
         centros/         → centros.json
 
@@ -52,6 +54,7 @@ OUTPUT_DB = os.path.join(
 PREFIX_BILBOBUS = "BB_"
 PREFIX_BIZKAIBUS = "BK_"
 PREFIX_BIKE = "BICI_"
+PREFIX_TRAM = "TR_"
 PREFIX_CAMPUS = "UNI_"
 
 # Transfers
@@ -274,6 +277,7 @@ def insert_agencies(cursor):
         ("BIZKAIBUS", "Bizkaibus", "BUS"),
         ("BILBONBIZI", "Bilbonbizi", "BIKE"),
         ("UNIVERSIDAD", "Centros Universitarios", "CAMPUS"),
+        ("TRANVIA", "Tranvía Euskotren", "TRAM"),
     ]
     cursor.executemany(
         "INSERT OR REPLACE INTO agencies (agency_id, agency_name, agency_type) VALUES (?, ?, ?)",
@@ -803,6 +807,11 @@ def main():
     # Importar Bizkaibus
     print("\n── Importando Bizkaibus GTFS ──")
     import_gtfs(cursor, "bizkaibus_gtfs", PREFIX_BIZKAIBUS, "BIZKAIBUS", "BUS_BIZKAIBUS")
+    conn.commit()
+
+    # Importar Tranvía
+    print("\n── Importando Tranvía GTFS ──")
+    import_gtfs(cursor, "tranvia_gtfs", PREFIX_TRAM, "TRANVIA", "TRAM_EUSKOTREN")
     conn.commit()
 
     # Importar estaciones de bici

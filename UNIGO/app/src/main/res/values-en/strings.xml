@@ -10,6 +10,7 @@
     <string name="transport_walk">🚶 Walking</string>
     <string name="transport_bus">🚌 Bus</string>
     <string name="transport_bike">🚲 Bicycle</string>
+    <string name="transport_tram">🚃 Tram</string>
 
     <string name="campus_345">Bilbao School of Engineering</string>
     <string name="campus_350">Bilbao School of Engineering (Nautical)</string>

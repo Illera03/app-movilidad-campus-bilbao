@@ -10,6 +10,7 @@
     <string name="transport_walk">🚶 Oinez</string>
     <string name="transport_bus">🚌 Autobusa</string>
     <string name="transport_bike">🚲 Bizikleta</string>
+    <string name="transport_tram">🚃 Tranbia</string>
 
     <string name="campus_345">Bilboko Ingeniaritza Eskola</string>
     <string name="campus_350">Bilboko Ingeniaritza Eskola (Nautika)</string>

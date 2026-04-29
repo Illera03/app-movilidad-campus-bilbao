@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private Spinner spinnerDest, spinnerLang;
     private LinearLayout layoutTransport;
     private RadioGroup rgTransport;
-    private RadioButton rbWalk, rbBus, rbBike;
+    private RadioButton rbWalk, rbBus, rbBike, rbTram;
     private Button btnConfirmar;
     private boolean isFirstStart = true;
 
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         rbWalk = findViewById(R.id.rb_walk);
         rbBus = findViewById(R.id.rb_bus);
         rbBike = findViewById(R.id.rb_bike);
+        rbTram = findViewById(R.id.rb_tram);
         btnConfirmar = findViewById(R.id.btn_confirmar_ruta);
 
         Executors.newSingleThreadExecutor().execute(() -> {
@@ -130,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         rbWalk.setOnClickListener(radioClickListener);
         rbBus.setOnClickListener(radioClickListener);
         rbBike.setOnClickListener(radioClickListener);
+        rbTram.setOnClickListener(radioClickListener);
 
         spinnerDest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -139,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                     rbWalk.setEnabled(true);
                     rbBus.setEnabled(true);
                     rbBike.setEnabled(true);
+                    rbTram.setEnabled(true);
                     btnConfirmar.setVisibility(View.VISIBLE);
 
                     // Ponemos textos de carga solo para andando
@@ -146,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                     // Bus y bici se quedan con su texto normal de momento
                     rbBus.setText(getString(R.string.transport_bus));
                     rbBike.setText(getString(R.string.transport_bike));
+                    rbTram.setText(getString(R.string.transport_tram));
 
                     // Lanzar cálculo
                     int selectedPosition = position - 1;
@@ -156,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
                     rbWalk.setEnabled(false);
                     rbBus.setEnabled(false);
                     rbBike.setEnabled(false);
+                    rbTram.setEnabled(false);
                     btnConfirmar.setVisibility(View.INVISIBLE);
 
                     // Al bloquear, limpiamos todo_ y reseteamos nuestra memoria
@@ -201,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
             String modoTransporte = "walking";
             if (radioSeleccionadoId == R.id.rb_bus) modoTransporte = "transit";
             if (radioSeleccionadoId == R.id.rb_bike) modoTransporte = "bicycling";
+            if (radioSeleccionadoId == R.id.rb_tram) modoTransporte = "tram";
 
             // Lanzar la actividad del mapa pasando los datos
             Intent intent = new Intent(MainActivity.this, MapActivity.class);
