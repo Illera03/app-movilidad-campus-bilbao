@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike, String d2, List<LatLng> walk2, String d3, String totalDuration) {
                                     // Se muestra el icono de bicicleta y el tiempo total del trayecto completo
-                                    rbBike.setText(getString(R.string.transport_bike) + "(" + totalDuration + ")" );
+                                    rbBike.setText(getString(R.string.transport_bike) + " (" + totalDuration + ")" );
                                 }
 
                                 @Override
