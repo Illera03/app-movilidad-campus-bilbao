@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
                 if (resId != 0) {
                     destinationNames.add(getString(resId));
                 } else {
-                    // Fallback to database value if resource not found
                     destinationNames.add(stop.stopName);
                 }
             }
@@ -144,12 +143,14 @@ public class MainActivity extends AppCompatActivity {
                     rbTram.setEnabled(true);
                     btnConfirmar.setVisibility(View.VISIBLE);
 
-                    // Ponemos textos de carga solo para andando
+                    // Ponemos textos de carga 
                     rbWalk.setText(getString(R.string.transport_walk) + " (" + getString(R.string.calculating) + ")");
-                    // Bus y bici se quedan con su texto normal de momento
+                    rbBike.setText(getString(R.string.transport_bike)  + " (" + getString(R.string.calculating) + ")");
+                  
+                    // Bus se queda con su texto normal de momento
                     rbBus.setText(getString(R.string.transport_bus));
-                    rbBike.setText(getString(R.string.transport_bike));
                     rbTram.setText(getString(R.string.transport_tram));
+                    
 
                     // Lanzar cálculo
                     int selectedPosition = position - 1;
@@ -243,26 +244,92 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Ejecuta el cálculo de tiempos para los diferentes modos de transporte.
+     */
     private void lanzarCalculoRuta(double latOrigen, double lngOrigen, StopEntity destino) {
         try {
             ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
             String apiKey = appInfo.metaData.getString("com.google.android.geo.API_KEY");
 
-            // Andando (Única llamada a la API en esta pantalla)
+            // --- CÁLCULO ANDANDO ---
+            // Andando (Única llamada a la API en esta pantalla para este modo)
             apiClient.getRoute(latOrigen, lngOrigen, destino.stopLat, destino.stopLon, "walking", apiKey, new DirectionsApiClient.RouteCallback() {
                 @Override
-                public void onSuccess(List<LatLng> routeDecoded, String duration) {
-                    rbWalk.setText(getString(R.string.transport_walk) + " (" + duration + ")");
+                public void onSuccess(List<LatLng> r, String d) {
+                    rbWalk.setText(getString(R.string.transport_walk) + " (" + d + ")");
                 }
+
+                @Override
+                public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike, String d2, List<LatLng> walk2, String d3, String totalDuration) {
+                    // Se deja vacío porque aquí solo calculamos ruta simple
+                }
+
                 @Override
                 public void onError(String errorMessage) {
                     rbWalk.setText(getString(R.string.transport_walk) + " (-)");
                 }
             });
 
+            // --- CÁLCULO EN BICI (Multimodal: Andar -> Bici -> Andar) ---
+            // Buscamos las estaciones de Bilbobizi más cercanas en la base de datos
+            Executors.newSingleThreadExecutor().execute(() -> {
+                TransitDatabase db = TransitDatabase.getInstance(MainActivity.this);
+                List<StopEntity> estacionesBici = db.transitDao().getStopsByNodeType("BIKE");
+
+                if (estacionesBici != null && estacionesBici.size() >= 2) {
+                    // Encontrar estaciones óptimas de origen y destino
+                    StopEntity biciOrigen = getClosestStop(latOrigen, lngOrigen, estacionesBici);
+                    StopEntity biciDestino = getClosestStop(destino.stopLat, destino.stopLon, estacionesBici);
+
+                    // Petición combinada al DirectionsApiClient
+                    apiClient.getComplexBikeRoute(
+                            latOrigen, lngOrigen,
+                            biciOrigen.stopLat, biciOrigen.stopLon,
+                            biciDestino.stopLat, biciDestino.stopLon,
+                            destino.stopLat, destino.stopLon,
+                            apiKey,
+                            new DirectionsApiClient.RouteCallback() {
+                                @Override
+                                public void onSuccess(List<LatLng> routeDecoded, String duration) {}
+
+                                @Override
+                                public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike, String d2, List<LatLng> walk2, String d3, String totalDuration) {
+                                    // Se muestra el icono de bicicleta y el tiempo total del trayecto completo
+                                    rbBike.setText( R.string.transport_bike + "(" + totalDuration + ")" );
+                                }
+
+                                @Override
+                                public void onError(String errorMessage) {
+                                    rbBike.setText("🚲 (-)");
+                                }
+                            }
+                    );
+                }
+            });
+
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Algoritmo auxiliar para encontrar la parada o estación más cercana a una ubicación dada.
+     */
+    private StopEntity getClosestStop(double lat, double lon, List<StopEntity> stops) {
+        StopEntity closest = null;
+        float minDistance = Float.MAX_VALUE;
+        float[] results = new float[1];
+
+        for (StopEntity stop : stops) {
+            // Cálculo de distancia real usando la utilidad de Android
+            android.location.Location.distanceBetween(lat, lon, stop.stopLat, stop.stopLon, results);
+            if (results[0] < minDistance) {
+                minDistance = results[0];
+                closest = stop;
+            }
+        }
+        return closest;
     }
 
     @Override

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.das.unigo.BuildConfig;
 import com.das.unigo.utils.JwtUtils;
@@ -144,58 +146,139 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         llamarAPIDirections(origen, destino);
     }
 
+    /**
+     * Gestiona la llamada a la API de Directions con colores diferenciados para bici.
+     */
     private void llamarAPIDirections(LatLng origen, LatLng destino) {
         try {
-            // Leemos la clave del AndroidManifest (igual que en tu proyecto anterior)
             ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
             String apiKey = appInfo.metaData.getString("com.google.android.geo.API_KEY");
-
             DirectionsApiClient apiClient = new DirectionsApiClient();
-            apiClient.getRoute(
-                    origen.latitude, origen.longitude,
-                    destino.latitude, destino.longitude,
-                    modoTransporte,
-                    apiKey,
-                    new DirectionsApiClient.RouteCallback() {
-                        @Override
-                        public void onSuccess(List<LatLng> routeDecoded, String duration) {
-                            // Definimos el color de la línea según el transporte
-                            int colorLinea = Color.BLUE; // default walking
-                            if ("transit".equals(modoTransporte)) colorLinea = Color.RED;
-                            if ("bicycling".equals(modoTransporte)) colorLinea = Color.GREEN;
 
-                            // Trazamos la línea
-                            PolylineOptions options = new PolylineOptions()
-                                    .addAll(routeDecoded)
-                                    .width(12f)
-                                    .color(colorLinea)
-                                    .geodesic(true);
-                            mMap.addPolyline(options);
+            if ("bicycling".equals(modoTransporte)) {
+                new Thread(() -> {
+                    com.das.unigo.data.TransitDatabase db = com.das.unigo.data.TransitDatabase.getInstance(this);
+                    List<com.das.unigo.data.entity.StopEntity> estacionesBici = db.transitDao().getStopsByNodeType("BIKE");
 
-                            // Ajustamos la cámara para que se vean origen y destino
-                            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                            builder.include(origen);
-                            builder.include(destino);
-                            // También incluimos todos los puntos de la ruta para curvas extremas
-                            for (LatLng point : routeDecoded) {
-                                builder.include(point);
-                            }
+                    if (estacionesBici != null && estacionesBici.size() >= 2) {
+                        // Cálculo de estaciones óptimas
+                        com.das.unigo.data.entity.StopEntity bO = getClosestStop(origen.latitude, origen.longitude, estacionesBici);
+                        com.das.unigo.data.entity.StopEntity bD = getClosestStop(destLat, destLng, estacionesBici);
 
-                            LatLngBounds bounds = builder.build();
-                            // 100px de padding en los bordes de la pantalla
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
-                        }
+                        apiClient.getComplexBikeRoute(origen.latitude, origen.longitude, bO.stopLat, bO.stopLon,
+                                bD.stopLat, bD.stopLon, destLat, destLng, apiKey,
+                                new DirectionsApiClient.RouteCallback() {
+                                    @Override public void onSuccess(List<LatLng> r, String d) {}
 
-                        @Override
-                        public void onError(String errorMessage) {
-                            Toast.makeText(MapActivity.this, "Error de ruta: " + errorMessage, Toast.LENGTH_LONG).show();
+                                    @Override
+                                    public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike, String d2, List<LatLng> walk2, String d3, String totalDuration) {
+                                        runOnUiThread(() -> {
+                                            mMap.clear();
+
+                                            // Dibujado de los tres tramos con sus respectivos colores
+                                            pintarTramo(walk1, Color.BLUE);
+                                            pintarTramo(bike, Color.GREEN);
+                                            pintarTramo(walk2, Color.BLUE);
+
+                                            // Indicador de tiempos desglosados en el centro del tramo de bicicleta
+                                            if (bike != null && !bike.isEmpty()) {
+                                                LatLng medioBici = bike.get(bike.size() / 2);
+                                                String desgloseTiempos = "🚶 " + d1 + "  |  🚲 " + d2 + "  |  🚶 " + d3;
+                                                mMap.addMarker(new MarkerOptions()
+                                                        .position(medioBici)
+                                                        .alpha(0.0f)
+                                                        .infoWindowAnchor(0.5f, 0.5f)
+                                                        .title(desgloseTiempos)).showInfoWindow();
+                                            }
+
+                                            // (Resto de marcadores y configuración de cámara...)
+                                        });
+                                    }
+                                    @Override public void onError(String msg) {
+                                        runOnUiThread(() -> Toast.makeText(MapActivity.this, msg, Toast.LENGTH_SHORT).show());
+                                    }
+                                });
+                    }
+                }).start();
+            } else {
+                // Ruta normal azul/roja para andar o bus
+                apiClient.getRoute(origen.latitude, origen.longitude, destino.latitude, destino.longitude, modoTransporte, apiKey, new DirectionsApiClient.RouteCallback() {
+                    @Override public void onSuccess(List<LatLng> p, String d) {
+                        pintarRutaFinal(p, "transit".equals(modoTransporte) ? Color.RED : Color.BLUE, origen, destino);
+
+                        // En ruta normal también mostramos el tiempo en el medio
+                        if (p != null && !p.isEmpty()) {
+                            LatLng medio = p.get(p.size() / 2);
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(medio)
+                                    .alpha(0.0f)
+                                    .infoWindowAnchor(0.5f, 0.5f)
+                                    .title("Tiempo estimado: " + d)).showInfoWindow();
                         }
                     }
-            );
 
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+                    @Override
+                    public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike, String d2, List<LatLng> walk2, String d3, String totalDuration) {}
+
+                    @Override public void onError(String msg) { Toast.makeText(MapActivity.this, msg, Toast.LENGTH_SHORT).show(); }
+                });
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    /**
+     * Pinta una polilínea en el mapa con el color indicado.
+     */
+    private void pintarTramo(List<LatLng> puntos, int color) {
+        if (puntos != null && !puntos.isEmpty()) {
+            mMap.addPolyline(new PolylineOptions().addAll(puntos).width(12f).color(color).geodesic(true));
         }
+    }
+
+    /**
+     * Pinta la ruta y ajusta la cámara asegurando que se incluyan todos los puntos.
+     */
+    private void pintarRutaFinal(List<LatLng> puntos, int color, LatLng origen, LatLng destino) {
+        if (puntos == null || puntos.isEmpty()) return;
+
+        runOnUiThread(() -> {
+            mMap.addPolyline(new PolylineOptions().addAll(puntos).width(12f).color(color).geodesic(true));
+
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(origen);
+            builder.include(destino);
+            for (LatLng p : puntos) builder.include(p);
+
+            try {
+                // Reducimos el padding a 100 para evitar desbordamientos en pantallas pequeñas
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
+            } catch (IllegalStateException e) {
+                // Si el mapa aún no tiene tamaño (size 0), evitamos hacer un moveCamera idéntico
+                Log.e("MapActivity", "Error al centrar la cámara: el layout del mapa no está listo aún.");
+            }
+        });
+    }
+
+    /**
+     * Crea el efecto de círculo gris + chincheta personalizada para estaciones.
+     */
+    private void agregarMarcadorBici(LatLng pos, String nombre) {
+        // El circulito gris en el suelo
+        mMap.addCircle(new com.google.android.gms.maps.model.CircleOptions()
+                .center(pos).radius(6).fillColor(Color.argb(70, 128, 128, 128))
+                .strokeColor(Color.GRAY).strokeWidth(2));
+
+
+        // 1. Cargamos el bitmap original
+        Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.bici_chincheta);
+        // 2. Lo escalamos a 100x100 píxeles
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, 100, 100, false);
+
+        mMap.addMarker(new MarkerOptions()
+                .position(pos)
+                .title(nombre)
+                .icon(BitmapDescriptorFactory.fromBitmap(scaledBitmap)) // Usamos fromBitmap en vez de fromResource
+                .anchor(0.5f, 0.5f)); // Centrado exacto sobre el círculo gris
     }
 
     // ─── Weather & Air Quality (Open-Meteo, no API key required) ──────────
@@ -421,5 +504,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             obtenerUbicacionYTrazarRuta();
         }
+    }
+
+    /**
+     * Algoritmo auxiliar para encontrar la estación de bicicleta más cercana a un punto geográfico.
+     */
+    private com.das.unigo.data.entity.StopEntity getClosestStop(double lat, double lon, List<com.das.unigo.data.entity.StopEntity> stops) {
+        com.das.unigo.data.entity.StopEntity closest = null;
+        float minDistance = Float.MAX_VALUE;
+        float[] results = new float[1];
+
+        for (com.das.unigo.data.entity.StopEntity stop : stops) {
+            // Cálculo de distancia entre el punto dado y la parada/estación actual
+            android.location.Location.distanceBetween(lat, lon, stop.stopLat, stop.stopLon, results);
+            if (results[0] < minDistance) {
+                minDistance = results[0];
+                closest = stop;
+            }
+        }
+        return closest;
     }
 }
