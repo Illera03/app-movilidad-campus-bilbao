@@ -15,7 +15,6 @@ import com.das.unigo.data.entity.*;
  * Contiene 9 entidades que modelan un grafo de transporte:
  * - Nodos: StopEntity (paradas bus, estaciones bici, centros universitarios)
  * - Aristas transit: StopTimeEntity (horarios consecutivos de un mismo trip)
- * - Aristas transfer: TransferEntity (transbordos a pie / bici pre-calculados)
  * - Metadatos: AgencyEntity, RouteEntity, TripEntity, ShapeEntity,
  *              CalendarEntity, CalendarDateEntity
  */
@@ -28,8 +27,7 @@ import com.das.unigo.data.entity.*;
                 StopTimeEntity.class,
                 ShapeEntity.class,
                 CalendarEntity.class,
-                CalendarDateEntity.class,
-                TransferEntity.class
+                CalendarDateEntity.class
         },
         version = 1,
         exportSchema = false

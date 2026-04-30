@@ -76,12 +76,6 @@ public interface TransitDao {
        List<StopEntity> getNearbyStops(double lat, double lon, double latDelta, double lonDelta);
 
        /**
-        * Transbordos disponibles desde una parada.
-        */
-       @Query("SELECT * FROM transfers WHERE from_stop_id = :stopId")
-       List<TransferEntity> getTransfersFromStop(String stopId);
-
-       /**
         * Próximas salidas desde una parada a partir de una hora, para service_ids
         * activos.
         * Devuelve los stop_times con sus trip_ids para saber qué línea pasa.
@@ -149,9 +143,6 @@ public interface TransitDao {
 
        @Query("SELECT COUNT(*) FROM stop_times")
        int getStopTimeCount();
-
-       @Query("SELECT COUNT(*) FROM transfers")
-       int getTransferCount();
 
        @Query("SELECT COUNT(*) FROM calendar")
        int getCalendarCount();
