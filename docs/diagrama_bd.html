@@ -38,8 +38,6 @@ erDiagram
     calendar ||--o{ calendar_dates : "excepciones"
     trips ||--o{ stop_times : "compuesto de"
     stops ||--o{ stop_times : "servido por"
-    stops ||--o{ transfers : "desde"
-    stops ||--o{ transfers : "hacia"
 
     agencies {
         String agency_id PK
@@ -116,15 +114,6 @@ erDiagram
         double shape_pt_lon
         int shape_pt_sequence
         double shape_dist_traveled
-    }
-
-    transfers {
-        long id PK
-        String from_stop_id FK
-        String to_stop_id FK
-        int transfer_type
-        int min_transfer_time
-        double distance_meters
     }
     </div>
     <script>

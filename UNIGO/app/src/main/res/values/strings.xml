@@ -52,4 +52,5 @@
     <string name="air_quality_unhealthy">Mala</string>
     <string name="air_quality_very_unhealthy">Muy mala</string>
     <string name="air_quality_hazardous">Peligrosa</string>
+    <string name="origin_label">Origen\n</string>
 </resources>

@@ -15,7 +15,6 @@ import com.das.unigo.data.entity.*;
  * Contiene 9 entidades que modelan un grafo de transporte:
  * - Nodos: StopEntity (paradas bus, estaciones bici, centros universitarios)
  * - Aristas transit: StopTimeEntity (horarios consecutivos de un mismo trip)
- * - Aristas transfer: TransferEntity (transbordos a pie / bici pre-calculados)
  * - Metadatos: AgencyEntity, RouteEntity, TripEntity, ShapeEntity,
  *              CalendarEntity, CalendarDateEntity
  */
@@ -28,10 +27,9 @@ import com.das.unigo.data.entity.*;
                 StopTimeEntity.class,
                 ShapeEntity.class,
                 CalendarEntity.class,
-                CalendarDateEntity.class,
-                TransferEntity.class
+                CalendarDateEntity.class
         },
-        version = 1,
+        version = 2,
         exportSchema = false
 )
 public abstract class TransitDatabase extends RoomDatabase {
@@ -45,17 +43,15 @@ public abstract class TransitDatabase extends RoomDatabase {
      */
     public static TransitDatabase getInstance(Context context) {
         if (INSTANCE == null) {
-            synchronized (TransitDatabase.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(
-                            context.getApplicationContext(),
-                            TransitDatabase.class,
-                            "unigo_transit.db"
+            INSTANCE = Room.databaseBuilder(
+                        context.getApplicationContext(), // Usamos app context para evitar fugas
+                        TransitDatabase.class,
+                        "unigo_transit.db"
                     )
                     .createFromAsset("databases/unigo_transit.db")
+                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigrationOnDowngrade()
                     .build();
-                }
-            }
         }
         return INSTANCE;
     }

@@ -57,13 +57,6 @@ PREFIX_BIKE = "BICI_"
 PREFIX_TRAM = "TR_"
 PREFIX_CAMPUS = "UNI_"
 
-# Transfers
-MAX_WALK_RADIUS_METERS = 500.0
-LAT_DELTA = 0.0045
-LON_DELTA = 0.0062
-EARTH_RADIUS = 6_371_000
-WALK_SPEED = 1.4  # m/s (~5 km/h)
-
 BATCH_SIZE = 5000
 
 
@@ -184,22 +177,6 @@ CREATE INDEX IF NOT EXISTS `index_calendar_dates_service_id` ON `calendar_dates`
 CREATE INDEX IF NOT EXISTS `index_calendar_dates_date`       ON `calendar_dates` (`date`);
 CREATE UNIQUE INDEX IF NOT EXISTS `index_calendar_dates_service_id_date`
     ON `calendar_dates` (`service_id`, `date`);
-
--- Transfers (transbordos entre nodos)
-CREATE TABLE IF NOT EXISTS `transfers` (
-    `id`                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    `from_stop_id`      TEXT,
-    `to_stop_id`        TEXT,
-    `transfer_type`     INTEGER NOT NULL DEFAULT 0,
-    `min_transfer_time` INTEGER NOT NULL DEFAULT 0,
-    `distance_meters`   REAL NOT NULL DEFAULT 0,
-    FOREIGN KEY(`from_stop_id`) REFERENCES `stops`(`stop_id`) ON UPDATE NO ACTION ON DELETE CASCADE,
-    FOREIGN KEY(`to_stop_id`)   REFERENCES `stops`(`stop_id`) ON UPDATE NO ACTION ON DELETE CASCADE
-);
-CREATE INDEX IF NOT EXISTS `index_transfers_from_stop_id` ON `transfers` (`from_stop_id`);
-CREATE INDEX IF NOT EXISTS `index_transfers_to_stop_id`   ON `transfers` (`to_stop_id`);
-CREATE UNIQUE INDEX IF NOT EXISTS `index_transfers_from_stop_id_to_stop_id`
-    ON `transfers` (`from_stop_id`, `to_stop_id`);
 """
 
 
@@ -225,17 +202,6 @@ def safe_float(value, default=0.0):
         return float(value.strip())
     except ValueError:
         return default
-
-
-def haversine(lat1, lon1, lat2, lon2):
-    """Distancia en metros entre dos puntos (Haversine)."""
-    d_lat = math.radians(lat2 - lat1)
-    d_lon = math.radians(lon2 - lon1)
-    a = (math.sin(d_lat / 2) ** 2 +
-         math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) *
-         math.sin(d_lon / 2) ** 2)
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-    return EARTH_RADIUS * c
 
 
 def read_csv(filepath):
@@ -677,83 +643,6 @@ def import_campus_stops(cursor):
 
 
 # ============================================================
-# GENERACIÓN DE TRANSFERS
-# ============================================================
-
-def generate_transfers(cursor):
-    """
-    Genera transfers bidireccionales entre nodos de diferente modo.
-    Misma lógica que TransferGenerator.java.
-    """
-    print("\n── Generando transfers ──")
-
-    # Obtener nodos por tipo
-    node_types = {
-        "BUS_BILBOBUS": [],
-        "BUS_BIZKAIBUS": [],
-        "BIKE": [],
-        "CAMPUS": [],
-    }
-
-    cursor.execute("SELECT stop_id, stop_lat, stop_lon, node_type FROM stops")
-    for row in cursor.fetchall():
-        stop_id, lat, lon, nt = row
-        if nt in node_types:
-            node_types[nt].append((stop_id, lat, lon))
-
-    for nt, stops in node_types.items():
-        print(f"  Nodos {nt}: {len(stops)}")
-
-    transfers = []
-
-    # Generar entre pares de modos distintos
-    pairs = [
-        ("BUS_BILBOBUS", "BIKE"),
-        ("BUS_BIZKAIBUS", "BIKE"),
-        ("BUS_BILBOBUS", "CAMPUS"),
-        ("BUS_BIZKAIBUS", "CAMPUS"),
-        ("BIKE", "CAMPUS"),
-    ]
-
-    for type_a, type_b in pairs:
-        list_a = node_types[type_a]
-        list_b = node_types[type_b]
-        pair_count = 0
-
-        for stop_a, lat_a, lon_a in list_a:
-            for stop_b, lat_b, lon_b in list_b:
-                # Filtro rápido por bounding box
-                if abs(lat_a - lat_b) > LAT_DELTA:
-                    continue
-                if abs(lon_a - lon_b) > LON_DELTA:
-                    continue
-
-                distance = haversine(lat_a, lon_a, lat_b, lon_b)
-                if distance <= MAX_WALK_RADIUS_METERS:
-                    walk_time = math.ceil(distance / WALK_SPEED)
-                    dist_rounded = round(distance * 10) / 10
-
-                    # A → B
-                    transfers.append((stop_a, stop_b, 2, walk_time, dist_rounded))
-                    # B → A
-                    transfers.append((stop_b, stop_a, 2, walk_time, dist_rounded))
-                    pair_count += 2
-
-        print(f"  ✓ {type_a} ↔ {type_b}: {pair_count} transfers")
-
-    # Insertar en lotes
-    for i in range(0, len(transfers), BATCH_SIZE):
-        batch = transfers[i:i + BATCH_SIZE]
-        cursor.executemany(
-            "INSERT OR REPLACE INTO transfers "
-            "(from_stop_id, to_stop_id, transfer_type, min_transfer_time, distance_meters) "
-            "VALUES (?, ?, ?, ?, ?)", batch
-        )
-
-    print(f"  ✓ Total transfers generados: {len(transfers)}")
-
-
-# ============================================================
 # MAIN
 # ============================================================
 
@@ -824,14 +713,10 @@ def main():
     import_campus_stops(cursor)
     conn.commit()
 
-    # Generar transfers
-    generate_transfers(cursor)
-    conn.commit()
-
     # Estadísticas finales
     print("\n── Estadísticas ──")
     tables = ["agencies", "routes", "stops", "trips", "stop_times", "shapes",
-              "calendar", "calendar_dates", "transfers"]
+              "calendar", "calendar_dates"]
     for table in tables:
         cursor.execute(f"SELECT COUNT(*) FROM {table}")
         count = cursor.fetchone()[0]

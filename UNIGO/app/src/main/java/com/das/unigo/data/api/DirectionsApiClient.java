@@ -31,7 +31,7 @@ public class DirectionsApiClient {
     }
 
     /**
-     * Calcula la ruta multimodal (Andar -> Bici -> Andar) y suma los tiempos totales.
+     * Calcula la ruta multimodal (Andar -> X -> Andar) y suma los tiempos totales.
      */
     public void getComplexBikeRoute(double latOri, double lngOri, double latBici1, double lngBici1,
                                     double latBici2, double lngBici2, double latDest, double lngDest,
@@ -62,7 +62,7 @@ public class DirectionsApiClient {
     }
 
     /**
-     * Obtiene una ruta simple (Andando o Bus) desde Google Maps Directions API.
+     * Obtiene una ruta simple (Andando) desde Google Maps Directions API.
      */
     public void getRoute(double latOrigen, double lngOrigen, double latDest, double lngDest, String mode, String apiKey, RouteCallback callback) {
         executor.execute(() -> {
