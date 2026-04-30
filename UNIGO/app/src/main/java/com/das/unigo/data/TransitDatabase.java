@@ -42,20 +42,17 @@ public abstract class TransitDatabase extends RoomDatabase {
      * Singleton thread-safe para obtener la instancia de la base de datos.
      */
     public static TransitDatabase getInstance(Context context) {
-        if (INSTANCE == null) {
-            synchronized (TransitDatabase.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(
-                            context.getApplicationContext(),
-                            TransitDatabase.class,
-                            "unigo_transit.db"
-                    )
-                    .createFromAsset("databases/unigo_transit.db")
-                    .fallbackToDestructiveMigration()
-                    .build();
-                }
-            }
-        }
-        return INSTANCE;
+    if (instance == null) {
+        instance = Room.databaseBuilder(
+                    context.getApplicationContext(), // Usamos app context para evitar fugas
+                    TransitDatabase.class, 
+                    "unigo_transit.db"
+                )
+                .createFromAsset("databases/unigo_transit.db")
+                .fallbackToDestructiveMigration()
+                .fallbackToDestructiveMigrationOnDowngrade()
+                .build();
     }
+    return instance;
+}
 }

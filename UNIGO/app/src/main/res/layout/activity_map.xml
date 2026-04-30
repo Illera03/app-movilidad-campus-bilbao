@@ -118,4 +118,107 @@
         app:layout_constraintTop_toTopOf="@id/card_map"
         app:layout_constraintStart_toStartOf="@id/card_map" />
 
+    <!-- ─── Card de Detalles de la Ruta (Bus/Tranvía) ─── -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_route_details"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:strokeColor="#E0E0E0"
+        app:strokeWidth="1dp"
+        app:layout_constraintBottom_toBottomOf="@id/card_map"
+        app:layout_constraintStart_toStartOf="@id/card_map"
+        app:layout_constraintEnd_toEndOf="@id/card_map"
+        tools:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- Icono y Nombre de Línea -->
+            <TextView
+                android:id="@+id/tv_line_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_line_badge"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:text="Bus - A3"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_total_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="24 min"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/divider_route"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="#EEEEEE"
+                app:layout_constraintTop_toBottomOf="@id/tv_line_label" />
+
+            <!-- Origen -->
+            <ImageView
+                android:id="@+id/ic_dot_orig"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginTop="16dp"
+                android:src="@android:drawable/presence_online"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_route"
+                app:tint="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tv_origin_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="Parada Origen"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/ic_dot_orig"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ic_dot_orig"
+                app:layout_constraintTop_toTopOf="@id/ic_dot_orig" />
+
+            <!-- Destino -->
+            <ImageView
+                android:id="@+id/ic_dot_dest"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginTop="12dp"
+                android:src="@android:drawable/presence_online"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_origin_name"
+                app:tint="#FF5252" />
+
+            <TextView
+                android:id="@+id/tv_destination_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="Parada Destino"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/ic_dot_dest"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ic_dot_dest"
+                app:layout_constraintTop_toTopOf="@id/ic_dot_dest" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
