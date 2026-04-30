@@ -33,6 +33,7 @@ import com.das.unigo.R;
 import com.das.unigo.data.TransitDatabase;
 import com.das.unigo.data.api.DirectionsApiClient;
 import com.das.unigo.data.entity.StopEntity;
+import com.das.unigo.data.entity.StopTimeEntity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
@@ -143,14 +144,13 @@ public class MainActivity extends AppCompatActivity {
                     rbTram.setEnabled(true);
                     btnConfirmar.setVisibility(View.VISIBLE);
 
-                    // Ponemos textos de carga 
+                    // Ponemos textos de carga
                     rbWalk.setText(getString(R.string.transport_walk) + " (" + getString(R.string.calculating) + ")");
+                    rbBus.setText(getString(R.string.transport_bus) + " (" + getString(R.string.calculating) + ")");
                     rbBike.setText(getString(R.string.transport_bike)  + " (" + getString(R.string.calculating) + ")");
-                  
-                    // Bus se queda con su texto normal de momento
-                    rbBus.setText(getString(R.string.transport_bus));
+
                     rbTram.setText(getString(R.string.transport_tram));
-                    
+
 
                     // Lanzar cálculo
                     int selectedPosition = position - 1;
@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Acción al confirmar ruta
+        // Acción al confirmar ruta
         btnConfirmar.setOnClickListener(v -> {
             if (radioSeleccionadoId == -1) {
                 Toast.makeText(this, getString(R.string.error_selecciona_transporte), Toast.LENGTH_SHORT).show();
@@ -205,9 +206,34 @@ public class MainActivity extends AppCompatActivity {
             StopEntity destinoSeleccionado = campusStopsList.get(selectedPosition);
 
             String modoTransporte = "walking";
-            if (radioSeleccionadoId == R.id.rb_bus) modoTransporte = "transit";
-            if (radioSeleccionadoId == R.id.rb_bike) modoTransporte = "bicycling";
-            if (radioSeleccionadoId == R.id.rb_tram) modoTransporte = "tram";
+            String tiempoAEnviar = "";
+
+            if (radioSeleccionadoId == R.id.rb_walk) {
+                modoTransporte = "walking";
+                tiempoAEnviar = rbWalk.getText().toString();
+            } else if (radioSeleccionadoId == R.id.rb_bus) {
+                modoTransporte = "transit";
+                tiempoAEnviar = rbBus.getText().toString();
+            } else if (radioSeleccionadoId == R.id.rb_bike) {
+                modoTransporte = "bicycling";
+                tiempoAEnviar = rbBike.getText().toString();
+            } else if (radioSeleccionadoId == R.id.rb_tram) {
+                modoTransporte = "tram";
+                tiempoAEnviar = rbTram.getText().toString();
+            }
+
+            // --- EXTRACCIÓN DEL TIEMPO ---
+            // Buscamos el texto entre paréntesis. Si no hay o da error, enviamos un fallback seguro.
+            int startIdx = tiempoAEnviar.lastIndexOf("(");
+            int endIdx = tiempoAEnviar.lastIndexOf(")");
+
+            if (startIdx != -1 && endIdx != -1 && startIdx < endIdx) {
+                tiempoAEnviar = tiempoAEnviar.substring(startIdx + 1, endIdx);
+            } else {
+                // Si por algún motivo el botón no tiene paréntesis (ej. el tranvía o no ha terminado de calcular)
+                tiempoAEnviar = "-- mins";
+            }
+            // ------------------------------------
 
             // Lanzar la actividad del mapa pasando los datos
             Intent intent = new Intent(MainActivity.this, MapActivity.class);
@@ -215,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("DESTINO_LNG", destinoSeleccionado.stopLon);
             intent.putExtra("DESTINO_NOMBRE", destinoSeleccionado.stopName);
             intent.putExtra("MODO_TRANSPORTE", modoTransporte);
+            intent.putExtra("TIEMPO_ESTIMADO", tiempoAEnviar);
             startActivity(intent);
         });
     }
@@ -271,6 +298,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            // --- CÁLCULO TRANSPORTE PÚBLICO (Real GTFS) ---
+            calcularTiempoBusReal(latOrigen, lngOrigen, destino);
+
             // --- CÁLCULO EN BICI (Multimodal: Andar -> Bici -> Andar) ---
             // Buscamos las estaciones de Bilbobizi más cercanas en la base de datos
             Executors.newSingleThreadExecutor().execute(() -> {
@@ -311,6 +341,99 @@ public class MainActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Calcula el tiempo total real cruzando horarios GTFS:
+     * T_Caminar_Parada + T_Espera + T_Bus + T_Caminar_Campus
+     */
+    private void calcularTiempoBusReal(double latOrigen, double lngOrigen, StopEntity destino) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            TransitDatabase db = TransitDatabase.getInstance(MainActivity.this);
+
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            java.text.SimpleDateFormat sdfDate = new java.text.SimpleDateFormat("yyyyMMdd", Locale.US);
+            java.text.SimpleDateFormat sdfTime = new java.text.SimpleDateFormat("HH:mm:ss", Locale.US);
+
+            String hoyDate = sdfDate.format(cal.getTime());
+            String ahoraTime = sdfTime.format(cal.getTime());
+
+            int day = cal.get(java.util.Calendar.DAY_OF_WEEK);
+            int gtfsDay = (day == java.util.Calendar.SUNDAY) ? 7 : day - 1;
+
+            List<String> activeServices = db.transitDao().getActiveServiceIds(gtfsDay, hoyDate);
+            if (activeServices == null || activeServices.isEmpty()) {
+                runOnUiThread(() -> rbBus.setText(getString(R.string.transport_bus) + " (- mins)"));
+                return;
+            }
+
+            // Radio de búsqueda de ~1km para paradas
+            List<StopEntity> origenStops = db.transitDao().getNearbyStops(latOrigen, lngOrigen, 0.01, 0.01);
+            List<StopEntity> destinoStops = db.transitDao().getNearbyStops(destino.stopLat, destino.stopLon, 0.01, 0.01);
+
+            int bestTotalTimeSeconds = Integer.MAX_VALUE;
+
+            for (StopEntity oStop : origenStops) {
+                // Estimamos tiempo andando a la parada (5km/h = ~1.4 m/s)
+                float[] res1 = new float[1];
+                android.location.Location.distanceBetween(latOrigen, lngOrigen, oStop.stopLat, oStop.stopLon, res1);
+                // Multiplicamos la distancia en línea recta por 1.5 para simular las curvas de las calles
+                int walkSecondsToOrigen = (int) ((res1[0] * 1.5f) / 1.4f);
+
+                // Calculamos a qué hora exacta pisamos la parada
+                cal.setTimeInMillis(System.currentTimeMillis() + (walkSecondsToOrigen * 1000L));
+                String arrivalAtStopStr = sdfTime.format(cal.getTime());
+
+                // Buscamos los próximos buses desde que llegamos, no desde "ahora"
+                List<StopTimeEntity> departures = db.transitDao().getNextDepartures(oStop.stopId, arrivalAtStopStr, activeServices, 15);
+
+                for (StopTimeEntity dep : departures) {
+                    List<StopTimeEntity> tripStops = db.transitDao().getStopTimesForTrip(dep.tripId);
+
+                    for (StopEntity dStop : destinoStops) {
+                        for (StopTimeEntity ts : tripStops) {
+                            // Si la ruta pasa por nuestro destino DESPUÉS de recogernos
+                            if (ts.stopId.equals(dStop.stopId) && ts.stopSequence > dep.stopSequence) {
+
+                                float[] res2 = new float[1];
+                                android.location.Location.distanceBetween(dStop.stopLat, dStop.stopLon, destino.stopLat, destino.stopLon, res2);
+                                // Multiplicamos por 1.5 para simular las calles
+                                int walkSecondsToCampus = (int) ((res2[0] * 1.5f) / 1.4f);
+
+                                // El tiempo real total es simplemente (HoraLlegadaDestino - HoraActual) + CaminarCampus
+                                int horaLlegadaDestinoBus = timeStringToSeconds(ts.arrivalTime);
+                                int horaActual = timeStringToSeconds(ahoraTime);
+
+                                int totalSeconds = (horaLlegadaDestinoBus - horaActual) + walkSecondsToCampus;
+
+                                if (totalSeconds > 0 && totalSeconds < bestTotalTimeSeconds) {
+                                    bestTotalTimeSeconds = totalSeconds;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (bestTotalTimeSeconds != Integer.MAX_VALUE) {
+                int mins = bestTotalTimeSeconds / 60;
+                runOnUiThread(() -> rbBus.setText(getString(R.string.transport_bus) + " (" + mins + " mins)"));
+            } else {
+                runOnUiThread(() -> rbBus.setText(getString(R.string.transport_bus) + " (- mins)"));
+            }
+        });
+    }
+
+    /**
+     * Utilidad para convertir los String del GTFS (ej. "14:30:00") a segundos operables.
+     */
+    private int timeStringToSeconds(String time) {
+        if (time == null) return 0;
+        String[] parts = time.split(":");
+        if (parts.length == 3) {
+            return Integer.parseInt(parts[0]) * 3600 + Integer.parseInt(parts[1]) * 60 + Integer.parseInt(parts[2]);
+        }
+        return 0;
     }
 
     /**
