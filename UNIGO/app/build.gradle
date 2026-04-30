@@ -44,6 +44,8 @@ android {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
+        // Adoptium provides full JDKs with jlink included
+        vendor = JvmVendorSpec.ADOPTIUM
     }
 }
 
@@ -56,15 +58,15 @@ dependencies {
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
 
-    // Retrofit y Gson (Para conectarse a Open Data Euskadi y leer los JSON)
+    // Retrofit y Gson
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation('com.google.code.gson:gson:2.10.1')
 
-    // Google Maps y Localización (Para renderizar el mapa y obtener el GPS del usuario)
+    // Google Maps y Localización
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
-    // Room (Base de datos local para GTFS, estaciones bici y centros universitarios)
+    // Room
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
 }

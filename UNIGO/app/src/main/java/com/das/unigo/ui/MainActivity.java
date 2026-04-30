@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,6 +35,7 @@ import com.das.unigo.data.TransitDatabase;
 import com.das.unigo.data.api.DirectionsApiClient;
 import com.das.unigo.data.entity.StopEntity;
 import com.das.unigo.data.entity.StopTimeEntity;
+import com.das.unigo.utils.ViajeOptimo;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
@@ -49,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnConfirmar;
     private boolean isFirstStart = true;
 
-    // Guardamos la lista de paradas universitarias para obtener sus coordenadas luego
+    // Guardamos la lista de paradas universitarias para obtener sus coordenadas
+    // luego
     private List<StopEntity> campusStopsList;
     // Variable para controlar qué botón está pulsado y poder desmarcarlo
     private int radioSeleccionadoId = -1;
@@ -126,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-
         rbWalk.setOnClickListener(radioClickListener);
         rbBus.setOnClickListener(radioClickListener);
         rbBike.setOnClickListener(radioClickListener);
@@ -146,10 +148,9 @@ public class MainActivity extends AppCompatActivity {
                     // Ponemos textos de carga
                     rbWalk.setText(getString(R.string.transport_walk) + " (" + getString(R.string.calculating) + ")");
                     rbBus.setText(getString(R.string.transport_bus) + " (" + getString(R.string.calculating) + ")");
-                    rbBike.setText(getString(R.string.transport_bike)  + " (" + getString(R.string.calculating) + ")");
+                    rbBike.setText(getString(R.string.transport_bike) + " (" + getString(R.string.calculating) + ")");
 
                     rbTram.setText(getString(R.string.transport_tram));
-
 
                     // Lanzar cálculo
                     int selectedPosition = position - 1;
@@ -170,7 +171,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -182,14 +184,17 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 String langCode = "es";
-                if (position == 1) langCode = "eu";
-                else if (position == 2) langCode = "en";
+                if (position == 1)
+                    langCode = "eu";
+                else if (position == 2)
+                    langCode = "en";
 
                 cambiarIdioma(langCode);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         // Acción al confirmar ruta
@@ -222,14 +227,16 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // --- EXTRACCIÓN DEL TIEMPO ---
-            // Buscamos el texto entre paréntesis. Si no hay o da error, enviamos un fallback seguro.
+            // Buscamos el texto entre paréntesis. Si no hay o da error, enviamos un
+            // fallback seguro.
             int startIdx = tiempoAEnviar.lastIndexOf("(");
             int endIdx = tiempoAEnviar.lastIndexOf(")");
 
             if (startIdx != -1 && endIdx != -1 && startIdx < endIdx) {
                 tiempoAEnviar = tiempoAEnviar.substring(startIdx + 1, endIdx);
             } else {
-                // Si por algún motivo el botón no tiene paréntesis (ej. el tranvía o no ha terminado de calcular)
+                // Si por algún motivo el botón no tiene paréntesis (ej. el tranvía o no ha
+                // terminado de calcular)
                 tiempoAEnviar = "-- mins";
             }
             // ------------------------------------
@@ -246,8 +253,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void calcularTiempos(StopEntity destino) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                    LOCATION_PERMISSION_REQUEST_CODE);
             return;
         }
 
@@ -258,14 +267,13 @@ public class MainActivity extends AppCompatActivity {
                 // Fallback: solicitar ubicación actual al GPS
                 CancellationTokenSource cts = new CancellationTokenSource();
                 fusedLocationClient.getCurrentLocation(
-                        Priority.PRIORITY_HIGH_ACCURACY, cts.getToken()
-                ).addOnSuccessListener(loc -> {
-                    if (loc != null) {
-                        lanzarCalculoRuta(loc.getLatitude(), loc.getLongitude(), destino);
-                    } else {
-                        Toast.makeText(this, getString(R.string.error_ubicacion), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        Priority.PRIORITY_HIGH_ACCURACY, cts.getToken()).addOnSuccessListener(loc -> {
+                            if (loc != null) {
+                                lanzarCalculoRuta(loc.getLatitude(), loc.getLongitude(), destino);
+                            } else {
+                                Toast.makeText(this, getString(R.string.error_ubicacion), Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
     }
@@ -275,27 +283,30 @@ public class MainActivity extends AppCompatActivity {
      */
     private void lanzarCalculoRuta(double latOrigen, double lngOrigen, StopEntity destino) {
         try {
-            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(),
+                    PackageManager.GET_META_DATA);
             String apiKey = appInfo.metaData.getString("com.google.android.geo.API_KEY");
 
             // --- CÁLCULO ANDANDO ---
             // Andando (Única llamada a la API en esta pantalla para este modo)
-            apiClient.getRoute(latOrigen, lngOrigen, destino.stopLat, destino.stopLon, "walking", apiKey, new DirectionsApiClient.RouteCallback() {
-                @Override
-                public void onSuccess(List<LatLng> r, String d) {
-                    rbWalk.setText(getString(R.string.transport_walk) + " (" + d + ")");
-                }
+            apiClient.getRoute(latOrigen, lngOrigen, destino.stopLat, destino.stopLon, "walking", apiKey,
+                    new DirectionsApiClient.RouteCallback() {
+                        @Override
+                        public void onSuccess(List<LatLng> r, String d) {
+                            rbWalk.setText(getString(R.string.transport_walk) + " (" + d + ")");
+                        }
 
-                @Override
-                public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike, String d2, List<LatLng> walk2, String d3, String totalDuration) {
-                    // Se deja vacío porque aquí solo calculamos ruta simple
-                }
+                        @Override
+                        public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike, String d2,
+                                List<LatLng> walk2, String d3, String totalDuration) {
+                            // Se deja vacío porque aquí solo calculamos ruta simple
+                        }
 
-                @Override
-                public void onError(String errorMessage) {
-                    rbWalk.setText(getString(R.string.transport_walk) + " (-)");
-                }
-            });
+                        @Override
+                        public void onError(String errorMessage) {
+                            rbWalk.setText(getString(R.string.transport_walk) + " (-)");
+                        }
+                    });
 
             // --- CÁLCULO TRANSPORTE PÚBLICO (Real GTFS) ---
             calcularTiempoBusReal(latOrigen, lngOrigen, destino);
@@ -320,20 +331,21 @@ public class MainActivity extends AppCompatActivity {
                             apiKey,
                             new DirectionsApiClient.RouteCallback() {
                                 @Override
-                                public void onSuccess(List<LatLng> routeDecoded, String duration) {}
+                                public void onSuccess(List<LatLng> routeDecoded, String duration) {
+                                }
 
                                 @Override
-                                public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike, String d2, List<LatLng> walk2, String d3, String totalDuration) {
+                                public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike,
+                                        String d2, List<LatLng> walk2, String d3, String totalDuration) {
                                     // Se muestra el icono de bicicleta y el tiempo total del trayecto completo
-                                    rbBike.setText(getString(R.string.transport_bike) + " (" + totalDuration + ")" );
+                                    rbBike.setText(getString(R.string.transport_bike) + " (" + totalDuration + ")");
                                 }
 
                                 @Override
                                 public void onError(String errorMessage) {
                                     rbBike.setText(getString(R.string.transport_walk) + "(-)");
                                 }
-                            }
-                    );
+                            });
                 }
             });
 
@@ -367,16 +379,24 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Radio de búsqueda de ~1km para paradas
-            List<StopEntity> origenStops = db.transitDao().getNearbyStops(latOrigen, lngOrigen, 0.01, 0.01);
-            List<StopEntity> destinoStops = db.transitDao().getNearbyStops(destino.stopLat, destino.stopLon, 0.01, 0.01);
+            List<StopEntity> origenStops = db.transitDao().getNearbyBusStops(latOrigen, lngOrigen, 0.01, 0.01);
+            List<StopEntity> destinoStops = db.transitDao().getNearbyBusStops(destino.stopLat, destino.stopLon,
+                    0.01, 0.01);
+
+            List<String> destinoIds = new ArrayList<>();
+            for (StopEntity dStop : destinoStops) {
+                destinoIds.add(dStop.stopId);
+            }
 
             int bestTotalTimeSeconds = Integer.MAX_VALUE;
+            ViajeOptimo mejorViaje = null;
 
             for (StopEntity oStop : origenStops) {
                 // Estimamos tiempo andando a la parada (5km/h = ~1.4 m/s)
                 float[] res1 = new float[1];
                 android.location.Location.distanceBetween(latOrigen, lngOrigen, oStop.stopLat, oStop.stopLon, res1);
-                // Multiplicamos la distancia en línea recta por 1.5 para simular las curvas de las calles
+                // Multiplicamos la distancia en línea recta por 1.5 para simular las curvas de
+                // las calles
                 int walkSecondsToOrigen = (int) ((res1[0] * 1.5f) / 1.4f);
 
                 // Calculamos a qué hora exacta pisamos la parada
@@ -384,39 +404,40 @@ public class MainActivity extends AppCompatActivity {
                 String arrivalAtStopStr = sdfTime.format(cal.getTime());
 
                 // Buscamos los próximos buses desde que llegamos, no desde "ahora"
-                List<StopTimeEntity> departures = db.transitDao().getNextDepartures(oStop.stopId, arrivalAtStopStr, activeServices, 15);
+                ViajeOptimo viaje = db.transitDao().getMejorConexionBus(
+                        oStop.stopId,
+                        destinoIds,
+                        activeServices,
+                        arrivalAtStopStr);
 
-                for (StopTimeEntity dep : departures) {
-                    List<StopTimeEntity> tripStops = db.transitDao().getStopTimesForTrip(dep.tripId);
+                if (viaje == null) {
+                    continue;
+                }
 
-                    for (StopEntity dStop : destinoStops) {
-                        for (StopTimeEntity ts : tripStops) {
-                            // Si la ruta pasa por nuestro destino DESPUÉS de recogernos
-                            if (ts.stopId.equals(dStop.stopId) && ts.stopSequence > dep.stopSequence) {
+                float[] res2 = new float[1];
+                android.location.Location.distanceBetween(viaje.destLat, viaje.destLon, destino.stopLat,
+                        destino.stopLon, res2);
+                // Multiplicamos por 1.5 para simular las calles
+                int walkSecondsToCampus = (int) ((res2[0] * 1.5f) / 1.4f);
 
-                                float[] res2 = new float[1];
-                                android.location.Location.distanceBetween(dStop.stopLat, dStop.stopLon, destino.stopLat, destino.stopLon, res2);
-                                // Multiplicamos por 1.5 para simular las calles
-                                int walkSecondsToCampus = (int) ((res2[0] * 1.5f) / 1.4f);
+                // El tiempo real total es simplemente (HoraLlegadaDestino - HoraActual) +
+                // CaminarCampus
+                int horaLlegadaDestinoBus = timeStringToSeconds(viaje.horaLlegada);
+                int horaActual = timeStringToSeconds(ahoraTime);
 
-                                // El tiempo real total es simplemente (HoraLlegadaDestino - HoraActual) + CaminarCampus
-                                int horaLlegadaDestinoBus = timeStringToSeconds(ts.arrivalTime);
-                                int horaActual = timeStringToSeconds(ahoraTime);
+                int totalSeconds = (horaLlegadaDestinoBus - horaActual) + walkSecondsToCampus;
 
-                                int totalSeconds = (horaLlegadaDestinoBus - horaActual) + walkSecondsToCampus;
-
-                                if (totalSeconds > 0 && totalSeconds < bestTotalTimeSeconds) {
-                                    bestTotalTimeSeconds = totalSeconds;
-                                }
-                            }
-                        }
-                    }
+                if (totalSeconds > 0 && totalSeconds < bestTotalTimeSeconds) {
+                    bestTotalTimeSeconds = totalSeconds;
+                    mejorViaje = viaje;
                 }
             }
 
             if (bestTotalTimeSeconds != Integer.MAX_VALUE) {
                 int mins = bestTotalTimeSeconds / 60;
                 runOnUiThread(() -> rbBus.setText(getString(R.string.transport_bus) + " (" + mins + " mins)"));
+                Log.d("MainActivity", "Mejor viaje: " + mejorViaje.toString());
+                Log.d("MainActivity", "Tiempo: " + mins + " mins");
             } else {
                 runOnUiThread(() -> rbBus.setText(getString(R.string.transport_bus) + " (- mins)"));
             }
@@ -424,10 +445,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Utilidad para convertir los String del GTFS (ej. "14:30:00") a segundos operables.
+     * Utilidad para convertir los String del GTFS (ej. "14:30:00") a segundos
+     * operables.
      */
     private int timeStringToSeconds(String time) {
-        if (time == null) return 0;
+        if (time == null)
+            return 0;
         String[] parts = time.split(":");
         if (parts.length == 3) {
             return Integer.parseInt(parts[0]) * 3600 + Integer.parseInt(parts[1]) * 60 + Integer.parseInt(parts[2]);
@@ -436,7 +459,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Algoritmo auxiliar para encontrar la parada o estación más cercana a una ubicación dada.
+     * Algoritmo auxiliar para encontrar la parada o estación más cercana a una
+     * ubicación dada.
      */
     private StopEntity getClosestStop(double lat, double lon, List<StopEntity> stops) {
         StopEntity closest = null;
@@ -455,9 +479,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             // Si el usuario acaba de dar permiso, recálculamos si ya hay algo seleccionado
             if (spinnerDest.getSelectedItemPosition() > 0) {
                 StopEntity destinoSeleccionado = campusStopsList.get(spinnerDest.getSelectedItemPosition() - 1);
@@ -468,7 +494,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void cambiarIdioma(String langCode) {
         Locale currentLocale = getResources().getConfiguration().locale;
-        if (currentLocale.getLanguage().equals(langCode)) return;
+        if (currentLocale.getLanguage().equals(langCode))
+            return;
 
         Locale myLocale = new Locale(langCode);
         Resources res = getResources();
@@ -484,8 +511,10 @@ public class MainActivity extends AppCompatActivity {
     private void setLocaleInSpinner() {
         String lang = getResources().getConfiguration().locale.getLanguage();
         int position = 0;
-        if (lang.equals("eu")) position = 1;
-        else if (lang.equals("en")) position = 2;
+        if (lang.equals("eu"))
+            position = 1;
+        else if (lang.equals("en"))
+            position = 2;
 
         spinnerLang.setSelection(position);
     }
