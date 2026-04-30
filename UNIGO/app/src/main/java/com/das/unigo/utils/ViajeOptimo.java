@@ -11,6 +11,9 @@ public class ViajeOptimo {
     public double destLat;
     public double destLon;
 
+    public String nombreParadaOrigen;
+    public String nombreParadaDestino;
+
 
     @Override
     public String toString() {

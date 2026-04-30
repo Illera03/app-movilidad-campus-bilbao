@@ -41,6 +41,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.CancellationTokenSource;
+import com.google.maps.android.PolyUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
 
     private DirectionsApiClient apiClient;
+
+    private String encodedWalkPath;
+    private String encodedBikePath, encodedBikeWalk1, encodedBikeWalk2;
+    private ViajeOptimo mejorViajeBus;
+    private ViajeOptimo mejorViajeTram;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,7 +204,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Acción al confirmar ruta
-        // Acción al confirmar ruta
         btnConfirmar.setOnClickListener(v -> {
             if (radioSeleccionadoId == -1) {
                 Toast.makeText(this, getString(R.string.error_selecciona_transporte), Toast.LENGTH_SHORT).show();
@@ -209,21 +214,52 @@ public class MainActivity extends AppCompatActivity {
             int selectedPosition = spinnerDest.getSelectedItemPosition() - 1;
             StopEntity destinoSeleccionado = campusStopsList.get(selectedPosition);
 
-            String modoTransporte = "walking";
+            // Lanzar la actividad del mapa pasando los datos
+            Intent intent = new Intent(MainActivity.this, MapActivity.class);
+
+            // Datos comunes
+            intent.putExtra("DESTINO_LAT", destinoSeleccionado.stopLat);
+            intent.putExtra("DESTINO_LNG", destinoSeleccionado.stopLon);
+            intent.putExtra("DESTINO_NOMBRE", destinoSeleccionado.stopName);
+
+            String modoTransporte = "";
             String tiempoAEnviar = "";
 
+            // --- LÓGICA SEGÚN MODO SELECCIONADO ---
             if (radioSeleccionadoId == R.id.rb_walk) {
-                modoTransporte = "walking";
+                modoTransporte = "WALK";
                 tiempoAEnviar = rbWalk.getText().toString();
-            } else if (radioSeleccionadoId == R.id.rb_bus) {
-                modoTransporte = "transit";
-                tiempoAEnviar = rbBus.getText().toString();
+                // Pasamos la ruta codificada que guardamos en el callback de la API
+                intent.putExtra("ENCODED_PATH", encodedWalkPath);
+
             } else if (radioSeleccionadoId == R.id.rb_bike) {
-                modoTransporte = "bicycling";
+                modoTransporte = "BIKE";
                 tiempoAEnviar = rbBike.getText().toString();
+                // Pasamos los 3 tramos codificados (Andar -> Bici -> Andar)
+                intent.putExtra("PATH_W1", encodedBikeWalk1);
+                intent.putExtra("PATH_B", encodedBikePath);
+                intent.putExtra("PATH_W2", encodedBikeWalk2);
+
+            } else if (radioSeleccionadoId == R.id.rb_bus) {
+                modoTransporte = "BUS";
+                tiempoAEnviar = rbBus.getText().toString();
+
+                if (mejorViajeBus != null) {
+                    // Pasamos los datos necesarios para que el Mapa dibuje el Shape y la caminata
+                    // final
+                    intent.putExtra("SHAPE_ID", mejorViajeBus.shapeId);
+                    intent.putExtra("ROUTE_ID", mejorViajeBus.routeId);
+                    intent.putExtra("BUS_DEST_LAT", mejorViajeBus.destLat);
+                    intent.putExtra("BUS_DEST_LON", mejorViajeBus.destLon);
+
+                    intent.putExtra("STOP_ORIGEN_NAME", mejorViajeBus.nombreParadaOrigen);
+                    intent.putExtra("STOP_DESTINO_NAME", mejorViajeBus.nombreParadaDestino);
+                }
+
             } else if (radioSeleccionadoId == R.id.rb_tram) {
-                modoTransporte = "tram";
+                modoTransporte = "TRAM";
                 tiempoAEnviar = rbTram.getText().toString();
+                // Aquí iría la lógica del tranvía similar a la del bus
             }
 
             // --- EXTRACCIÓN DEL TIEMPO ---
@@ -241,13 +277,9 @@ public class MainActivity extends AppCompatActivity {
             }
             // ------------------------------------
 
-            // Lanzar la actividad del mapa pasando los datos
-            Intent intent = new Intent(MainActivity.this, MapActivity.class);
-            intent.putExtra("DESTINO_LAT", destinoSeleccionado.stopLat);
-            intent.putExtra("DESTINO_LNG", destinoSeleccionado.stopLon);
-            intent.putExtra("DESTINO_NOMBRE", destinoSeleccionado.stopName);
             intent.putExtra("MODO_TRANSPORTE", modoTransporte);
             intent.putExtra("TIEMPO_ESTIMADO", tiempoAEnviar);
+
             startActivity(intent);
         });
     }
@@ -294,6 +326,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(List<LatLng> r, String d) {
                             rbWalk.setText(getString(R.string.transport_walk) + " (" + d + ")");
+                            encodedWalkPath = PolyUtil.encode(r);
                         }
 
                         @Override
@@ -339,11 +372,14 @@ public class MainActivity extends AppCompatActivity {
                                         String d2, List<LatLng> walk2, String d3, String totalDuration) {
                                     // Se muestra el icono de bicicleta y el tiempo total del trayecto completo
                                     rbBike.setText(getString(R.string.transport_bike) + " (" + totalDuration + ")");
+                                    encodedBikeWalk1 = PolyUtil.encode(walk1);
+                                    encodedBikePath = PolyUtil.encode(bike);
+                                    encodedBikeWalk2 = PolyUtil.encode(walk2);
                                 }
 
                                 @Override
                                 public void onError(String errorMessage) {
-                                    rbBike.setText(getString(R.string.transport_walk) + "(-)");
+                                    rbBike.setText(getString(R.string.transport_bike) + "(-)");
                                 }
                             });
                 }
@@ -429,14 +465,16 @@ public class MainActivity extends AppCompatActivity {
 
                 if (totalSeconds > 0 && totalSeconds < bestTotalTimeSeconds) {
                     bestTotalTimeSeconds = totalSeconds;
-                    mejorViaje = viaje;
+                    this.mejorViajeBus = viaje;
                 }
             }
 
-            if (bestTotalTimeSeconds != Integer.MAX_VALUE) {
+            if (this.mejorViajeBus != null) {
                 int mins = bestTotalTimeSeconds / 60;
                 runOnUiThread(() -> rbBus.setText(getString(R.string.transport_bus) + " (" + mins + " mins)"));
-                Log.d("MainActivity", "Mejor viaje: " + mejorViaje.toString());
+                mejorViajeBus.nombreParadaOrigen = db.transitDao().getStopById(mejorViajeBus.origenId).stopName;
+                mejorViajeBus.nombreParadaDestino = db.transitDao().getStopById(mejorViajeBus.destinoId).stopName;
+                Log.d("MainActivity", "Mejor viaje: " + mejorViajeBus.toString());
                 Log.d("MainActivity", "Tiempo: " + mins + " mins");
             } else {
                 runOnUiThread(() -> rbBus.setText(getString(R.string.transport_bus) + " (- mins)"));
