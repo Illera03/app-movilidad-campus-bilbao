@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
 
-    // Cliente reutilizable para la API de Directions (evita crear threads innecesarios)
     private DirectionsApiClient apiClient;
 
     @Override

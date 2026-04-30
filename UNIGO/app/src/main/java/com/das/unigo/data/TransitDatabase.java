@@ -29,7 +29,7 @@ import com.das.unigo.data.entity.*;
                 CalendarEntity.class,
                 CalendarDateEntity.class
         },
-        version = 1,
+        version = 2,
         exportSchema = false
 )
 public abstract class TransitDatabase extends RoomDatabase {
@@ -51,6 +51,7 @@ public abstract class TransitDatabase extends RoomDatabase {
                             "unigo_transit.db"
                     )
                     .createFromAsset("databases/unigo_transit.db")
+                    .fallbackToDestructiveMigration()
                     .build();
                 }
             }
