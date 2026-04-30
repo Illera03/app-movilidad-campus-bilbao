@@ -57,6 +57,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private double destLng;
     private String destNombre;
     private String modoTransporte;
+    private String tiempoEstimado;
 
     // Info bar views
     private TextView tvWeather;
@@ -75,6 +76,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             destLng = getIntent().getDoubleExtra("DESTINO_LNG", 0);
             destNombre = getIntent().getStringExtra("DESTINO_NOMBRE");
             modoTransporte = getIntent().getStringExtra("MODO_TRANSPORTE");
+            tiempoEstimado = getIntent().getStringExtra("TIEMPO_ESTIMADO"); // <-- LEER EL DATO
         }
 
         // Info bar views
@@ -153,7 +155,156 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             String apiKey = appInfo.metaData.getString("com.google.android.geo.API_KEY");
             DirectionsApiClient apiClient = new DirectionsApiClient();
 
-            if ("bicycling".equals(modoTransporte)) {
+            if ("transit".equals(modoTransporte)) {
+                new Thread(() -> {
+                    com.das.unigo.data.TransitDatabase db = com.das.unigo.data.TransitDatabase.getInstance(this);
+
+                    // 1. Búsqueda principal (radio estricto ~1km)
+                    List<com.das.unigo.data.entity.StopEntity> origenStops = db.transitDao().getNearbyStops(origen.latitude, origen.longitude, 0.01, 0.01);
+                    List<com.das.unigo.data.entity.StopEntity> destinoStops = db.transitDao().getNearbyStops(destino.latitude, destino.longitude, 0.01, 0.01);
+
+                    java.util.Collections.sort(origenStops, (s1, s2) -> {
+                        float[] r1 = new float[1]; android.location.Location.distanceBetween(origen.latitude, origen.longitude, s1.stopLat, s1.stopLon, r1);
+                        float[] r2 = new float[1]; android.location.Location.distanceBetween(origen.latitude, origen.longitude, s2.stopLat, s2.stopLon, r2);
+                        return Float.compare(r1[0], r2[0]);
+                    });
+
+                    java.util.Collections.sort(destinoStops, (s1, s2) -> {
+                        float[] r1 = new float[1]; android.location.Location.distanceBetween(destino.latitude, destino.longitude, s1.stopLat, s1.stopLon, r1);
+                        float[] r2 = new float[1]; android.location.Location.distanceBetween(destino.latitude, destino.longitude, s2.stopLat, s2.stopLon, r2);
+                        return Float.compare(r1[0], r2[0]);
+                    });
+
+                    int limiteOrigen = Math.min(origenStops.size(), 15);
+                    int limiteDestino = Math.min(destinoStops.size(), 15);
+                    List<com.das.unigo.data.entity.StopEntity> topOrigenStops = origenStops.subList(0, limiteOrigen);
+                    List<com.das.unigo.data.entity.StopEntity> topDestinoStops = destinoStops.subList(0, limiteDestino);
+
+                    String validShapeId = null;
+                    com.das.unigo.data.entity.StopEntity stopOrigenBus = null;
+                    com.das.unigo.data.entity.StopEntity stopDestinoBus = null;
+
+                    float mejorDistanciaPie = Float.MAX_VALUE;
+
+                    // Evaluar combinaciones principales
+                    for (com.das.unigo.data.entity.StopEntity oStop : topOrigenStops) {
+                        for (com.das.unigo.data.entity.StopEntity dStop : topDestinoStops) {
+                            String shapeId = db.transitDao().getShapeIdBetweenStops(oStop.stopId, dStop.stopId);
+
+                            if (shapeId != null) {
+                                float[] r1 = new float[1];
+                                android.location.Location.distanceBetween(origen.latitude, origen.longitude, oStop.stopLat, oStop.stopLon, r1);
+                                float[] r2 = new float[1];
+                                android.location.Location.distanceBetween(dStop.stopLat, dStop.stopLon, destino.latitude, destino.longitude, r2);
+
+                                float distanciaTotalPie = r1[0] + r2[0];
+
+                                if (distanciaTotalPie < mejorDistanciaPie) {
+                                    mejorDistanciaPie = distanciaTotalPie;
+                                    validShapeId = shapeId;
+                                    stopOrigenBus = oStop;
+                                    stopDestinoBus = dStop;
+                                }
+                            }
+                        }
+                    }
+
+                    // Si no hay línea directa, forzamos la búsqueda: cogemos la parada
+                    // más cercana al destino que tenga rutas, y vemos si hay cualquier
+                    // parada en Bilbao que nos lleve allí, aunque esté lejos para andar.
+                    if (validShapeId == null && !destinoStops.isEmpty()) {
+                        // Expandimos el radio de búsqueda en origen muchísimo (ej. todo_ Bilbao)
+                        List<com.das.unigo.data.entity.StopEntity> todoBilbaoStops = db.transitDao().getNearbyStops(origen.latitude, origen.longitude, 0.05, 0.05);
+
+                        java.util.Collections.sort(todoBilbaoStops, (s1, s2) -> {
+                            float[] r1 = new float[1]; android.location.Location.distanceBetween(origen.latitude, origen.longitude, s1.stopLat, s1.stopLon, r1);
+                            float[] r2 = new float[1]; android.location.Location.distanceBetween(origen.latitude, origen.longitude, s2.stopLat, s2.stopLon, r2);
+                            return Float.compare(r1[0], r2[0]);
+                        });
+
+                        // Buscamos a lo bestia la conexión más cercana posible
+                        for (com.das.unigo.data.entity.StopEntity dStop : topDestinoStops) { // Probamos con las del campus
+                            for (com.das.unigo.data.entity.StopEntity oStop : todoBilbaoStops) {
+                                String shapeId = db.transitDao().getShapeIdBetweenStops(oStop.stopId, dStop.stopId);
+                                if (shapeId != null) {
+                                    validShapeId = shapeId;
+                                    stopOrigenBus = oStop;
+                                    stopDestinoBus = dStop;
+                                    break; // En cuanto encuentre UNA forma de llegar, nos sirve
+                                }
+                            }
+                            if (validShapeId != null) break;
+                        }
+                    }
+                    // ----------------------------------------------
+
+                    if (validShapeId != null) {
+                        List<com.das.unigo.data.entity.ShapeEntity> shapeEntities = db.transitDao().getShapePoints(validShapeId);
+                        List<LatLng> rutaCompleta = new java.util.ArrayList<>();
+                        for (com.das.unigo.data.entity.ShapeEntity shape : shapeEntities) {
+                            rutaCompleta.add(new LatLng(shape.shapePtLat, shape.shapePtLon));
+                        }
+
+                        final com.das.unigo.data.entity.StopEntity finalOrigenBus = stopOrigenBus;
+                        final com.das.unigo.data.entity.StopEntity finalDestinoBus = stopDestinoBus;
+
+                        List<LatLng> busRoute = recortarRutaBus(
+                                rutaCompleta,
+                                new LatLng(finalOrigenBus.stopLat, finalOrigenBus.stopLon),
+                                new LatLng(finalDestinoBus.stopLat, finalDestinoBus.stopLon)
+                        );
+
+                        // Calcular tiempo real del autobús usando GTFS (sin espera)
+                        String tripId = db.transitDao().getTripIdBetweenStops(finalOrigenBus.stopId, finalDestinoBus.stopId);
+                        int busMins = 0;
+                        if (tripId != null) {
+                            List<com.das.unigo.data.entity.StopTimeEntity> stopsDeEseViaje = db.transitDao().getStopTimesForTrip(tripId);
+                            int timeOri = 0, timeDes = 0;
+                            for(com.das.unigo.data.entity.StopTimeEntity st : stopsDeEseViaje) {
+                                if(st.stopId.equals(finalOrigenBus.stopId)) timeOri = timeStringToSeconds(st.departureTime);
+                                if(st.stopId.equals(finalDestinoBus.stopId)) timeDes = timeStringToSeconds(st.arrivalTime);
+                            }
+                            if(timeDes > timeOri) busMins = (timeDes - timeOri) / 60;
+                        }
+                        final String tiempoRealBus = busMins > 0 ? busMins + " mins" : "? mins";
+
+                        apiClient.getComplexBikeRoute(
+                                origen.latitude, origen.longitude,
+                                finalOrigenBus.stopLat, finalOrigenBus.stopLon,
+                                finalDestinoBus.stopLat, finalDestinoBus.stopLon,
+                                destino.latitude, destino.longitude,
+                                apiKey,
+                                new DirectionsApiClient.RouteCallback() {
+                                    @Override public void onSuccess(List<LatLng> r, String d) {}
+
+                                    @Override
+                                    public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> ignoreBike, String d2, List<LatLng> walk2, String d3, String totalDuration) {
+                                        runOnUiThread(() -> {
+                                            pintarTramo(walk1, Color.BLUE);
+                                            pintarTramo(busRoute, Color.RED);
+                                            pintarTramo(walk2, Color.BLUE);
+
+                                            agregarMarcadorDestino(new LatLng(finalOrigenBus.stopLat, finalOrigenBus.stopLon), finalOrigenBus.stopName);
+                                            agregarMarcadorDestino(new LatLng(finalDestinoBus.stopLat, finalDestinoBus.stopLon), finalDestinoBus.stopName);
+
+                                            if (!busRoute.isEmpty()) {
+                                                // Restauramos la etiqueta visual limpia
+                                                mostrarInfoTiempo(busRoute.get(busRoute.size() / 2), "🚶 " + d1 + "  |  🚌 " + tiempoRealBus + "  |  🚶 " + d3);
+                                            }
+                                            enfocarRuta(origen, destino, java.util.Arrays.asList(walk1, busRoute, walk2));
+                                        });
+                                    }
+                                    @Override public void onError(String msg) {
+                                        runOnUiThread(() -> Toast.makeText(MapActivity.this, "Error conectando tramos: " + msg, Toast.LENGTH_SHORT).show());
+                                    }
+                                }
+                        );
+                    } else {
+                        runOnUiThread(() -> Toast.makeText(MapActivity.this, "No hay líneas directas. Prueba otro medio de transporte.", Toast.LENGTH_LONG).show());
+                    }
+                }).start();
+
+            } else if ("bicycling".equals(modoTransporte)) {
                 new Thread(() -> {
                     com.das.unigo.data.TransitDatabase db = com.das.unigo.data.TransitDatabase.getInstance(this);
                     List<com.das.unigo.data.entity.StopEntity> estacionesBici = db.transitDao().getStopsByNodeType("BIKE");
@@ -182,6 +333,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                                             // Indicador de tiempos desglosados en el centro del tramo de bicicleta
                                             if (bike != null && !bike.isEmpty()) {
+                                                // Mostramos los 3 tramos desglosados de Google
                                                 mostrarInfoTiempo(bike.get(bike.size() / 2), "🚶 " + d1 + "  |  🚲 " + d2 + "  |  🚶 " + d3);
                                             }
 
@@ -196,15 +348,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     }
                 }).start();
             } else {
-                // Ruta normal azul/roja para andar o bus
+                // Ruta normal azul para andar (o tram si usáis el default)
                 apiClient.getRoute(origen.latitude, origen.longitude, destino.latitude, destino.longitude, modoTransporte, apiKey, new DirectionsApiClient.RouteCallback() {
                     @Override public void onSuccess(List<LatLng> p, String d) {
                         runOnUiThread(() -> {
-                            pintarTramo(p, "transit".equals(modoTransporte) ? Color.RED : Color.BLUE);
+                            pintarTramo(p, "tram".equals(modoTransporte) ? Color.rgb(255,165,0) : Color.BLUE);
 
                             // En ruta normal también mostramos el tiempo en el medio
                             if (p != null && !p.isEmpty()) {
-                                mostrarInfoTiempo(p.get(p.size() / 2), "Tiempo estimado: " + d);
+                                // Mostrar el tiempo global sincronizado del MainActivity
+                                String tLabel = tiempoEstimado != null ? tiempoEstimado : d;
+                                mostrarInfoTiempo(p.get(p.size() / 2), "Tiempo estimado: " + tLabel);
                             }
                             
                             enfocarRuta(origen, destino, java.util.Arrays.asList(p));
@@ -434,7 +588,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         conn.setRequestMethod("GET");
         conn.setConnectTimeout(5000);
         conn.setReadTimeout(5000);
-        
+
         if (token != null && !token.isEmpty()) {
             conn.setRequestProperty("Authorization", "Bearer " + token);
             conn.setRequestProperty("Accept", "*/*");
@@ -532,5 +686,48 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
         return closest;
+    }
+
+    private List<LatLng> recortarRutaBus(List<LatLng> rutaCompleta, LatLng origen, LatLng destino) {
+        if (rutaCompleta == null || rutaCompleta.isEmpty()) return rutaCompleta;
+
+        int startIndex = 0;
+        int endIndex = rutaCompleta.size() - 1;
+        float minDistOrigen = Float.MAX_VALUE;
+        float minDistDestino = Float.MAX_VALUE;
+        float[] result = new float[1];
+
+        for (int i = 0; i < rutaCompleta.size(); i++) {
+            LatLng p = rutaCompleta.get(i);
+            android.location.Location.distanceBetween(origen.latitude, origen.longitude, p.latitude, p.longitude, result);
+            if (result[0] < minDistOrigen) {
+                minDistOrigen = result[0];
+                startIndex = i;
+            }
+        }
+
+        for (int i = startIndex; i < rutaCompleta.size(); i++) {
+            LatLng p = rutaCompleta.get(i);
+            android.location.Location.distanceBetween(destino.latitude, destino.longitude, p.latitude, p.longitude, result);
+            if (result[0] < minDistDestino) {
+                minDistDestino = result[0];
+                endIndex = i;
+            }
+        }
+
+        if (startIndex <= endIndex) {
+            return new java.util.ArrayList<>(rutaCompleta.subList(startIndex, endIndex + 1));
+        }
+
+        return rutaCompleta;
+    }
+
+    private int timeStringToSeconds(String time) {
+        if (time == null) return 0;
+        String[] parts = time.split(":");
+        if (parts.length == 3) {
+            return Integer.parseInt(parts[0]) * 3600 + Integer.parseInt(parts[1]) * 60 + Integer.parseInt(parts[2]);
+        }
+        return 0;
     }
 }

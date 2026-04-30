@@ -149,4 +149,25 @@ public interface TransitDao {
 
        @Query("SELECT COUNT(*) FROM calendar_dates")
        int getCalendarDateCount();
+
+       /**
+        * Busca si existe un viaje directo entre dos paradas y devuelve su shape_id
+        * para poder dibujar la ruta exacta en el mapa.
+        */
+       @Query("SELECT DISTINCT t.shape_id FROM stop_times st1 " +
+               "INNER JOIN stop_times st2 ON st1.trip_id = st2.trip_id " +
+               "INNER JOIN trips t ON st1.trip_id = t.trip_id " +
+               "WHERE st1.stop_id = :origenStopId AND st2.stop_id = :destinoStopId " +
+               "AND st1.stop_sequence < st2.stop_sequence LIMIT 1")
+       String getShapeIdBetweenStops(String origenStopId, String destinoStopId);
+
+       /**
+        * Obtiene un viaje directo de ejemplo entre dos paradas para calcular tiempos.
+        */
+       @Query("SELECT t.trip_id FROM stop_times st1 " +
+               "INNER JOIN stop_times st2 ON st1.trip_id = st2.trip_id " +
+               "INNER JOIN trips t ON st1.trip_id = t.trip_id " +
+               "WHERE st1.stop_id = :origenStopId AND st2.stop_id = :destinoStopId " +
+               "AND st1.stop_sequence < st2.stop_sequence LIMIT 1")
+       String getTripIdBetweenStops(String origenStopId, String destinoStopId);
 }
