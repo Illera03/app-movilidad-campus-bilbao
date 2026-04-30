@@ -34,7 +34,6 @@ import com.das.unigo.R;
 import com.das.unigo.data.TransitDatabase;
 import com.das.unigo.data.api.DirectionsApiClient;
 import com.das.unigo.data.entity.StopEntity;
-import com.das.unigo.data.entity.StopTimeEntity;
 import com.das.unigo.utils.ViajeOptimo;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -52,22 +51,31 @@ public class MainActivity extends AppCompatActivity {
     private Button btnConfirmar;
     private boolean isFirstStart = true;
 
-    // Guardamos la lista de paradas universitarias para obtener sus coordenadas
-    // luego
     private List<StopEntity> campusStopsList;
-    // Variable para controlar qué botón está pulsado y poder desmarcarlo
     private int radioSeleccionadoId = -1;
 
-    // Cliente de ubicación
     private FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
 
     private DirectionsApiClient apiClient;
 
+    // Rutas codificadas para Walk
     private String encodedWalkPath;
+
+    // Rutas codificadas para Bike + coordenadas de las estaciones
     private String encodedBikePath, encodedBikeWalk1, encodedBikeWalk2;
+    private double bikeOriLat, bikeOriLon;      // FIX: guardamos estación origen bici
+    private double bikeDestLat, bikeDestLon;    // FIX: guardamos estación destino bici
+    private String bikeOrigenName, bikeDestinoName; // FIX: nombres de las estaciones
+
+    // Mejor viaje Bus encontrado por GTFS
     private ViajeOptimo mejorViajeBus;
     private ViajeOptimo mejorViajeTram;
+
+    // FIX: guardamos la ubicación del usuario en cuanto se calcula la ruta,
+    // para poder enviarla a MapActivity en el Intent.
+    private double currentUserLat, currentUserLon;
+    private boolean userLocationCached = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,15 +86,15 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         apiClient = new DirectionsApiClient();
 
-        spinnerDest = findViewById(R.id.spinner_destination);
-        spinnerLang = findViewById(R.id.spinner_language);
+        spinnerDest    = findViewById(R.id.spinner_destination);
+        spinnerLang    = findViewById(R.id.spinner_language);
         layoutTransport = findViewById(R.id.layout_transport_options);
-        rgTransport = findViewById(R.id.rg_transport);
-        rbWalk = findViewById(R.id.rb_walk);
-        rbBus = findViewById(R.id.rb_bus);
-        rbBike = findViewById(R.id.rb_bike);
-        rbTram = findViewById(R.id.rb_tram);
-        btnConfirmar = findViewById(R.id.btn_confirmar_ruta);
+        rgTransport    = findViewById(R.id.rg_transport);
+        rbWalk         = findViewById(R.id.rb_walk);
+        rbBus          = findViewById(R.id.rb_bus);
+        rbBike         = findViewById(R.id.rb_bike);
+        rbTram         = findViewById(R.id.rb_tram);
+        btnConfirmar   = findViewById(R.id.btn_confirmar_ruta);
 
         Executors.newSingleThreadExecutor().execute(() -> {
             TransitDatabase db = TransitDatabase.getInstance(MainActivity.this);
@@ -98,12 +106,7 @@ public class MainActivity extends AppCompatActivity {
             for (StopEntity stop : campusStopsList) {
                 String resourceName = "campus_" + stop.stopCode;
                 int resId = getResources().getIdentifier(resourceName, "string", getPackageName());
-
-                if (resId != 0) {
-                    destinationNames.add(getString(resId));
-                } else {
-                    destinationNames.add(stop.stopName);
-                }
+                destinationNames.add(resId != 0 ? getString(resId) : stop.stopName);
             }
 
             runOnUiThread(() -> {
@@ -121,20 +124,14 @@ public class MainActivity extends AppCompatActivity {
 
         setLocaleInSpinner();
 
-        View.OnClickListener radioClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Si tocamos el que ya estaba seleccionado, lo desmarcamos
-                if (radioSeleccionadoId == v.getId()) {
-                    rgTransport.clearCheck();
-                    radioSeleccionadoId = -1;
-                } else {
-                    // Si es uno nuevo, nos guardamos su ID
-                    radioSeleccionadoId = v.getId();
-                }
+        View.OnClickListener radioClickListener = v -> {
+            if (radioSeleccionadoId == v.getId()) {
+                rgTransport.clearCheck();
+                radioSeleccionadoId = -1;
+            } else {
+                radioSeleccionadoId = v.getId();
             }
         };
-
         rbWalk.setOnClickListener(radioClickListener);
         rbBus.setOnClickListener(radioClickListener);
         rbBike.setOnClickListener(radioClickListener);
@@ -151,16 +148,15 @@ public class MainActivity extends AppCompatActivity {
                     rbTram.setEnabled(true);
                     btnConfirmar.setVisibility(View.VISIBLE);
 
-                    // Ponemos textos de carga
                     rbWalk.setText(getString(R.string.transport_walk) + " (" + getString(R.string.calculating) + ")");
-                    rbBus.setText(getString(R.string.transport_bus) + " (" + getString(R.string.calculating) + ")");
+                    rbBus.setText(getString(R.string.transport_bus)   + " (" + getString(R.string.calculating) + ")");
                     rbBike.setText(getString(R.string.transport_bike) + " (" + getString(R.string.calculating) + ")");
-
                     rbTram.setText(getString(R.string.transport_tram));
 
-                    // Lanzar cálculo
-                    int selectedPosition = position - 1;
-                    StopEntity destinoSeleccionado = campusStopsList.get(selectedPosition);
+                    // FIX: reseteamos las rutas guardadas al cambiar de destino
+                    limpiarRutasGuardadas();
+
+                    StopEntity destinoSeleccionado = campusStopsList.get(position - 1);
                     calcularTiempos(destinoSeleccionado);
                 } else {
                     layoutTransport.setAlpha(0.5f);
@@ -169,141 +165,147 @@ public class MainActivity extends AppCompatActivity {
                     rbBike.setEnabled(false);
                     rbTram.setEnabled(false);
                     btnConfirmar.setVisibility(View.INVISIBLE);
-
-                    // Al bloquear, limpiamos todo_ y reseteamos nuestra memoria
                     rgTransport.clearCheck();
                     radioSeleccionadoId = -1;
+                    limpiarRutasGuardadas();
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (isFirstStart) {
-                    isFirstStart = false;
-                    return;
-                }
-
+                if (isFirstStart) { isFirstStart = false; return; }
                 String langCode = "es";
-                if (position == 1)
-                    langCode = "eu";
-                else if (position == 2)
-                    langCode = "en";
-
+                if (position == 1) langCode = "eu";
+                else if (position == 2) langCode = "en";
                 cambiarIdioma(langCode);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        // Acción al confirmar ruta
+        // ── Confirmar ruta ──────────────────────────────────────────────────
         btnConfirmar.setOnClickListener(v -> {
             if (radioSeleccionadoId == -1) {
                 Toast.makeText(this, getString(R.string.error_selecciona_transporte), Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // position 0 es el prompt_destino, así que restamos 1 para el array
             int selectedPosition = spinnerDest.getSelectedItemPosition() - 1;
             StopEntity destinoSeleccionado = campusStopsList.get(selectedPosition);
 
-            // Lanzar la actividad del mapa pasando los datos
             Intent intent = new Intent(MainActivity.this, MapActivity.class);
 
-            // Datos comunes
-            intent.putExtra("DESTINO_LAT", destinoSeleccionado.stopLat);
-            intent.putExtra("DESTINO_LNG", destinoSeleccionado.stopLon);
+            // ── Datos comunes ──
+            intent.putExtra("DESTINO_LAT",    destinoSeleccionado.stopLat);
+            intent.putExtra("DESTINO_LNG",    destinoSeleccionado.stopLon);
             intent.putExtra("DESTINO_NOMBRE", destinoSeleccionado.stopName);
 
             String modoTransporte = "";
-            String tiempoAEnviar = "";
+            String tiempoAEnviar  = "";
 
-            // --- LÓGICA SEGÚN MODO SELECCIONADO ---
             if (radioSeleccionadoId == R.id.rb_walk) {
                 modoTransporte = "WALK";
-                tiempoAEnviar = rbWalk.getText().toString();
-                // Pasamos la ruta codificada que guardamos en el callback de la API
+                tiempoAEnviar  = rbWalk.getText().toString();
                 intent.putExtra("ENCODED_PATH", encodedWalkPath);
 
             } else if (radioSeleccionadoId == R.id.rb_bike) {
                 modoTransporte = "BIKE";
-                tiempoAEnviar = rbBike.getText().toString();
-                // Pasamos los 3 tramos codificados (Andar -> Bici -> Andar)
+                tiempoAEnviar  = rbBike.getText().toString();
                 intent.putExtra("PATH_W1", encodedBikeWalk1);
-                intent.putExtra("PATH_B", encodedBikePath);
+                intent.putExtra("PATH_B",  encodedBikePath);
                 intent.putExtra("PATH_W2", encodedBikeWalk2);
+                // FIX: enviamos coordenadas y nombres de las estaciones de bici
+                intent.putExtra("BIKE_ORI_LAT",    bikeOriLat);
+                intent.putExtra("BIKE_ORI_LON",    bikeOriLon);
+                intent.putExtra("BIKE_DEST_LAT",   bikeDestLat);
+                intent.putExtra("BIKE_DEST_LON",   bikeDestLon);
+                intent.putExtra("BIKE_ORIGEN_NAME",  bikeOrigenName);
+                intent.putExtra("BIKE_DESTINO_NAME", bikeDestinoName);
 
             } else if (radioSeleccionadoId == R.id.rb_bus) {
                 modoTransporte = "BUS";
-                tiempoAEnviar = rbBus.getText().toString();
-
+                tiempoAEnviar  = rbBus.getText().toString();
                 if (mejorViajeBus != null) {
-                    // Pasamos los datos necesarios para que el Mapa dibuje el Shape y la caminata
-                    // final
-                    intent.putExtra("SHAPE_ID", mejorViajeBus.shapeId);
-                    intent.putExtra("ROUTE_ID", mejorViajeBus.routeId);
+                    intent.putExtra("SHAPE_ID",  mejorViajeBus.shapeId);
+                    intent.putExtra("ROUTE_ID",  mejorViajeBus.routeId);
+                    // FIX: enviamos coordenadas de la parada de SUBIDA al bus
+                    intent.putExtra("BUS_ORI_LAT", mejorViajeBus.origenLat);
+                    intent.putExtra("BUS_ORI_LON", mejorViajeBus.origenLon);
                     intent.putExtra("BUS_DEST_LAT", mejorViajeBus.destLat);
                     intent.putExtra("BUS_DEST_LON", mejorViajeBus.destLon);
-
-                    intent.putExtra("STOP_ORIGEN_NAME", mejorViajeBus.nombreParadaOrigen);
+                    intent.putExtra("STOP_ORIGEN_NAME",  mejorViajeBus.nombreParadaOrigen);
                     intent.putExtra("STOP_DESTINO_NAME", mejorViajeBus.nombreParadaDestino);
                 }
 
             } else if (radioSeleccionadoId == R.id.rb_tram) {
                 modoTransporte = "TRAM";
-                tiempoAEnviar = rbTram.getText().toString();
-                // Aquí iría la lógica del tranvía similar a la del bus
+                tiempoAEnviar  = rbTram.getText().toString();
+                // Aquí iría la lógica del tranvía (similar al bus)
             }
 
-            // --- EXTRACCIÓN DEL TIEMPO ---
-            // Buscamos el texto entre paréntesis. Si no hay o da error, enviamos un
-            // fallback seguro.
+            // ── Extracción del tiempo entre paréntesis ──
             int startIdx = tiempoAEnviar.lastIndexOf("(");
-            int endIdx = tiempoAEnviar.lastIndexOf(")");
-
+            int endIdx   = tiempoAEnviar.lastIndexOf(")");
             if (startIdx != -1 && endIdx != -1 && startIdx < endIdx) {
                 tiempoAEnviar = tiempoAEnviar.substring(startIdx + 1, endIdx);
             } else {
-                // Si por algún motivo el botón no tiene paréntesis (ej. el tranvía o no ha
-                // terminado de calcular)
                 tiempoAEnviar = "-- mins";
             }
-            // ------------------------------------
 
-            intent.putExtra("MODO_TRANSPORTE", modoTransporte);
-            intent.putExtra("TIEMPO_ESTIMADO", tiempoAEnviar);
+            intent.putExtra("MODO_TRANSPORTE",  modoTransporte);
+            intent.putExtra("TIEMPO_ESTIMADO",  tiempoAEnviar);
 
             startActivity(intent);
         });
     }
 
+    /** Limpia todas las rutas calculadas al cambiar de destino. */
+    private void limpiarRutasGuardadas() {
+        encodedWalkPath  = null;
+        encodedBikePath  = null;
+        encodedBikeWalk1 = null;
+        encodedBikeWalk2 = null;
+        bikeOriLat = bikeOriLon = bikeDestLat = bikeDestLon = 0;
+        bikeOrigenName = bikeDestinoName = null;
+        mejorViajeBus  = null;
+        mejorViajeTram = null;
+    }
+
     private void calcularTiempos(StopEntity destino) {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_REQUEST_CODE);
             return;
         }
 
         fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
             if (location != null) {
-                lanzarCalculoRuta(location.getLatitude(), location.getLongitude(), destino);
+                // FIX: cacheamos la ubicación del usuario para el Intent
+                currentUserLat      = location.getLatitude();
+                currentUserLon      = location.getLongitude();
+                userLocationCached  = true;
+                lanzarCalculoRuta(currentUserLat, currentUserLon, destino);
             } else {
-                // Fallback: solicitar ubicación actual al GPS
                 CancellationTokenSource cts = new CancellationTokenSource();
                 fusedLocationClient.getCurrentLocation(
-                        Priority.PRIORITY_HIGH_ACCURACY, cts.getToken()).addOnSuccessListener(loc -> {
+                                Priority.PRIORITY_HIGH_ACCURACY, cts.getToken())
+                        .addOnSuccessListener(loc -> {
                             if (loc != null) {
-                                lanzarCalculoRuta(loc.getLatitude(), loc.getLongitude(), destino);
+                                currentUserLat     = loc.getLatitude();
+                                currentUserLon     = loc.getLongitude();
+                                userLocationCached = true;
+                                lanzarCalculoRuta(currentUserLat, currentUserLon, destino);
                             } else {
-                                Toast.makeText(this, getString(R.string.error_ubicacion), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, getString(R.string.error_ubicacion),
+                                        Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -315,13 +317,13 @@ public class MainActivity extends AppCompatActivity {
      */
     private void lanzarCalculoRuta(double latOrigen, double lngOrigen, StopEntity destino) {
         try {
-            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(),
-                    PackageManager.GET_META_DATA);
+            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(
+                    getPackageName(), PackageManager.GET_META_DATA);
             String apiKey = appInfo.metaData.getString("com.google.android.geo.API_KEY");
 
-            // --- CÁLCULO ANDANDO ---
-            // Andando (Única llamada a la API en esta pantalla para este modo)
-            apiClient.getRoute(latOrigen, lngOrigen, destino.stopLat, destino.stopLon, "walking", apiKey,
+            // ── ANDANDO ──────────────────────────────────────────────────────
+            apiClient.getRoute(latOrigen, lngOrigen, destino.stopLat, destino.stopLon,
+                    "walking", apiKey,
                     new DirectionsApiClient.RouteCallback() {
                         @Override
                         public void onSuccess(List<LatLng> r, String d) {
@@ -330,9 +332,10 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike, String d2,
-                                List<LatLng> walk2, String d3, String totalDuration) {
-                            // Se deja vacío porque aquí solo calculamos ruta simple
+                        public void onComplexSuccess(List<LatLng> walk1, String d1,
+                                                     List<LatLng> bike, String d2,
+                                                     List<LatLng> walk2, String d3, String totalDuration) {
+                            // No aplica para ruta simple
                         }
 
                         @Override
@@ -341,45 +344,50 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-            // --- CÁLCULO TRANSPORTE PÚBLICO (Real GTFS) ---
+            // ── BUS (GTFS) ───────────────────────────────────────────────────
             calcularTiempoBusReal(latOrigen, lngOrigen, destino);
 
-            // --- CÁLCULO EN BICI (Multimodal: Andar -> Bici -> Andar) ---
-            // Buscamos las estaciones de Bilbobizi más cercanas en la base de datos
+            // ── BICI (multimodal: Andar → Bici → Andar) ──────────────────────
             Executors.newSingleThreadExecutor().execute(() -> {
                 TransitDatabase db = TransitDatabase.getInstance(MainActivity.this);
                 List<StopEntity> estacionesBici = db.transitDao().getStopsByNodeType("BIKE");
 
                 if (estacionesBici != null && estacionesBici.size() >= 2) {
-                    // Encontrar estaciones óptimas de origen y destino
-                    StopEntity biciOrigen = getClosestStop(latOrigen, lngOrigen, estacionesBici);
+                    StopEntity biciOrigen  = getClosestStop(latOrigen, lngOrigen, estacionesBici);
                     StopEntity biciDestino = getClosestStop(destino.stopLat, destino.stopLon, estacionesBici);
 
-                    // Petición combinada al DirectionsApiClient
+                    // FIX: guardamos coordenadas y nombres de las estaciones
+                    bikeOriLat      = biciOrigen.stopLat;
+                    bikeOriLon      = biciOrigen.stopLon;
+                    bikeDestLat     = biciDestino.stopLat;
+                    bikeDestLon     = biciDestino.stopLon;
+                    bikeOrigenName  = biciOrigen.stopName;
+                    bikeDestinoName = biciDestino.stopName;
+
                     apiClient.getComplexBikeRoute(
                             latOrigen, lngOrigen,
-                            biciOrigen.stopLat, biciOrigen.stopLon,
+                            biciOrigen.stopLat,  biciOrigen.stopLon,
                             biciDestino.stopLat, biciDestino.stopLon,
                             destino.stopLat, destino.stopLon,
                             apiKey,
                             new DirectionsApiClient.RouteCallback() {
                                 @Override
-                                public void onSuccess(List<LatLng> routeDecoded, String duration) {
-                                }
+                                public void onSuccess(List<LatLng> routeDecoded, String duration) {}
 
                                 @Override
-                                public void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike,
-                                        String d2, List<LatLng> walk2, String d3, String totalDuration) {
-                                    // Se muestra el icono de bicicleta y el tiempo total del trayecto completo
-                                    rbBike.setText(getString(R.string.transport_bike) + " (" + totalDuration + ")");
+                                public void onComplexSuccess(List<LatLng> walk1, String d1,
+                                                             List<LatLng> bike, String d2,
+                                                             List<LatLng> walk2, String d3, String totalDuration) {
+                                    rbBike.setText(getString(R.string.transport_bike)
+                                            + " (" + totalDuration + ")");
                                     encodedBikeWalk1 = PolyUtil.encode(walk1);
-                                    encodedBikePath = PolyUtil.encode(bike);
+                                    encodedBikePath  = PolyUtil.encode(bike);
                                     encodedBikeWalk2 = PolyUtil.encode(walk2);
                                 }
 
                                 @Override
                                 public void onError(String errorMessage) {
-                                    rbBike.setText(getString(R.string.transport_bike) + "(-)");
+                                    rbBike.setText(getString(R.string.transport_bike) + " (-)");
                                 }
                             });
                 }
@@ -402,10 +410,10 @@ public class MainActivity extends AppCompatActivity {
             java.text.SimpleDateFormat sdfDate = new java.text.SimpleDateFormat("yyyyMMdd", Locale.US);
             java.text.SimpleDateFormat sdfTime = new java.text.SimpleDateFormat("HH:mm:ss", Locale.US);
 
-            String hoyDate = sdfDate.format(cal.getTime());
+            String hoyDate  = sdfDate.format(cal.getTime());
             String ahoraTime = sdfTime.format(cal.getTime());
 
-            int day = cal.get(java.util.Calendar.DAY_OF_WEEK);
+            int day     = cal.get(java.util.Calendar.DAY_OF_WEEK);
             int gtfsDay = (day == java.util.Calendar.SUNDAY) ? 7 : day - 1;
 
             List<String> activeServices = db.transitDao().getActiveServiceIds(gtfsDay, hoyDate);
@@ -414,67 +422,60 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            // Radio de búsqueda de ~1km para paradas
-            List<StopEntity> origenStops = db.transitDao().getNearbyBusStops(latOrigen, lngOrigen, 0.01, 0.01);
-            List<StopEntity> destinoStops = db.transitDao().getNearbyBusStops(destino.stopLat, destino.stopLon,
-                    0.01, 0.01);
+            List<StopEntity> origenStops  = db.transitDao().getNearbyBusStops(latOrigen, lngOrigen, 0.01, 0.01);
+            List<StopEntity> destinoStops = db.transitDao().getNearbyBusStops(
+                    destino.stopLat, destino.stopLon, 0.01, 0.01);
 
             List<String> destinoIds = new ArrayList<>();
-            for (StopEntity dStop : destinoStops) {
-                destinoIds.add(dStop.stopId);
-            }
+            for (StopEntity dStop : destinoStops) destinoIds.add(dStop.stopId);
 
             int bestTotalTimeSeconds = Integer.MAX_VALUE;
-            ViajeOptimo mejorViaje = null;
 
             for (StopEntity oStop : origenStops) {
-                // Estimamos tiempo andando a la parada (5km/h = ~1.4 m/s)
                 float[] res1 = new float[1];
-                android.location.Location.distanceBetween(latOrigen, lngOrigen, oStop.stopLat, oStop.stopLon, res1);
-                // Multiplicamos la distancia en línea recta por 1.5 para simular las curvas de
-                // las calles
+                android.location.Location.distanceBetween(
+                        latOrigen, lngOrigen, oStop.stopLat, oStop.stopLon, res1);
                 int walkSecondsToOrigen = (int) ((res1[0] * 1.5f) / 1.4f);
 
-                // Calculamos a qué hora exacta pisamos la parada
                 cal.setTimeInMillis(System.currentTimeMillis() + (walkSecondsToOrigen * 1000L));
                 String arrivalAtStopStr = sdfTime.format(cal.getTime());
 
-                // Buscamos los próximos buses desde que llegamos, no desde "ahora"
                 ViajeOptimo viaje = db.transitDao().getMejorConexionBus(
-                        oStop.stopId,
-                        destinoIds,
-                        activeServices,
-                        arrivalAtStopStr);
+                        oStop.stopId, destinoIds, activeServices, arrivalAtStopStr);
 
-                if (viaje == null) {
-                    continue;
-                }
+                if (viaje == null) continue;
 
                 float[] res2 = new float[1];
-                android.location.Location.distanceBetween(viaje.destLat, viaje.destLon, destino.stopLat,
-                        destino.stopLon, res2);
-                // Multiplicamos por 1.5 para simular las calles
+                android.location.Location.distanceBetween(
+                        viaje.destLat, viaje.destLon, destino.stopLat, destino.stopLon, res2);
                 int walkSecondsToCampus = (int) ((res2[0] * 1.5f) / 1.4f);
 
-                // El tiempo real total es simplemente (HoraLlegadaDestino - HoraActual) +
-                // CaminarCampus
                 int horaLlegadaDestinoBus = timeStringToSeconds(viaje.horaLlegada);
-                int horaActual = timeStringToSeconds(ahoraTime);
-
-                int totalSeconds = (horaLlegadaDestinoBus - horaActual) + walkSecondsToCampus;
+                int horaActual            = timeStringToSeconds(ahoraTime);
+                int totalSeconds          = (horaLlegadaDestinoBus - horaActual) + walkSecondsToCampus;
 
                 if (totalSeconds > 0 && totalSeconds < bestTotalTimeSeconds) {
                     bestTotalTimeSeconds = totalSeconds;
-                    this.mejorViajeBus = viaje;
+                    this.mejorViajeBus   = viaje;
+                    // FIX: guardamos también la parada de origen (subida) para enviarla a MapActivity
+                    this.mejorViajeBus.origenLat = oStop.stopLat;
+                    this.mejorViajeBus.origenLon = oStop.stopLon;
                 }
             }
 
             if (this.mejorViajeBus != null) {
+                Log.d("BusDebug", "origenLat=" + mejorViajeBus.origenLat + " origenLon=" + mejorViajeBus.origenLon);
+                Log.d("BusDebug", "destLat="   + mejorViajeBus.destLat   + " destLon="   + mejorViajeBus.destLon);
+                Log.d("BusDebug", "shapeId="   + mejorViajeBus.shapeId);
+                Log.d("BusDebug", "origenId="  + mejorViajeBus.origenId  + " destinoId=" + mejorViajeBus.destinoId);
                 int mins = bestTotalTimeSeconds / 60;
-                runOnUiThread(() -> rbBus.setText(getString(R.string.transport_bus) + " (" + mins + " mins)"));
-                mejorViajeBus.nombreParadaOrigen = db.transitDao().getStopById(mejorViajeBus.origenId).stopName;
-                mejorViajeBus.nombreParadaDestino = db.transitDao().getStopById(mejorViajeBus.destinoId).stopName;
-                Log.d("MainActivity", "Mejor viaje: " + mejorViajeBus.toString());
+                runOnUiThread(() -> rbBus.setText(
+                        getString(R.string.transport_bus) + " (" + mins + " mins)"));
+                mejorViajeBus.nombreParadaOrigen  =
+                        db.transitDao().getStopById(mejorViajeBus.origenId).stopName;
+                mejorViajeBus.nombreParadaDestino =
+                        db.transitDao().getStopById(mejorViajeBus.destinoId).stopName;
+                Log.d("MainActivity", "Mejor viaje: " + mejorViajeBus);
                 Log.d("MainActivity", "Tiempo: " + mins + " mins");
             } else {
                 runOnUiThread(() -> rbBus.setText(getString(R.string.transport_bus) + " (- mins)"));
@@ -482,31 +483,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Utilidad para convertir los String del GTFS (ej. "14:30:00") a segundos
-     * operables.
-     */
     private int timeStringToSeconds(String time) {
-        if (time == null)
-            return 0;
+        if (time == null) return 0;
         String[] parts = time.split(":");
         if (parts.length == 3) {
-            return Integer.parseInt(parts[0]) * 3600 + Integer.parseInt(parts[1]) * 60 + Integer.parseInt(parts[2]);
+            return Integer.parseInt(parts[0]) * 3600
+                    + Integer.parseInt(parts[1]) * 60
+                    + Integer.parseInt(parts[2]);
         }
         return 0;
     }
 
-    /**
-     * Algoritmo auxiliar para encontrar la parada o estación más cercana a una
-     * ubicación dada.
-     */
     private StopEntity getClosestStop(double lat, double lon, List<StopEntity> stops) {
-        StopEntity closest = null;
-        float minDistance = Float.MAX_VALUE;
-        float[] results = new float[1];
-
+        StopEntity closest  = null;
+        float minDistance   = Float.MAX_VALUE;
+        float[] results     = new float[1];
         for (StopEntity stop : stops) {
-            // Cálculo de distancia real usando la utilidad de Android
             android.location.Location.distanceBetween(lat, lon, stop.stopLat, stop.stopLon, results);
             if (results[0] < minDistance) {
                 minDistance = results[0];
@@ -518,13 +510,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE && grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Si el usuario acaba de dar permiso, recálculamos si ya hay algo seleccionado
             if (spinnerDest.getSelectedItemPosition() > 0) {
-                StopEntity destinoSeleccionado = campusStopsList.get(spinnerDest.getSelectedItemPosition() - 1);
+                StopEntity destinoSeleccionado =
+                        campusStopsList.get(spinnerDest.getSelectedItemPosition() - 1);
                 calcularTiempos(destinoSeleccionado);
             }
         }
@@ -532,28 +524,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void cambiarIdioma(String langCode) {
         Locale currentLocale = getResources().getConfiguration().locale;
-        if (currentLocale.getLanguage().equals(langCode))
-            return;
+        if (currentLocale.getLanguage().equals(langCode)) return;
 
         Locale myLocale = new Locale(langCode);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-
+        Resources res       = getResources();
+        DisplayMetrics dm   = res.getDisplayMetrics();
+        Configuration conf  = res.getConfiguration();
         conf.setLocale(myLocale);
         res.updateConfiguration(conf, dm);
-
         recreate();
     }
 
     private void setLocaleInSpinner() {
         String lang = getResources().getConfiguration().locale.getLanguage();
         int position = 0;
-        if (lang.equals("eu"))
-            position = 1;
-        else if (lang.equals("en"))
-            position = 2;
-
+        if (lang.equals("eu"))  position = 1;
+        else if (lang.equals("en")) position = 2;
         spinnerLang.setSelection(position);
     }
 }

@@ -8,6 +8,8 @@ public class ViajeOptimo {
     public String destinoId;
     public String horaSalida; // st_orig.departure_time
     public String horaLlegada; // st_dest.arrival_time
+    public double origenLat;
+    public double origenLon;
     public double destLat;
     public double destLon;
 

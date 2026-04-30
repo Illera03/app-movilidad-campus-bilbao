@@ -128,6 +128,12 @@ public interface TransitDao {
         List<RouteEntity> getRoutesByAgency(String agencyId);
 
         /**
+         * Obtiene una ruta por su ID.
+         */
+        @Query("SELECT * FROM routes WHERE route_id = :routeId LIMIT 1")
+        RouteEntity getRouteById(String routeId);
+
+        /**
          * Obtiene los puntos de shape para dibujar una ruta en el mapa.
          */
         @Query("SELECT * FROM shapes WHERE shape_id = :shapeId ORDER BY shape_pt_sequence ASC")
@@ -164,12 +170,15 @@ public interface TransitDao {
                 "st_dest.stop_id AS destinoId, " +
                 "st_orig.departure_time AS horaSalida, " +
                 "st_dest.arrival_time AS horaLlegada, " +
-                "s_dest.stop_lat AS destLat, " +  // Obtenemos latitud del destino
-                "s_dest.stop_lon AS destLon " +   // Obtenemos longitud del destino
+                "s_orig.stop_lat AS origenLat, " +
+                "s_orig.stop_lon AS origenLon, " +
+                "s_dest.stop_lat AS destLat, " +
+                "s_dest.stop_lon AS destLon " +
                 "FROM stop_times st_orig " +
                 "JOIN stop_times st_dest ON st_orig.trip_id = st_dest.trip_id " +
                 "JOIN trips t ON st_orig.trip_id = t.trip_id " +
-                "JOIN stops s_dest ON st_dest.stop_id = s_dest.stop_id " + // <--- Unión clave
+                "JOIN stops s_orig ON st_orig.stop_id = s_orig.stop_id " +
+                "JOIN stops s_dest ON st_dest.stop_id = s_dest.stop_id " +
                 "WHERE st_orig.stop_id = :originId " +
                 "  AND st_dest.stop_id IN (:destIds) " +
                 "  AND t.service_id IN (:activeServices) " +
