@@ -1,0 +1,5 @@
+service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date
+ES:Euskotren:Service:2813:,0,0,0,0,0,0,1,20260510,20260510
+ES:Euskotren:Service:2878:,0,0,0,0,0,1,0,20260502,20260606
+ES:Euskotren:Service:2879:,0,0,0,0,1,0,1,20260501,20260607
+ES:Euskotren:Service:2882:,1,1,1,1,1,0,0,20260504,20260610

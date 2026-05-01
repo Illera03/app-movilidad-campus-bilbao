@@ -80,7 +80,7 @@ public interface TransitDao {
          * Obtiene paradas de autobús (Bilbobus/Bizkaibus) cercanas.
          */
         @Query("SELECT * FROM stops " +
-                        "WHERE (node_type = 'BUS_BILBOBUS' OR node_type = 'BUS_BIZKABUS') " +
+                        "WHERE (node_type = 'BUS_BILBOBUS' OR node_type = 'BUS_BIZKAIBUS') " +
                         "AND stop_lat BETWEEN :lat - :latDelta AND :lat + :latDelta " +
                         "AND stop_lon BETWEEN :lon - :lonDelta AND :lon + :lonDelta")
         List<StopEntity> getNearbyBusStops(double lat, double lon, double latDelta, double lonDelta);
@@ -89,10 +89,13 @@ public interface TransitDao {
          * Obtiene paradas de metro (Euskotren) cercanas.
          */
         @Query("SELECT * FROM stops " +
-                        "WHERE node_type = 'TRAM_EUSKOTREN' " +
+                        "WHERE (node_type = 'TRAM_EUSKOTREN') " +
                         "AND stop_lat BETWEEN :lat - :latDelta AND :lat + :latDelta " +
                         "AND stop_lon BETWEEN :lon - :lonDelta AND :lon + :lonDelta")
         List<StopEntity> getNearbyTramStops(double lat, double lon, double latDelta, double lonDelta);
+
+        @Query("SELECT DISTINCT node_type FROM stops")
+        List<String> getStopsNodeTypes();
 
         /**
          * Próximas salidas desde una parada a partir de una hora, para service_ids
@@ -156,38 +159,38 @@ public interface TransitDao {
         /**
          * Busca la mejor conexión entre un origen y un destino.
          * 
-         * @param originId        Lista de IDs de paradas de origen
+         * @param originId          Lista de IDs de paradas de origen
          * @param destIds           Lista de IDs de paradas de destino
          * @param activeServices    Lista de IDs de servicios activos
          * @param timeArrivalAtStop Hora de llegada a la parada de origen
          * @return ViajeOptimo con la mejor conexión
          */
         @Query("SELECT " +
-                "t.route_id AS routeId, " +
-                "t.shape_id AS shapeId, " +
-                "t.trip_id AS tripId, " +
-                "st_orig.stop_id AS origenId, " +
-                "st_dest.stop_id AS destinoId, " +
-                "st_orig.departure_time AS horaSalida, " +
-                "st_dest.arrival_time AS horaLlegada, " +
-                "s_orig.stop_lat AS origenLat, " +
-                "s_orig.stop_lon AS origenLon, " +
-                "s_dest.stop_lat AS destLat, " +
-                "s_dest.stop_lon AS destLon " +
-                "FROM stop_times st_orig " +
-                "JOIN stop_times st_dest ON st_orig.trip_id = st_dest.trip_id " +
-                "JOIN trips t ON st_orig.trip_id = t.trip_id " +
-                "JOIN stops s_orig ON st_orig.stop_id = s_orig.stop_id " +
-                "JOIN stops s_dest ON st_dest.stop_id = s_dest.stop_id " +
-                "WHERE st_orig.stop_id = :originId " +
-                "  AND st_dest.stop_id IN (:destIds) " +
-                "  AND t.service_id IN (:activeServices) " +
-                "  AND st_orig.stop_sequence < st_dest.stop_sequence " +
-                "  AND st_orig.departure_time >= :timeArrivalAtStop " +
-                "ORDER BY st_dest.arrival_time ASC " +
-                "LIMIT 1")
-        ViajeOptimo getMejorConexionBus(String originId, List<String> destIds,
-                                        List<String> activeServices, String timeArrivalAtStop);
+                        "t.route_id AS routeId, " +
+                        "t.shape_id AS shapeId, " +
+                        "t.trip_id AS tripId, " +
+                        "st_orig.stop_id AS origenId, " +
+                        "st_dest.stop_id AS destinoId, " +
+                        "st_orig.departure_time AS horaSalida, " +
+                        "st_dest.arrival_time AS horaLlegada, " +
+                        "s_orig.stop_lat AS origenLat, " +
+                        "s_orig.stop_lon AS origenLon, " +
+                        "s_dest.stop_lat AS destLat, " +
+                        "s_dest.stop_lon AS destLon " +
+                        "FROM stop_times st_orig " +
+                        "JOIN stop_times st_dest ON st_orig.trip_id = st_dest.trip_id " +
+                        "JOIN trips t ON st_orig.trip_id = t.trip_id " +
+                        "JOIN stops s_orig ON st_orig.stop_id = s_orig.stop_id " +
+                        "JOIN stops s_dest ON st_dest.stop_id = s_dest.stop_id " +
+                        "WHERE st_orig.stop_id = :originId " +
+                        "  AND st_dest.stop_id IN (:destIds) " +
+                        "  AND t.service_id IN (:activeServices) " +
+                        "  AND st_orig.stop_sequence < st_dest.stop_sequence " +
+                        "  AND st_orig.departure_time >= :timeArrivalAtStop " +
+                        "ORDER BY st_dest.arrival_time ASC " +
+                        "LIMIT 1")
+        ViajeOptimo getMejorConexion(String originId, List<String> destIds,
+                        List<String> activeServices, String timeArrivalAtStop);
 
         // ========================
         // CONTADORES (para verificación)

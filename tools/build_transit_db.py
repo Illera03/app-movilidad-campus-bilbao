@@ -700,7 +700,7 @@ def main():
 
     # Importar Tranvía
     print("\n── Importando Tranvía GTFS ──")
-    import_gtfs(cursor, "tranvia_gtfs", PREFIX_TRAM, "TRANVIA", "TRAM_EUSKOTREN")
+    import_gtfs(cursor, "tram_gtfs", PREFIX_TRAM, "TRANVIA", "TRAM_EUSKOTREN")
     conn.commit()
 
     # Importar estaciones de bici

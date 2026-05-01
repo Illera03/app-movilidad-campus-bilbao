@@ -1,0 +1,573 @@
+route_id,service_id,trip_id,trip_headsign,trip_short_name,direction_id,block_id,shape_id,wheelchair_accessible,bikes_allowed
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056320:,La Casilla,,1,,ES:Euskotren:RoutePoints:517:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056340:,La Casilla,,1,,ES:Euskotren:RoutePoints:517:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056350:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056360:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056380:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056390:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056410:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056420:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056430:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056440:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056450:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056460:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056470:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056480:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056490:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056500:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056510:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056520:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056530:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056540:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056550:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056560:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056570:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056580:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056590:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056600:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056610:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056620:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056630:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056640:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056650:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056660:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056670:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056680:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056690:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056700:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056710:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056720:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056730:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056740:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056750:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056760:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056770:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056780:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056790:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056800:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056810:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056820:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056830:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056840:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056850:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056860:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056870:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056880:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056890:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056900:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056910:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056920:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056930:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056940:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056950:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056960:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056970:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14056980:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057000:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057010:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057020:,Hospital/Ospitalea,,1,,ES:Euskotren:RoutePoints:1846:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057030:,Euskalduna,,1,,ES:Euskotren:RoutePoints:5970:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057040:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057060:,Euskalduna,,1,,ES:Euskotren:RoutePoints:5970:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057070:,Euskalduna,,1,,ES:Euskotren:RoutePoints:2462:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057080:,Bolueta,,0,,ES:Euskotren:RoutePoints:5974:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057090:,Euskalduna,,1,,ES:Euskotren:RoutePoints:5970:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057110:,Bolueta,,0,,ES:Euskotren:RoutePoints:5974:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057120:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057130:,Euskalduna,,1,,ES:Euskotren:RoutePoints:2462:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057140:,Bolueta,,0,,ES:Euskotren:RoutePoints:5974:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057150:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057170:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057180:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057190:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057200:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057210:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057220:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057230:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057240:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057250:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057260:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057270:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057280:,Euskalduna,,1,,ES:Euskotren:RoutePoints:5970:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057310:,Bolueta,,0,,ES:Euskotren:RoutePoints:5974:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057320:,Euskalduna,,1,,ES:Euskotren:RoutePoints:5970:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057330:,Bolueta,,0,,ES:Euskotren:RoutePoints:5974:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057340:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057350:,Bolueta,,0,,ES:Euskotren:RoutePoints:5974:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057360:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057370:,Bolueta,,0,,ES:Euskotren:RoutePoints:5977:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057380:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057390:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057400:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057410:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057430:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057440:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057450:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057460:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057470:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057480:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057490:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057500:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057510:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057520:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057530:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057540:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057550:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057560:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057570:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057580:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057590:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057600:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057610:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057620:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057630:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057640:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057650:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057660:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057670:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057680:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057690:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057700:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057710:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057720:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057730:,Atxuri,,0,,ES:Euskotren:RoutePoints:518:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057750:,Atxuri,,0,,ES:Euskotren:RoutePoints:518:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2813:,ES:Euskotren:Journey:14057770:,Atxuri,,0,,ES:Euskotren:RoutePoints:518:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307340:,La Casilla,,1,,ES:Euskotren:RoutePoints:517:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307360:,La Casilla,,1,,ES:Euskotren:RoutePoints:517:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307370:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307380:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307400:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307410:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307430:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307440:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307450:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307460:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307470:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307480:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307490:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307500:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307510:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307520:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307530:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307540:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307550:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307560:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307570:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307580:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307590:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307600:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307610:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307620:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307630:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307640:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307650:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307660:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307670:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307680:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307690:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307700:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307710:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307720:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307730:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307740:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307750:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307760:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307770:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307780:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307790:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307800:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307810:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307820:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307830:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307840:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307850:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307860:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307870:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307880:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307890:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307900:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307910:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307920:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307930:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307940:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307950:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307960:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307970:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307980:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14307990:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308010:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308020:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308030:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308040:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308050:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308060:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308070:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308080:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308090:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308100:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308110:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308120:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308130:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308140:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308150:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308160:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308170:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308180:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308190:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308200:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308210:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308220:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308230:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308240:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308250:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308260:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308270:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308280:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308290:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308300:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308310:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308320:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308330:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308340:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308350:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308360:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308370:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308380:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308390:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308400:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308410:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308420:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308430:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308440:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308450:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308460:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308470:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308480:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308490:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308500:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308510:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308520:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308530:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308540:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308550:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308560:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308570:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308580:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308590:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308600:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308610:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308620:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308630:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308640:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308650:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308660:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308670:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308690:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308700:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308710:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308720:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308730:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308740:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308750:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308760:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308770:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308780:,Atxuri,,0,,ES:Euskotren:RoutePoints:518:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308800:,Atxuri,,0,,ES:Euskotren:RoutePoints:518:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2878:,ES:Euskotren:Journey:14308820:,Atxuri,,0,,ES:Euskotren:RoutePoints:518:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308830:,La Casilla,,1,,ES:Euskotren:RoutePoints:517:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308850:,La Casilla,,1,,ES:Euskotren:RoutePoints:517:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308860:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308870:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308890:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308900:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308920:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308930:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308940:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308950:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308960:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308970:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308980:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14308990:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309000:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309010:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309020:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309030:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309040:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309050:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309060:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309070:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309080:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309090:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309100:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309110:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309120:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309130:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309140:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309150:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309160:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309170:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309180:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309190:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309200:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309210:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309220:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309230:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309240:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309250:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309260:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309270:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309280:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309290:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309300:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309310:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309320:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309330:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309340:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309350:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309360:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309370:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309380:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309390:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309400:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309410:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309420:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309430:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309440:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309450:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309460:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309470:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309480:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309490:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309500:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309510:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309520:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309530:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309540:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309550:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309560:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309570:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309580:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309590:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309600:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309610:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309620:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309630:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309640:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309650:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309660:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309670:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309680:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309690:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309700:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309710:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309720:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309730:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309740:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309750:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309760:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309770:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309780:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309790:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309800:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309810:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309820:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309830:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309840:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309850:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309860:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309870:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309880:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309890:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309900:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309910:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309920:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309930:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309940:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309950:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309960:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309970:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309980:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14309990:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310000:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310010:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310020:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310030:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310040:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310050:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310060:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310070:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310080:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310090:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310100:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310110:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310120:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310130:,Atxuri,,0,,ES:Euskotren:RoutePoints:518:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310150:,Atxuri,,0,,ES:Euskotren:RoutePoints:518:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2879:,ES:Euskotren:Journey:14310170:,Atxuri,,0,,ES:Euskotren:RoutePoints:518:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313460:,La Casilla,,1,,ES:Euskotren:RoutePoints:517:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313480:,La Casilla,,1,,ES:Euskotren:RoutePoints:517:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313490:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313500:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313520:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313530:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313550:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313570:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313580:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313590:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313600:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313610:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313620:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313630:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313640:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313650:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313660:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313670:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313680:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313690:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313700:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313710:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313720:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313730:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313740:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313750:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313760:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313770:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313780:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313790:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313800:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313810:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313820:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313830:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313840:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313850:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313860:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313870:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313880:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313890:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313900:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313910:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313920:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313930:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313940:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313950:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313960:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313970:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313980:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14313990:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314000:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314010:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314020:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314030:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314040:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314050:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314060:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314070:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314080:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314090:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314100:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314110:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314120:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314130:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314140:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314150:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314160:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314170:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314180:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314190:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314200:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314210:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314220:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314230:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314240:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314250:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314260:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314270:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314280:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314290:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314300:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314310:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314320:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314330:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314340:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314350:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314360:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314370:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314380:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314390:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314400:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314410:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314420:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314430:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314440:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314450:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314460:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314470:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314480:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314490:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314500:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314510:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314520:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314530:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314540:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314550:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314560:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314570:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314580:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314590:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314600:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314610:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314620:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314630:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314640:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314650:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314660:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314670:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314680:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314690:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314700:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314710:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314720:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314730:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314740:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314750:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314760:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314770:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314780:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314790:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314800:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314810:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314820:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314830:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314840:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314850:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314860:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314870:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314880:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314890:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314900:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314910:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314920:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314930:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314940:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314950:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314960:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314970:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314980:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14314990:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315000:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315010:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315020:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315030:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315050:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315060:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315070:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315080:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315090:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315100:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315110:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315120:,Bolueta,,0,,ES:Euskotren:RoutePoints:5975:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315130:,La Casilla,,1,,ES:Euskotren:RoutePoints:5971:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315140:,Atxuri,,0,,ES:Euskotren:RoutePoints:518:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315160:,Atxuri,,0,,ES:Euskotren:RoutePoints:518:,1,0
+ES:Euskotren:Line:5:,ES:Euskotren:Service:2882:,ES:Euskotren:Journey:14315180:,Atxuri,,0,,ES:Euskotren:RoutePoints:518:,1,0
