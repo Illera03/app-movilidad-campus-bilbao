@@ -1,0 +1,2 @@
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color,route_sort_order,continuous_pickup,continuous_drop_off,network_id
+ES:Euskotren:Line:5:,ES:Euskotren:Operator:EUS_TrBi:,TR,Bolueta-La Casilla,,0,,4EB848,000000,11,1,1,ES:Euskotren:Network:30:

@@ -16,22 +16,18 @@ import com.das.unigo.data.entity.*;
  * - Nodos: StopEntity (paradas bus, estaciones bici, centros universitarios)
  * - Aristas transit: StopTimeEntity (horarios consecutivos de un mismo trip)
  * - Metadatos: AgencyEntity, RouteEntity, TripEntity, ShapeEntity,
- *              CalendarEntity, CalendarDateEntity
+ * CalendarEntity, CalendarDateEntity
  */
-@Database(
-        entities = {
-                AgencyEntity.class,
-                RouteEntity.class,
-                StopEntity.class,
-                TripEntity.class,
-                StopTimeEntity.class,
-                ShapeEntity.class,
-                CalendarEntity.class,
-                CalendarDateEntity.class
-        },
-        version = 2,
-        exportSchema = false
-)
+@Database(entities = {
+        AgencyEntity.class,
+        RouteEntity.class,
+        StopEntity.class,
+        TripEntity.class,
+        StopTimeEntity.class,
+        ShapeEntity.class,
+        CalendarEntity.class,
+        CalendarDateEntity.class
+}, version = 4, exportSchema = false)
 public abstract class TransitDatabase extends RoomDatabase {
 
     private static volatile TransitDatabase INSTANCE;
@@ -44,13 +40,11 @@ public abstract class TransitDatabase extends RoomDatabase {
     public static TransitDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(
-                        context.getApplicationContext(), // Usamos app context para evitar fugas
-                        TransitDatabase.class,
-                        "unigo_transit.db"
-                    )
+                    context.getApplicationContext(), // Usamos app context para evitar fugas
+                    TransitDatabase.class,
+                    "unigo_transit.db")
                     .createFromAsset("databases/unigo_transit.db")
                     .fallbackToDestructiveMigration()
-                    .fallbackToDestructiveMigrationOnDowngrade()
                     .build();
         }
         return INSTANCE;

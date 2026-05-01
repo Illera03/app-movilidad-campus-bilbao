@@ -3,6 +3,7 @@ package com.das.unigo.ui;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -43,6 +44,7 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -68,6 +70,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private double busOriLat, busOriLon; // FIX #3: añadidos para recibir la parada de subida
     private double bikeOriLat, bikeOriLon;
     private double bikeDestLat, bikeDestLon; // FIX #2: añadidos para recibir la estación destino de bici
+
+    private double tramOriLat, tramOriLon;
+    private double tramDestLat, tramDestLon;
 
     // Views de la interfaz
     private TextView tvWeather, tvWeatherIcon, tvPollution, tvPollutionIcon;
@@ -127,6 +132,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             stopOrigenName = getIntent().getStringExtra("STOP_ORIGEN_NAME");
             stopDestinoName = getIntent().getStringExtra("STOP_DESTINO_NAME");
+
+            // Datos de tranvía
+            tramOriLat = getIntent().getDoubleExtra("TRAM_ORI_LAT", 0);
+            tramOriLon = getIntent().getDoubleExtra("TRAM_ORI_LON", 0);
+            tramDestLat = getIntent().getDoubleExtra("TRAM_DEST_LAT", 0);
+            tramDestLon = getIntent().getDoubleExtra("TRAM_DEST_LON", 0);
 
             // Datos de Bici
             bikeOriLat = getIntent().getDoubleExtra("BIKE_ORI_LAT", 0);
@@ -229,10 +240,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 trazarRutaBusGTFS(destinoFinal);
                 break;
 
-            // FIX #6: caso TRAM añadido para no ignorarlo en silencio
             case "TRAM":
                 // Toast.makeText(this, getString(R.string.tram_not_implemented),
                 // Toast.LENGTH_SHORT).show();
+                trazarRutaTramGTFS(destinoFinal);
                 break;
 
             default:
@@ -310,7 +321,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             for (com.das.unigo.data.entity.ShapeEntity p : rawPoints)
                 rutaCompleta.add(new LatLng(p.shapePtLat, p.shapePtLon));
 
-            List<LatLng> busRoute = recortarRutaBus(rutaCompleta, paradaOrigen, paradaDestino);
+            List<LatLng> busRoute = recortarRuta(rutaCompleta, paradaOrigen, paradaDestino);
 
             // 2. Con el shape listo, pedimos los dos tramos a pie a la API (en paralelo)
             DirectionsApiClient apiClient = new DirectionsApiClient();
@@ -324,7 +335,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 public void onSuccess(List<LatLng> route, String duration) {
                     walkRoutes[0] = route;
                     if (pendingCalls.decrementAndGet() == 0)
-                        dibujarTodoElBus(walkRoutes[0], busRoute, walkRoutes[1],
+                        dibujarTodo(walkRoutes[0], busRoute, walkRoutes[1],
                                 paradaOrigen, paradaDestino, destinoFinal);
                 }
 
@@ -339,7 +350,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     // Fallback: línea recta
                     walkRoutes[0] = java.util.Arrays.asList(usuarioOrigen, paradaOrigen);
                     if (pendingCalls.decrementAndGet() == 0)
-                        dibujarTodoElBus(walkRoutes[0], busRoute, walkRoutes[1],
+                        dibujarTodo(walkRoutes[0], busRoute, walkRoutes[1],
                                 paradaOrigen, paradaDestino, destinoFinal);
                 }
             };
@@ -349,7 +360,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 public void onSuccess(List<LatLng> route, String duration) {
                     walkRoutes[1] = route;
                     if (pendingCalls.decrementAndGet() == 0)
-                        dibujarTodoElBus(walkRoutes[0], busRoute, walkRoutes[1],
+                        dibujarTodo(walkRoutes[0], busRoute, walkRoutes[1],
                                 paradaOrigen, paradaDestino, destinoFinal);
                 }
 
@@ -364,7 +375,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     // Fallback: línea recta
                     walkRoutes[1] = java.util.Arrays.asList(paradaDestino, destinoFinal);
                     if (pendingCalls.decrementAndGet() == 0)
-                        dibujarTodoElBus(walkRoutes[0], busRoute, walkRoutes[1],
+                        dibujarTodo(walkRoutes[0], busRoute, walkRoutes[1],
                                 paradaOrigen, paradaDestino, destinoFinal);
                 }
             };
@@ -388,12 +399,145 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             // Pintamos el shape del bus inmediatamente (no espera a los tramos a pie)
 
             RouteEntity route = db.transitDao().getRouteById(routeId);
+
+            if (route == null) {
+                Log.e("MapActivity", "No se pudo obtener la ruta del bus");
+                finish();
+            }
+
             runOnUiThread(() -> {
                 pintarTramo(busRoute, Color.RED);
-                agregarMarcadorBus(paradaOrigen, stopOrigenName);
-                agregarMarcadorBus(paradaDestino, stopDestinoName);
+                agregarMarcador(paradaOrigen, stopOrigenName);
+                agregarMarcador(paradaDestino, stopDestinoName);
                 actualizarCardDetalles("Línea " + route.routeShortName, stopOrigenName, stopDestinoName);
                 enfocarListaPuntos(busRoute);
+            });
+
+        }).start();
+    }
+
+    private void trazarRutaTramGTFS(LatLng destinoFinal) {
+        // Obtenemos la API key igual que en MainActivity
+        String apiKey;
+        try {
+            android.content.pm.ApplicationInfo appInfo = getPackageManager()
+                    .getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+            apiKey = appInfo.metaData.getString("com.google.android.geo.API_KEY");
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("MapActivity", "No se pudo obtener la API key", e);
+            return;
+        }
+
+        LatLng paradaOrigen = new LatLng(tramOriLat, tramOriLon);
+        LatLng paradaDestino = new LatLng(tramDestLat, tramDestLon);
+        LatLng usuarioOrigen = new LatLng(userLat, userLon);
+
+        Log.d("TramDebug", "trazarRutaTramGTFS: shapeId=" + shapeId + ", routeId=" + routeId);
+        Log.d("TramDebug", "paradaOrigen=" + tramOriLat + "," + tramOriLon);
+        Log.d("TramDebug", "paradaDestino=" + tramDestLat + "," + tramDestLon);
+
+        // 1. Cargamos el shape del tranvía en un hilo de fondo
+        new Thread(() -> {
+            com.das.unigo.data.TransitDatabase db = com.das.unigo.data.TransitDatabase.getInstance(this);
+            java.util.List<com.das.unigo.data.entity.ShapeEntity> rawPoints = db.transitDao().getShapePoints(shapeId);
+
+            java.util.List<LatLng> rutaCompleta = new java.util.ArrayList<>();
+            for (com.das.unigo.data.entity.ShapeEntity p : rawPoints)
+                rutaCompleta.add(new LatLng(p.shapePtLat, p.shapePtLon));
+
+            Log.d("TramDebug", "rawPoints.size()=" + rawPoints.size());
+            List<LatLng> tramRoute = recortarRuta(rutaCompleta, paradaOrigen, paradaDestino);
+            Log.d("TramDebug", "tramRoute.size()=" + (tramRoute != null ? tramRoute.size() : "null"));
+
+            // 2. Con el shape listo, pedimos los dos tramos a pie a la API (en paralelo)
+            DirectionsApiClient apiClient = new DirectionsApiClient();
+
+            // Usamos un contador atómico para saber cuándo han terminado las dos llamadas
+            java.util.concurrent.atomic.AtomicInteger pendingCalls = new java.util.concurrent.atomic.AtomicInteger(2);
+            List<LatLng>[] walkRoutes = new List[2]; // [0]=usuario→parada, [1]=parada→campus
+
+            DirectionsApiClient.RouteCallback callbackW1 = new DirectionsApiClient.RouteCallback() {
+                @Override
+                public void onSuccess(List<LatLng> route, String duration) {
+                    walkRoutes[0] = route;
+                    if (pendingCalls.decrementAndGet() == 0)
+                        dibujarTodo(walkRoutes[0], tramRoute, walkRoutes[1],
+                                paradaOrigen, paradaDestino, destinoFinal);
+                }
+
+                @Override
+                public void onComplexSuccess(List<LatLng> w1, String d1, List<LatLng> b,
+                        String d2, List<LatLng> w2, String d3, String total) {
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e("MapActivity", "Error tramo a pie 1: " + error);
+                    // Fallback: línea recta
+                    walkRoutes[0] = java.util.Arrays.asList(usuarioOrigen, paradaOrigen);
+                    if (pendingCalls.decrementAndGet() == 0)
+                        dibujarTodo(walkRoutes[0], tramRoute, walkRoutes[1],
+                                paradaOrigen, paradaDestino, destinoFinal);
+                }
+            };
+
+            DirectionsApiClient.RouteCallback callbackW2 = new DirectionsApiClient.RouteCallback() {
+                @Override
+                public void onSuccess(List<LatLng> route, String duration) {
+                    walkRoutes[1] = route;
+                    if (pendingCalls.decrementAndGet() == 0)
+                        dibujarTodo(walkRoutes[0], tramRoute, walkRoutes[1],
+                                paradaOrigen, paradaDestino, destinoFinal);
+                }
+
+                @Override
+                public void onComplexSuccess(List<LatLng> w1, String d1, List<LatLng> b,
+                        String d2, List<LatLng> w2, String d3, String total) {
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e("MapActivity", "Error tramo a pie 2: " + error);
+                    // Fallback: línea recta
+                    walkRoutes[1] = java.util.Arrays.asList(paradaDestino, destinoFinal);
+                    if (pendingCalls.decrementAndGet() == 0)
+                        dibujarTodo(walkRoutes[0], tramRoute, walkRoutes[1],
+                                paradaOrigen, paradaDestino, destinoFinal);
+                }
+            };
+
+            // Tramo a pie 1: ubicación usuario → parada de subida
+            if (userLocationReady) {
+                apiClient.getRoute(userLat, userLon,
+                        tramOriLat, tramOriLon,
+                        "walking", apiKey, callbackW1);
+            } else {
+                // Si no tenemos ubicación, fallback a línea recta y decrementamos
+                walkRoutes[0] = java.util.Arrays.asList(paradaOrigen, paradaOrigen);
+                pendingCalls.decrementAndGet();
+            }
+
+            // Tramo a pie 2: parada de bajada → destino campus
+            apiClient.getRoute(tramDestLat, tramDestLon,
+                    destLat, destLng,
+                    "walking", apiKey, callbackW2);
+
+            // Pintamos el shape del bus inmediatamente (no espera a los tramos a pie)
+
+            RouteEntity route = db.transitDao().getRouteById(routeId);
+
+            if (route == null) {
+                Log.e("MapActivity", "No se pudo obtener la ruta del tranvia");
+                finish();
+            }
+
+            runOnUiThread(() -> {
+                Log.d("TramDebug", "Dibujando tranvía: " + (tramRoute != null ? tramRoute.size() : "null") + " puntos");
+                pintarTramo(tramRoute, Color.DKGRAY);
+                agregarMarcador(paradaOrigen, stopOrigenName);
+                agregarMarcador(paradaDestino, stopDestinoName);
+                actualizarCardDetalles("Tranvía " + route.routeShortName, stopOrigenName, stopDestinoName);
+                enfocarListaPuntos(tramRoute);
             });
 
         }).start();
@@ -403,7 +547,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
      * Se llama cuando los dos tramos a pie han terminado de calcularse.
      * Añade las polilíneas al mapa ya en el hilo principal.
      */
-    private void dibujarTodoElBus(List<LatLng> walk1, List<LatLng> busRoute,
+    private void dibujarTodo(List<LatLng> walk1, List<LatLng> route,
             List<LatLng> walk2, LatLng paradaOrigen,
             LatLng paradaDestino, LatLng destinoFinal) {
         runOnUiThread(() -> {
@@ -414,15 +558,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             java.util.List<LatLng> total = new java.util.ArrayList<>();
             if (walk1 != null)
                 total.addAll(walk1);
-            if (busRoute != null)
-                total.addAll(busRoute);
+            if (route != null)
+                total.addAll(route);
             if (walk2 != null)
                 total.addAll(walk2);
             enfocarListaPuntos(total);
         });
     }
 
-    private void agregarMarcadorBus(LatLng pos, String nombre) {
+    private void agregarMarcador(LatLng pos, String nombre) {
         mMap.addMarker(new MarkerOptions()
                 .position(pos)
                 .title(nombre)
@@ -713,8 +857,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    private List<LatLng> recortarRutaBus(List<LatLng> rutaCompleta, LatLng origen, LatLng destino) {
-        if (rutaCompleta == null || rutaCompleta.isEmpty())
+    private List<LatLng> recortarRuta(List<LatLng> rutaCompleta, LatLng origen, LatLng destino) {
+        if (rutaCompleta == null || rutaCompleta.size() < 2)
             return rutaCompleta;
 
         int startIndex = 0;
@@ -723,30 +867,47 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         float minDistDestino = Float.MAX_VALUE;
         float[] result = new float[1];
 
+        // 1. Buscar el punto más cercano al origen (en toda la ruta)
         for (int i = 0; i < rutaCompleta.size(); i++) {
             LatLng p = rutaCompleta.get(i);
-            android.location.Location.distanceBetween(
-                    origen.latitude, origen.longitude, p.latitude, p.longitude, result);
+            Location.distanceBetween(origen.latitude, origen.longitude,
+                    p.latitude, p.longitude, result);
             if (result[0] < minDistOrigen) {
                 minDistOrigen = result[0];
                 startIndex = i;
             }
         }
 
+        // 2. Buscar el punto más cercano al destino (solo desde startIndex en adelante)
+        //    Asunción explícita: la ruta es unidireccional (origen → destino)
         for (int i = startIndex; i < rutaCompleta.size(); i++) {
             LatLng p = rutaCompleta.get(i);
-            android.location.Location.distanceBetween(
-                    destino.latitude, destino.longitude, p.latitude, p.longitude, result);
+            Location.distanceBetween(destino.latitude, destino.longitude,
+                    p.latitude, p.longitude, result);
             if (result[0] < minDistDestino) {
                 minDistDestino = result[0];
                 endIndex = i;
             }
         }
 
-        if (startIndex <= endIndex) {
-            return new java.util.ArrayList<>(rutaCompleta.subList(startIndex, endIndex + 1));
+        // 3. Validar que el recorte tiene sentido
+        if (startIndex > endIndex) {
+            Log.w("recortarRuta", "startIndex (" + startIndex + ") > endIndex ("
+                    + endIndex + "), devolviendo ruta completa");
+            return new ArrayList<>(rutaCompleta);
         }
-        return rutaCompleta;
+
+        List<LatLng> recortada = new ArrayList<>(
+                rutaCompleta.subList(startIndex, endIndex + 1));
+
+        // 4. (Opcional pero recomendado) Insertar origen y destino exactos
+        //    para que el trazado arranque y termine justo en los pins
+        if (!recortada.isEmpty()) {
+            recortada.set(0, origen);
+            recortada.set(recortada.size() - 1, destino);
+        }
+
+        return recortada;
     }
 
     // timeStringToSeconds se mantiene por si se necesita en el futuro
