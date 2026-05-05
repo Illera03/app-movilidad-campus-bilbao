@@ -229,7 +229,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         switch (modoTransporte) {
             case "WALK":
-                trazarRutaSimple(encodedPath, Color.BLUE, "🚶 Andando");
+                trazarRutaSimple(encodedPath, Color.BLUE, getString(R.string.route_walking));
                 break;
 
             case "BIKE":
@@ -280,15 +280,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         // Pines en las estaciones de bici
         agregarMarcadorBici(new LatLng(bikeOriLat, bikeOriLon),
-                bikeOrigenName != null ? bikeOrigenName : "Estación Origen");
+                bikeOrigenName != null ? bikeOrigenName : getString(R.string.station_origin_fallback));
         // FIX #2: ahora bikeDestLat/bikeDestLon tienen los valores correctos
         agregarMarcadorBici(new LatLng(bikeDestLat, bikeDestLon),
-                bikeDestinoName != null ? bikeDestinoName : "Estación Destino");
+                bikeDestinoName != null ? bikeDestinoName : getString(R.string.station_destination_fallback));
 
         // FIX #4: usar los nombres de estación de bici, no los de la parada de bus
-        actualizarCardDetalles("Bici - Bilbobizi",
-                bikeOrigenName != null ? bikeOrigenName : "Estación Origen",
-                bikeDestinoName != null ? bikeDestinoName : "Estación Destino");
+        actualizarCardDetalles(getString(R.string.route_bike_label),
+                bikeOrigenName != null ? bikeOrigenName : getString(R.string.station_origin_fallback),
+                bikeDestinoName != null ? bikeDestinoName : getString(R.string.station_destination_fallback));
 
         java.util.List<LatLng> total = new java.util.ArrayList<>(w1);
         total.addAll(b);
@@ -409,7 +409,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 pintarTramo(busRoute, Color.RED);
                 agregarMarcador(paradaOrigen, stopOrigenName);
                 agregarMarcador(paradaDestino, stopDestinoName);
-                actualizarCardDetalles("Línea " + route.routeShortName, stopOrigenName, stopDestinoName);
+                actualizarCardDetalles(getString(R.string.route_bus_line, route.routeShortName), stopOrigenName, stopDestinoName);
                 enfocarListaPuntos(busRoute);
             });
 
@@ -536,7 +536,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 pintarTramo(tramRoute, Color.DKGRAY);
                 agregarMarcador(paradaOrigen, stopOrigenName);
                 agregarMarcador(paradaDestino, stopDestinoName);
-                actualizarCardDetalles("Tranvía " + route.routeShortName, stopOrigenName, stopDestinoName);
+                actualizarCardDetalles(getString(R.string.route_tram_line, route.routeShortName), stopOrigenName, stopDestinoName);
                 enfocarListaPuntos(tramRoute);
             });
 
@@ -852,7 +852,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 obtenerUbicacionYDibujar();
             }
         } else {
-            Toast.makeText(this, "Permiso denegado. No verás tu posición en el mapa.",
+            Toast.makeText(this, getString(R.string.permission_denied_location),
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -908,18 +908,5 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         return recortada;
-    }
-
-    // timeStringToSeconds se mantiene por si se necesita en el futuro
-    private int timeStringToSeconds(String time) {
-        if (time == null)
-            return 0;
-        String[] parts = time.split(":");
-        if (parts.length == 3) {
-            return Integer.parseInt(parts[0]) * 3600
-                    + Integer.parseInt(parts[1]) * 60
-                    + Integer.parseInt(parts[2]);
-        }
-        return 0;
     }
 }
