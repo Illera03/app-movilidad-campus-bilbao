@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIGO Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f0f1a;
+            --bg-card: rgba(255, 255, 255, 0.04);
+            --bg-card-hover: rgba(255, 255, 255, 0.07);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --text-primary: #e8e8f0;
+            --text-secondary: #8b8ba0;
+            --accent-green: #4ade80;
+            --accent-blue: #60a5fa;
+            --accent-purple: #a78bfa;
+            --accent-orange: #fb923c;
+            --accent-pink: #f472b6;
+            --accent-cyan: #22d3ee;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background gradient blobs */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(74, 222, 128, 0.08) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -200px;
+            left: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.06) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .header h1 span {
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Stat cards row */
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            padding: 24px;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .stat-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-2px);
+        }
+        .stat-card .stat-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+        .stat-card .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+        .stat-card .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Chart grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        @media (max-width: 900px) {
+            .charts-grid { grid-template-columns: 1fr; }
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            padding: 24px;
+            transition: background 0.2s;
+        }
+        .chart-card:hover { background: var(--bg-card-hover); }
+        .chart-card h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .chart-card > canvas {
+            max-height: 280px;
+        }
+        /* Evitar que nuestros estilos interfieran con Leaflet */
+        #heatmap canvas {
+            max-height: none !important;
+        }
+        .leaflet-pane, .leaflet-tile, .leaflet-marker-icon {
+            position: absolute;
+        }
+
+        /* Recent logs table */
+        .table-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            padding: 24px;
+            overflow-x: auto;
+        }
+        .table-card h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        thead th {
+            text-align: left;
+            padding: 10px 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-card);
+            white-space: nowrap;
+        }
+        tbody td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            white-space: nowrap;
+        }
+        tbody tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .tag-walk { background: rgba(96,165,250,0.15); color: var(--accent-blue); }
+        .tag-bus  { background: rgba(251,146,60,0.15); color: var(--accent-orange); }
+        .tag-bike { background: rgba(74,222,128,0.15); color: var(--accent-green); }
+        .tag-tram { background: rgba(167,139,250,0.15); color: var(--accent-purple); }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+        .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+        .empty-state p { font-size: 15px; }
+
+        /* Loading skeleton */
+        .loading .stat-value,
+        .loading .chart-card canvas {
+            background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <div class="logo">🎓</div>
+                <div>
+                    <h1>UNIGO <span>Analytics</span></h1>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="badge"><div class="dot"></div> En vivo</div>
+                <div class="badge" id="badge-total">—  registros</div>
+            </div>
+        </div>
+
+        <!-- Stat cards -->
+        <div class="stat-cards" id="stat-cards">
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-value" id="stat-total">—</div>
+                <div class="stat-label">Total trayectos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🚌</div>
+                <div class="stat-value" id="stat-top-mode">—</div>
+                <div class="stat-label">Transporte favorito</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏫</div>
+                <div class="stat-value" id="stat-top-dest">—</div>
+                <div class="stat-label">Campus más visitado</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🌐</div>
+                <div class="stat-value" id="stat-top-lang">—</div>
+                <div class="stat-label">Idioma más usado</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>📊 Reparto por transporte</h3>
+                <canvas id="chart-transport"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>🏫 Top destinos</h3>
+                <canvas id="chart-destinations"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>📈 Evolución diaria</h3>
+                <canvas id="chart-daily"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>⏰ Distribución horaria</h3>
+                <canvas id="chart-hourly"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>🌐 Idiomas</h3>
+                <canvas id="chart-language"></canvas>
+            </div>
+            <div class="chart-card" style="grid-column: 1 / -1;">
+                <h3>🔥 Mapa de calor — Orígenes</h3>
+                <div id="heatmap" style="height: 420px; border-radius: 12px; overflow: hidden;"></div>
+            </div>
+        </div>
+
+        <!-- Recent logs -->
+        <div class="table-card">
+            <h3>🕐 Últimos registros</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha / Hora</th>
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th>Transporte</th>
+                        <th>Tiempo est.</th>
+                        <th>Idioma</th>
+                    </tr>
+                </thead>
+                <tbody id="logs-body">
+                    <tr><td colspan="6" class="empty-state"><div class="icon">📭</div><p>Sin datos todavía</p></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Campus code → human name mapping
+        const CAMPUS_NAMES = {
+            '345': 'Ing. Bilbao',
+            '350': 'Ing. Náutica',
+            '363': 'Ing. Edif II I',
+            '364': 'Ing. Edif II M',
+            '320': 'Bellas Artes',
+            '310': 'Ciencia y Tec.',
+            '323': 'CC. Sociales',
+            '324': 'Derecho',
+            '321': 'Economía (Sarriko)',
+            '351': 'Economía (Elkano)',
+            '354': 'Educación',
+            '327': 'Medicina',
+            '332': 'Medicina (Galdakao)',
+            '328': 'Medicina (Basurto)',
+            '329': 'Medicina (Cruces)',
+            '1': 'Aulas Experiencia',
+            '2': 'BBF / LEINN',
+            '3': 'AS Fabrik',
+            '4': 'Univ. Deusto'
+        };
+
+        const TRANSPORT_LABELS = {
+            'WALK': '🚶 A pie',
+            'BUS': '🚌 Autobús',
+            'BIKE': '🚲 Bicicleta',
+            'TRAM': '🚃 Tranvía'
+        };
+
+        const TRANSPORT_COLORS = {
+            'WALK': '#60a5fa',
+            'BUS': '#fb923c',
+            'BIKE': '#4ade80',
+            'TRAM': '#a78bfa'
+        };
+
+        const LANG_LABELS = { 'es': 'Castellano', 'eu': 'Euskera', 'en': 'English' };
+        const LANG_COLORS = { 'es': '#fb923c', 'eu': '#4ade80', 'en': '#60a5fa' };
+
+        const chartDefaults = {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    labels: { color: '#8b8ba0', font: { family: 'Inter', size: 12 } }
+                }
+            }
+        };
+
+        let charts = {};
+
+        async function loadDashboard() {
+            try {
+                const [statsRes, logsRes] = await Promise.all([
+                    fetch('/api/stats'),
+                    fetch('/api/logs?limit=50')
+                ]);
+
+                const stats = await statsRes.json();
+                const logs = await logsRes.json();
+
+                updateStatCards(stats);
+                renderCharts(stats);
+                renderHeatmap(logs);
+                renderTable(logs);
+            } catch (err) {
+                console.error('Error loading dashboard:', err);
+            }
+        }
+
+        function updateStatCards(stats) {
+            document.getElementById('stat-total').textContent = stats.total.toLocaleString();
+            document.getElementById('badge-total').textContent = stats.total.toLocaleString() + ' registros';
+
+            if (stats.byTransport.length > 0) {
+                document.getElementById('stat-top-mode').textContent =
+                    TRANSPORT_LABELS[stats.byTransport[0].transport_mode] || stats.byTransport[0].transport_mode;
+            }
+            if (stats.byDestination.length > 0) {
+                document.getElementById('stat-top-dest').textContent =
+                    CAMPUS_NAMES[stats.byDestination[0].destination] || stats.byDestination[0].destination;
+            }
+            if (stats.byLanguage.length > 0) {
+                document.getElementById('stat-top-lang').textContent =
+                    LANG_LABELS[stats.byLanguage[0].language] || stats.byLanguage[0].language;
+            }
+        }
+
+        function renderCharts(stats) {
+            // Destroy existing charts to avoid duplication on refresh
+            Object.values(charts).forEach(c => c.destroy());
+            charts = {};
+
+            // 1. Transport pie chart
+            charts.transport = new Chart(document.getElementById('chart-transport'), {
+                type: 'doughnut',
+                data: {
+                    labels: stats.byTransport.map(d => TRANSPORT_LABELS[d.transport_mode] || d.transport_mode),
+                    datasets: [{
+                        data: stats.byTransport.map(d => d.count),
+                        backgroundColor: stats.byTransport.map(d => TRANSPORT_COLORS[d.transport_mode] || '#666'),
+                        borderWidth: 0,
+                        spacing: 3,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    ...chartDefaults,
+                    cutout: '60%',
+                    plugins: {
+                        ...chartDefaults.plugins,
+                        legend: { position: 'bottom', labels: { color: '#8b8ba0', padding: 16, font: { family: 'Inter' } } }
+                    }
+                }
+            });
+
+            // 2. Destinations bar chart
+            charts.destinations = new Chart(document.getElementById('chart-destinations'), {
+                type: 'bar',
+                data: {
+                    labels: stats.byDestination.map(d => CAMPUS_NAMES[d.destination] || d.destination),
+                    datasets: [{
+                        label: 'Consultas',
+                        data: stats.byDestination.map(d => d.count),
+                        backgroundColor: 'rgba(74, 222, 128, 0.6)',
+                        borderColor: '#4ade80',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                        barPercentage: 0.7
+                    }]
+                },
+                options: {
+                    ...chartDefaults,
+                    indexAxis: 'y',
+                    plugins: { ...chartDefaults.plugins, legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#8b8ba0' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+                        y: { ticks: { color: '#8b8ba0', font: { size: 11 } }, grid: { display: false } }
+                    }
+                }
+            });
+
+            // 3. Daily line chart
+            charts.daily = new Chart(document.getElementById('chart-daily'), {
+                type: 'line',
+                data: {
+                    labels: stats.byDay.map(d => d.day.substring(5)),
+                    datasets: [{
+                        label: 'Trayectos',
+                        data: stats.byDay.map(d => d.count),
+                        borderColor: '#60a5fa',
+                        backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#60a5fa',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    ...chartDefaults,
+                    plugins: { ...chartDefaults.plugins, legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#8b8ba0' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+                        y: { ticks: { color: '#8b8ba0', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.04)' }, beginAtZero: true }
+                    }
+                }
+            });
+
+            // 4. Hourly bar chart
+            const hourLabels = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+            const hourData = new Array(24).fill(0);
+            stats.byHour.forEach(d => { hourData[d.hour] = d.count; });
+
+            charts.hourly = new Chart(document.getElementById('chart-hourly'), {
+                type: 'bar',
+                data: {
+                    labels: hourLabels,
+                    datasets: [{
+                        label: 'Trayectos',
+                        data: hourData,
+                        backgroundColor: 'rgba(167, 139, 250, 0.5)',
+                        borderColor: '#a78bfa',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barPercentage: 0.8
+                    }]
+                },
+                options: {
+                    ...chartDefaults,
+                    plugins: { ...chartDefaults.plugins, legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#8b8ba0', maxRotation: 0, autoSkip: true, maxTicksLimit: 12 }, grid: { display: false } },
+                        y: { ticks: { color: '#8b8ba0', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.04)' }, beginAtZero: true }
+                    }
+                }
+            });
+
+            // 5. Language doughnut
+            charts.language = new Chart(document.getElementById('chart-language'), {
+                type: 'doughnut',
+                data: {
+                    labels: stats.byLanguage.map(d => LANG_LABELS[d.language] || d.language),
+                    datasets: [{
+                        data: stats.byLanguage.map(d => d.count),
+                        backgroundColor: stats.byLanguage.map(d => LANG_COLORS[d.language] || '#666'),
+                        borderWidth: 0,
+                        spacing: 3,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    ...chartDefaults,
+                    cutout: '60%',
+                    plugins: {
+                        ...chartDefaults.plugins,
+                        legend: { position: 'bottom', labels: { color: '#8b8ba0', padding: 16, font: { family: 'Inter' } } }
+                    }
+                }
+            });
+        }
+
+        function renderTable(logs) {
+            const tbody = document.getElementById('logs-body');
+
+            if (logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="icon">📭</div><p>Sin datos todavía</p></td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = logs.map(log => {
+                const mode = log.transport_mode;
+                const tagClass = `tag-${mode.toLowerCase()}`;
+                const modeLabel = TRANSPORT_LABELS[mode] || mode;
+                const destLabel = CAMPUS_NAMES[log.destination] || log.destination;
+                const dateStr = log.timestamp.replace('T', '  ');
+                const langLabel = LANG_LABELS[log.language] || log.language;
+                const coords = `${log.origin_lat.toFixed(4)}, ${log.origin_lng.toFixed(4)}`;
+
+                return `<tr>
+                    <td>${dateStr}</td>
+                    <td>${coords}</td>
+                    <td>${destLabel}</td>
+                    <td><span class="tag ${tagClass}">${modeLabel}</span></td>
+                    <td>${log.estimated_time}</td>
+                    <td>${langLabel}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        // ── Mapa de calor ──
+        let heatmapLayer = null;
+        let leafletMap = null;
+
+        function renderHeatmap(logs) {
+            const points = logs
+                .filter(l => l.origin_lat && l.origin_lng)
+                .map(l => [l.origin_lat, l.origin_lng, 0.7]); // [lat, lng, intensity]
+
+            if (!leafletMap) {
+                leafletMap = L.map('heatmap', {
+                    zoomControl: true,
+                    attributionControl: false
+                }).setView([43.263, -2.935], 14); // Centro de Bilbao
+
+                // Tiles oscuros para coherencia con el tema
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                    maxZoom: 19
+                }).addTo(leafletMap);
+
+                // Forzar recalcular tamaño para evitar desplazamiento del canvas
+                setTimeout(() => leafletMap.invalidateSize(), 200);
+            }
+
+            if (heatmapLayer) {
+                leafletMap.removeLayer(heatmapLayer);
+            }
+
+            if (points.length > 0) {
+                heatmapLayer = L.heatLayer(points, {
+                    radius: 25,
+                    blur: 20,
+                    maxZoom: 17,
+                    max: 1.0,
+                    gradient: {
+                        0.2: '#22d3ee',
+                        0.4: '#60a5fa',
+                        0.6: '#a78bfa',
+                        0.8: '#fb923c',
+                        1.0: '#ef4444'
+                    }
+                }).addTo(leafletMap);
+            }
+        }
+
+        // Load on start + auto-refresh every 30s
+        loadDashboard();
+        setInterval(loadDashboard, 30000);
+    </script>
+</body>
+</html>

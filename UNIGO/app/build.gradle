@@ -23,6 +23,7 @@ android {
         manifestPlaceholders = [ MAPS_API_KEY: secrets.getProperty("MAPS_API_KEY", "CLAVE_NO_ENCONTRADA") ]
         
         buildConfigField("String", "EUSKALMET_PRIVATE_KEY", "\"${secrets.getProperty("EUSKALMET_PRIVATE_KEY", "").replace("\n", "").replace("\r", "")}\"")
+        buildConfigField("String", "SERVER_URL", "\"${secrets.getProperty("SERVER_URL", "http://10.0.2.2:3000")}\"")
     }
 
     buildFeatures {
@@ -54,6 +55,7 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
+    implementation libs.work.runtime
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
@@ -70,4 +72,7 @@ dependencies {
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
+
+    // WorkManager (sincronización periódica de logs de uso)
+    implementation("androidx.work:work-runtime:2.9.0")
 }

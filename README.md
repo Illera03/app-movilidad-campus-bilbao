@@ -32,3 +32,11 @@ Para que el mapa y el cálculo de rutas funcionen, es necesario configurar una c
    MAPS_API_KEY=AIzaSyA_tu_clave_real_aqui
    ```
 3. Sincroniza el proyecto en Android Studio.
+
+## Dashboard
+
+Accede al dashboard en:
+
+[http://34.68.1.253:3000/demo](http://34.68.1.253:3000/demo)
+
+

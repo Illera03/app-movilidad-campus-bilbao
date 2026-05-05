@@ -1,0 +1,12 @@
+services:
+  unigo-server:
+    build: .
+    container_name: unigo-analytics
+    ports:
+      - "3000:3000"
+    volumes:
+      - unigo-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  unigo-data:
