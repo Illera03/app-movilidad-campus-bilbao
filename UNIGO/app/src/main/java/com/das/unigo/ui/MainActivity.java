@@ -211,7 +211,11 @@ public class MainActivity extends AppCompatActivity {
             // ── Datos comunes ──
             intent.putExtra("DESTINO_LAT", destinoSeleccionado.stopLat);
             intent.putExtra("DESTINO_LNG", destinoSeleccionado.stopLon);
-            intent.putExtra("DESTINO_NOMBRE", destinoSeleccionado.stopName);
+            // Resolve localized campus name using the same pattern as the spinner
+            String resourceName = "campus_" + destinoSeleccionado.stopCode;
+            int resId = getResources().getIdentifier(resourceName, "string", getPackageName());
+            String localizedName = resId != 0 ? getString(resId) : destinoSeleccionado.stopName;
+            intent.putExtra("DESTINO_NOMBRE", localizedName);
 
             String modoTransporte = "";
             String tiempoAEnviar = "";
@@ -461,8 +465,9 @@ public class MainActivity extends AppCompatActivity {
                 ViajeOptimo viaje = db.transitDao().getMejorConexion(
                         oStop.stopId, destinoIds, activeServices, arrivalAtStopStr);
 
-                if (viaje == null)
+                if (viaje == null) {
                     continue;
+                }
 
                 float[] res2 = new float[1];
                 android.location.Location.distanceBetween(
@@ -489,14 +494,22 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("TramDebug", "shapeId=" + mejorViajeTram.shapeId);
                 Log.d("TramDebug", "origenId=" + mejorViajeTram.origenId + " destinoId=" + mejorViajeTram.destinoId);
                 int mins = bestTotalTimeSeconds / 60;
-                runOnUiThread(() -> rbTram.setText(
-                        getString(R.string.transport_tram) + " (" + mins + " mins)"));
+                runOnUiThread(() -> {
+                    rbTram.setText(
+                            getString(R.string.transport_tram) + " (" + mins + " mins)");
+                    rbTram.setEnabled(true);
+                    rbTram.setClickable(true);
+                });
                 mejorViajeTram.nombreParadaOrigen = db.transitDao().getStopById(mejorViajeTram.origenId).stopName;
                 mejorViajeTram.nombreParadaDestino = db.transitDao().getStopById(mejorViajeTram.destinoId).stopName;
                 Log.d("MainActivity", "Mejor viaje: " + mejorViajeTram);
                 Log.d("MainActivity", "Tiempo: " + mins + " mins");
             } else {
-                runOnUiThread(() -> rbTram.setText(getString(R.string.transport_tram) + " (- mins)"));
+                runOnUiThread(() -> {
+                    rbTram.setText(getString(R.string.transport_tram) + " (- mins)");
+                    rbTram.setEnabled(false);
+                    rbTram.setClickable(false);
+                });
             }
         });
     }
@@ -575,14 +588,22 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("BusDebug", "shapeId=" + mejorViajeBus.shapeId);
                 Log.d("BusDebug", "origenId=" + mejorViajeBus.origenId + " destinoId=" + mejorViajeBus.destinoId);
                 int mins = bestTotalTimeSeconds / 60;
-                runOnUiThread(() -> rbBus.setText(
-                        getString(R.string.transport_bus) + " (" + mins + " mins)"));
+                runOnUiThread(() -> {
+                    rbBus.setText(
+                            getString(R.string.transport_bus) + " (" + mins + " mins)");
+                    rbBus.setEnabled(true);
+                    rbBus.setClickable(true);
+                });
                 mejorViajeBus.nombreParadaOrigen = db.transitDao().getStopById(mejorViajeBus.origenId).stopName;
                 mejorViajeBus.nombreParadaDestino = db.transitDao().getStopById(mejorViajeBus.destinoId).stopName;
                 Log.d("MainActivity", "Mejor viaje: " + mejorViajeBus);
                 Log.d("MainActivity", "Tiempo: " + mins + " mins");
             } else {
-                runOnUiThread(() -> rbBus.setText(getString(R.string.transport_bus) + " (- mins)"));
+                runOnUiThread(() -> {
+                    rbBus.setText(getString(R.string.transport_bus) + " (- mins)");
+                    rbBus.setEnabled(false);
+                    rbBus.setClickable(false);
+                });
             }
         });
     }

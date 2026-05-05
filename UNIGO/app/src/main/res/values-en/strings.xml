@@ -52,4 +52,14 @@
     <string name="air_quality_unhealthy">Unhealthy</string>
     <string name="air_quality_very_unhealthy">Very unhealthy</string>
     <string name="air_quality_hazardous">Hazardous</string>
+    <string name="origin_label">Origin\n</string>
+
+    <!-- Route card -->
+    <string name="route_walking">🚶 Walking</string>
+    <string name="route_bike_label">Bike - Bilbobizi</string>
+    <string name="route_bus_line">Line %1$s</string>
+    <string name="route_tram_line">Tram %1$s</string>
+    <string name="station_origin_fallback">Origin Station</string>
+    <string name="station_destination_fallback">Destination Station</string>
+    <string name="permission_denied_location">Permission denied. You won\'t see your position on the map.</string>
 </resources>

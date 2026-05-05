@@ -52,4 +52,14 @@
     <string name="air_quality_unhealthy">Txarra</string>
     <string name="air_quality_very_unhealthy">Oso txarra</string>
     <string name="air_quality_hazardous">Arriskutsua</string>
+    <string name="origin_label">Jatorria\n</string>
+
+    <!-- Route card -->
+    <string name="route_walking">🚶 Oinez</string>
+    <string name="route_bike_label">Bizikleta - Bilbobizi</string>
+    <string name="route_bus_line">%1$s linea</string>
+    <string name="route_tram_line">Tranbia %1$s</string>
+    <string name="station_origin_fallback">Jatorrizko geltokia</string>
+    <string name="station_destination_fallback">Helmugako geltokia</string>
+    <string name="permission_denied_location">Baimena ukatua. Ez duzu zure kokapena mapan ikusiko.</string>
 </resources>

@@ -53,4 +53,13 @@
     <string name="air_quality_very_unhealthy">Muy mala</string>
     <string name="air_quality_hazardous">Peligrosa</string>
     <string name="origin_label">Origen\n</string>
+
+    <!-- Route card -->
+    <string name="route_walking">🚶 Andando</string>
+    <string name="route_bike_label">Bici - Bilbobizi</string>
+    <string name="route_bus_line">Línea %1$s</string>
+    <string name="route_tram_line">Tranvía %1$s</string>
+    <string name="station_origin_fallback">Estación Origen</string>
+    <string name="station_destination_fallback">Estación Destino</string>
+    <string name="permission_denied_location">Permiso denegado. No verás tu posición en el mapa.</string>
 </resources>
