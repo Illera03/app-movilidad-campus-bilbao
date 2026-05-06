@@ -538,6 +538,7 @@ public class MainActivity extends AppCompatActivity {
                 destinoIds.add(dStop.stopId);
 
             int bestTotalTimeSeconds = Integer.MAX_VALUE;
+            int bestScore = Integer.MAX_VALUE; // FIX: Variable para penalizar el exceso de caminata
 
             for (StopEntity oStop : origenStops) {
                 float[] res1 = new float[1];
@@ -548,37 +549,38 @@ public class MainActivity extends AppCompatActivity {
                 cal.setTimeInMillis(System.currentTimeMillis() + (walkSecondsToOrigen * 1000L));
                 String arrivalAtStopStr = sdfTime.format(cal.getTime());
 
-                ViajeOptimo viaje = db.transitDao().getMejorConexion(
-                        oStop.stopId, destinoIds, activeServices, arrivalAtStopStr);
+                for (StopEntity dStop : destinoStops) {
+                    ViajeOptimo viaje = db.transitDao().getMejorConexion(
+                            oStop.stopId, java.util.Collections.singletonList(dStop.stopId), activeServices, arrivalAtStopStr);
 
-                if (viaje == null) {
-                    continue;
-                }
+                    if (viaje == null) {
+                        continue;
+                    }
 
-                float[] res2 = new float[1];
-                android.location.Location.distanceBetween(
-                        viaje.destLat, viaje.destLon, destino.stopLat, destino.stopLon, res2);
-                int walkSecondsToCampus = (int) ((res2[0] * 1.5f) / 1.4f);
+                    float[] res2 = new float[1];
+                    android.location.Location.distanceBetween(
+                            viaje.destLat, viaje.destLon, destino.stopLat, destino.stopLon, res2);
+                    int walkSecondsToCampus = (int) ((res2[0] * 1.5f) / 1.4f);
 
-                int horaLlegadaDestinoTram = timeStringToSeconds(viaje.horaLlegada);
-                int horaActual = timeStringToSeconds(ahoraTime);
-                int totalSeconds = (horaLlegadaDestinoTram - horaActual) + walkSecondsToCampus;
+                    int horaLlegadaDestinoTram = timeStringToSeconds(viaje.horaLlegada);
+                    int horaActual = timeStringToSeconds(ahoraTime);
+                    int totalSeconds = (horaLlegadaDestinoTram - horaActual) + walkSecondsToCampus;
 
-                if (totalSeconds > 0 && totalSeconds < bestTotalTimeSeconds) {
-                    bestTotalTimeSeconds = totalSeconds;
-                    this.mejorViajeTram = viaje;
-                    // FIX: guardamos también la parada de origen (subida) para enviarla a
-                    // MapActivity
-                    this.mejorViajeTram.origenLat = oStop.stopLat;
-                    this.mejorViajeTram.origenLon = oStop.stopLon;
+                    // FIX: Penalizamos caminar (* 10) para evitar que el algoritmo
+                    // obligue al usuario a caminar a paradas lejanas solo para interceptar un viaje anterior.
+                    int score = totalSeconds + (walkSecondsToOrigen * 10) + (walkSecondsToCampus * 10);
+
+                    if (totalSeconds > 0 && score < bestScore) {
+                        bestScore = score;
+                        bestTotalTimeSeconds = totalSeconds;
+                        this.mejorViajeTram = viaje;
+                        this.mejorViajeTram.origenLat = oStop.stopLat;
+                        this.mejorViajeTram.origenLon = oStop.stopLon;
+                    }
                 }
             }
 
             if (this.mejorViajeTram != null) {
-                Log.d("TramDebug", "origenLat=" + mejorViajeTram.origenLat + " origenLon=" + mejorViajeTram.origenLon);
-                Log.d("TramDebug", "destLat=" + mejorViajeTram.destLat + " destLon=" + mejorViajeTram.destLon);
-                Log.d("TramDebug", "shapeId=" + mejorViajeTram.shapeId);
-                Log.d("TramDebug", "origenId=" + mejorViajeTram.origenId + " destinoId=" + mejorViajeTram.destinoId);
                 int mins = bestTotalTimeSeconds / 60;
                 String formattedTramTime = formatDuration(mins);
 
@@ -639,6 +641,7 @@ public class MainActivity extends AppCompatActivity {
                 destinoIds.add(dStop.stopId);
 
             int bestTotalTimeSeconds = Integer.MAX_VALUE;
+            int bestScore = Integer.MAX_VALUE; // FIX: Variable para penalizar el exceso de andar
 
             for (StopEntity oStop : origenStops) {
                 float[] res1 = new float[1];
@@ -649,28 +652,33 @@ public class MainActivity extends AppCompatActivity {
                 cal.setTimeInMillis(System.currentTimeMillis() + (walkSecondsToOrigen * 1000L));
                 String arrivalAtStopStr = sdfTime.format(cal.getTime());
 
-                ViajeOptimo viaje = db.transitDao().getMejorConexion(
-                        oStop.stopId, destinoIds, activeServices, arrivalAtStopStr);
+                for (StopEntity dStop : destinoStops) {
+                    ViajeOptimo viaje = db.transitDao().getMejorConexion(
+                            oStop.stopId, java.util.Collections.singletonList(dStop.stopId), activeServices, arrivalAtStopStr);
 
-                if (viaje == null)
-                    continue;
+                    if (viaje == null)
+                        continue;
 
-                float[] res2 = new float[1];
-                android.location.Location.distanceBetween(
-                        viaje.destLat, viaje.destLon, destino.stopLat, destino.stopLon, res2);
-                int walkSecondsToCampus = (int) ((res2[0] * 1.5f) / 1.4f);
+                    float[] res2 = new float[1];
+                    android.location.Location.distanceBetween(
+                            viaje.destLat, viaje.destLon, destino.stopLat, destino.stopLon, res2);
+                    int walkSecondsToCampus = (int) ((res2[0] * 1.5f) / 1.4f);
 
-                int horaLlegadaDestinoBus = timeStringToSeconds(viaje.horaLlegada);
-                int horaActual = timeStringToSeconds(ahoraTime);
-                int totalSeconds = (horaLlegadaDestinoBus - horaActual) + walkSecondsToCampus;
+                    int horaLlegadaDestinoBus = timeStringToSeconds(viaje.horaLlegada);
+                    int horaActual = timeStringToSeconds(ahoraTime);
+                    int totalSeconds = (horaLlegadaDestinoBus - horaActual) + walkSecondsToCampus;
 
-                if (totalSeconds > 0 && totalSeconds < bestTotalTimeSeconds) {
-                    bestTotalTimeSeconds = totalSeconds;
-                    this.mejorViajeBus = viaje;
-                    // FIX: guardamos también la parada de origen (subida) para enviarla a
-                    // MapActivity
-                    this.mejorViajeBus.origenLat = oStop.stopLat;
-                    this.mejorViajeBus.origenLon = oStop.stopLon;
+                    // FIX: Penalizamos caminar (* 10) para evitar que el algoritmo
+                    // obligue al usuario a caminar a paradas intermedias para interceptar transportes.
+                    int score = totalSeconds + (walkSecondsToOrigen * 10) + (walkSecondsToCampus * 10);
+
+                    if (totalSeconds > 0 && score < bestScore) {
+                        bestScore = score;
+                        bestTotalTimeSeconds = totalSeconds;
+                        this.mejorViajeBus = viaje;
+                        this.mejorViajeBus.origenLat = oStop.stopLat;
+                        this.mejorViajeBus.origenLon = oStop.stopLon;
+                    }
                 }
             }
 
