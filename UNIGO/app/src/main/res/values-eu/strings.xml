@@ -44,8 +44,8 @@
     <!-- Map info bar -->
     <string name="weather_label">Eguraldia: %1$s °C</string>
     <string name="weather_loading">Eguraldia: …</string>
-    <string name="pollution_label">Kutsadura: %1$s</string>
-    <string name="pollution_loading">Kutsadura: …</string>
+    <string name="pollution_label">Airearen kalitatea: %1$s</string>
+    <string name="pollution_loading">Airearen kalitatea: …</string>
     <string name="air_quality_good">Ona</string>
     <string name="air_quality_moderate">Ertaina</string>
     <string name="air_quality_unhealthy_sensitive">Txarra (sentikorrak)</string>
@@ -62,4 +62,8 @@
     <string name="station_origin_fallback">Jatorrizko geltokia</string>
     <string name="station_destination_fallback">Helmugako geltokia</string>
     <string name="permission_denied_location">Baimena ukatua. Ez duzu zure kokapena mapan ikusiko.</string>
+
+    <string name="time_hour_singular">ordu</string>
+    <string name="time_hour_plural">ordu</string>
+    <string name="time_minute">min</string>
 </resources>
