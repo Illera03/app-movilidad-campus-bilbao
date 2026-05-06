@@ -28,7 +28,10 @@ import androidx.core.content.ContextCompat;
 import java.util.Locale;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.text.SimpleDateFormat;
 
 import com.das.unigo.R;
 import com.das.unigo.data.TransitDatabase;
@@ -41,6 +44,15 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.maps.android.PolyUtil;
+
+import com.das.unigo.data.UsageDatabase;
+import com.das.unigo.data.entity.UsageLogEntity;
+import com.das.unigo.data.sync.SyncWorker;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -88,6 +100,17 @@ public class MainActivity extends AppCompatActivity {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         apiClient = new DirectionsApiClient();
+
+        // ── Programar sincronización periódica de logs de uso ──
+        PeriodicWorkRequest syncWork = new PeriodicWorkRequest.Builder(
+                SyncWorker.class, 24, TimeUnit.HOURS)
+                .setConstraints(new Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build())
+                .build();
+        WorkManager.getInstance(this)
+                .enqueueUniquePeriodicWork("usage_sync",
+                        ExistingPeriodicWorkPolicy.KEEP, syncWork);
 
         spinnerDest = findViewById(R.id.spinner_destination);
         spinnerLang = findViewById(R.id.spinner_language);
@@ -288,6 +311,24 @@ public class MainActivity extends AppCompatActivity {
 
             intent.putExtra("MODO_TRANSPORTE", modoTransporte);
             intent.putExtra("TIEMPO_ESTIMADO", tiempoAEnviar);
+
+            // ── Registrar el trayecto en la BD de uso ──
+            final String finalModoTransporte = modoTransporte;
+            final String finalTiempoEstimado = tiempoAEnviar;
+            Executors.newSingleThreadExecutor().execute(() -> {
+                UsageLogEntity log = new UsageLogEntity();
+                log.timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
+                        .format(new Date());
+                log.originLat = currentUserLat;
+                log.originLng = currentUserLon;
+                log.destination = destinoSeleccionado.stopCode;
+                log.transportMode = finalModoTransporte;
+                log.estimatedTime = finalTiempoEstimado;
+                log.language = getResources().getConfiguration().locale.getLanguage();
+                log.synced = false;
+                UsageDatabase.getInstance(MainActivity.this).usageLogDao().insert(log);
+                Log.d("UsageLog", "Registro guardado LOCALMENTE: " + log.transportMode + " a " + log.destination);
+            });
 
             startActivity(intent);
         });
