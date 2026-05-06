@@ -636,6 +636,22 @@ public class MainActivity extends AppCompatActivity {
             List<StopEntity> destinoStops = db.transitDao().getNearbyBusStops(
                     destino.stopLat, destino.stopLon, 0.01, 0.01);
 
+            // Ordenar por cercanía
+            java.util.Collections.sort(origenStops, (s1, s2) -> {
+                float[] r1 = new float[1]; android.location.Location.distanceBetween(latOrigen, lngOrigen, s1.stopLat, s1.stopLon, r1);
+                float[] r2 = new float[1]; android.location.Location.distanceBetween(latOrigen, lngOrigen, s2.stopLat, s2.stopLon, r2);
+                return Float.compare(r1[0], r2[0]);
+            });
+            java.util.Collections.sort(destinoStops, (s1, s2) -> {
+                float[] r1 = new float[1]; android.location.Location.distanceBetween(destino.stopLat, destino.stopLon, s1.stopLat, s1.stopLon, r1);
+                float[] r2 = new float[1]; android.location.Location.distanceBetween(destino.stopLat, destino.stopLon, s2.stopLat, s2.stopLon, r2);
+                return Float.compare(r1[0], r2[0]);
+            });
+
+            // Quedarnos solo con las 30 más cercanas para no saturar la BD
+            if (origenStops.size() > 30) origenStops = origenStops.subList(0, 30);
+            if (destinoStops.size() > 30) destinoStops = destinoStops.subList(0, 30);
+
             List<String> destinoIds = new ArrayList<>();
             for (StopEntity dStop : destinoStops)
                 destinoIds.add(dStop.stopId);
