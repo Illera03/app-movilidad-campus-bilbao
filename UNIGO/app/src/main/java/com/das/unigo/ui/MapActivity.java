@@ -407,8 +407,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             runOnUiThread(() -> {
                 pintarTramo(busRoute, Color.RED);
-                agregarMarcador(paradaOrigen, stopOrigenName);
-                agregarMarcador(paradaDestino, stopDestinoName);
+                agregarMarcadorConEstilo(paradaOrigen, stopOrigenName, R.drawable.ic_bus);
+                agregarMarcadorConEstilo(paradaDestino, stopDestinoName, R.drawable.ic_bus);
                 actualizarCardDetalles(getString(R.string.route_bus_line, route.routeShortName), stopOrigenName, stopDestinoName);
                 enfocarListaPuntos(busRoute);
             });
@@ -534,8 +534,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             runOnUiThread(() -> {
                 Log.d("TramDebug", "Dibujando tranvía: " + (tramRoute != null ? tramRoute.size() : "null") + " puntos");
                 pintarTramo(tramRoute, Color.DKGRAY);
-                agregarMarcador(paradaOrigen, stopOrigenName);
-                agregarMarcador(paradaDestino, stopDestinoName);
+                agregarMarcadorConEstilo(paradaOrigen, stopOrigenName, R.drawable.ic_tranvia);
+                agregarMarcadorConEstilo(paradaDestino, stopDestinoName, R.drawable.ic_tranvia);
                 actualizarCardDetalles(getString(R.string.route_tram_line, route.routeShortName), stopOrigenName, stopDestinoName);
                 enfocarListaPuntos(tramRoute);
             });
@@ -564,13 +564,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 total.addAll(walk2);
             enfocarListaPuntos(total);
         });
-    }
-
-    private void agregarMarcador(LatLng pos, String nombre) {
-        mMap.addMarker(new MarkerOptions()
-                .position(pos)
-                .title(nombre)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
     }
 
     private void actualizarCardDetalles(String linea, String origen, String destino) {
@@ -602,10 +595,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void agregarMarcadorDestino(LatLng destino, String nombre) {
-        mMap.addMarker(new MarkerOptions()
-                .position(destino)
-                .title(nombre)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        agregarMarcadorConEstilo(destino, nombre, R.drawable.ic_edificio);
     }
 
     private void agregarMarcadorBici(LatLng pos, String nombre) {
@@ -908,5 +898,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         return recortada;
+    }
+
+    /**
+     * Crea un marcador con un círculo gris de base y un icono personalizado escalado.
+     * Mantiene la coherencia visual con el estilo de las estaciones de bicicleta.
+     */
+    private void agregarMarcadorConEstilo(LatLng pos, String titulo, int resourceId) {
+        // 1. Dibujamos el círculo gris en el suelo (idéntico al de las bicis)
+        mMap.addCircle(new com.google.android.gms.maps.model.CircleOptions()
+                .center(pos)
+                .radius(6) // 6 metros de radio para que se vea bien
+                .fillColor(Color.argb(70, 128, 128, 128)) // Gris suave transparente
+                .strokeColor(Color.GRAY)
+                .strokeWidth(2));
+
+        // 2. Cargamos y escalamos el icono (100x100 píxeles como las bicis)
+        Bitmap b = BitmapFactory.decodeResource(getResources(), resourceId);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, 100, 100, false);
+
+        // 3. Añadimos el marcador centrado exactamente sobre el círculo
+        mMap.addMarker(new MarkerOptions()
+                .position(pos)
+                .title(titulo)
+                .icon(BitmapDescriptorFactory.fromBitmap(scaledBitmap))
+                .anchor(0.5f, 0.5f)); // Centrado total
     }
 }
