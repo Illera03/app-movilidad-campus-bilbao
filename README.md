@@ -33,10 +33,44 @@ Para que el mapa y el cálculo de rutas funcionen, es necesario configurar una c
    ```
 3. Sincroniza el proyecto en Android Studio.
 
+## Configuración de la API de Euskalmet (Tiempo y Polución)
+
+Para mostrar los datos meteorológicos y de calidad del aire en tiempo real, la aplicación utiliza la API de OpenData Euskadi (Euskalmet).
+Para obtener una clave privada, regístrate en [Euskalmet OpenData](https://opendata.euskadi.eus/api-euskalmet/-/api-de-euskalmet/)
+
+**Pasos a seguir:**
+
+1. Abre el archivo `secrets.properties` creado anteriormente.
+2. Añade las siguientes líneas con tu clave privada y correo de Euskalmet:
+   ```properties
+   EUSKALMET_PRIVATE_KEY=tu_clave_privada_aqui
+   EUSKALMET_EMAIL=tu_correo@ejemplo.com
+   ```
+3. Sincroniza el proyecto en Android Studio.
+
+## Despliegue del Servidor (Analytics Dashboard)
+
+El servidor se encarga de recibir los logs de uso de la aplicación y mostrar el dashboard de analíticas. Se puede desplegar fácilmente usando Docker.
+
+### Requisitos previos
+
+- Tener [Docker](https://www.docker.com/) instalado.
+- Definir en `secrets.properties` SERVER_URL=[IP_ADDRESS]:3000 (ip del PC donde se ejecuta el servidor)
+
+### Despliegue con Docker
+
+1. Navega a la carpeta del servidor:
+   ```bash
+   cd server
+   ```
+2. Levanta el contenedor:
+   ```bash
+   docker-compose up -d --build
+   ```
+   El servidor estará disponible en [http://localhost:3000](http://localhost:3000).
+
 ## Dashboard
 
 Accede al dashboard en:
 
 [http://34.68.1.253:3000/demo](http://34.68.1.253:3000/demo)
-
-
