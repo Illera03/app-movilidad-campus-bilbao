@@ -33,6 +33,21 @@ Para que el mapa y el cálculo de rutas funcionen, es necesario configurar una c
    ```
 3. Sincroniza el proyecto en Android Studio.
 
+## Configuración de la API de Euskalmet (Tiempo y Polución)
+
+Para mostrar los datos meteorológicos y de calidad del aire en tiempo real, la aplicación utiliza la API de OpenData Euskadi (Euskalmet).
+Para obtener una clave privada, regístrate en [Euskalmet OpenData](https://opendata.euskadi.eus/api-euskalmet/-/api-de-euskalmet/)
+
+**Pasos a seguir:**
+
+1. Abre el archivo `secrets.properties` creado anteriormente.
+2. Añade las siguientes líneas con tu clave privada y correo de Euskalmet:
+   ```properties
+   EUSKALMET_PRIVATE_KEY=tu_clave_privada_aqui
+   EUSKALMET_EMAIL=tu_correo@ejemplo.com
+   ```
+3. Sincroniza el proyecto en Android Studio.
+
 ## Dashboard
 
 Accede al dashboard en:

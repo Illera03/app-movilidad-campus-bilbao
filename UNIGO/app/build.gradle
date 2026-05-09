@@ -23,6 +23,7 @@ android {
         manifestPlaceholders = [ MAPS_API_KEY: secrets.getProperty("MAPS_API_KEY", "CLAVE_NO_ENCONTRADA") ]
         
         buildConfigField("String", "EUSKALMET_PRIVATE_KEY", "\"${secrets.getProperty("EUSKALMET_PRIVATE_KEY", "").replace("\n", "").replace("\r", "")}\"")
+        buildConfigField("String", "EUSKALMET_EMAIL", "\"${secrets.getProperty("EUSKALMET_EMAIL", "")}\"")
         buildConfigField("String", "SERVER_URL", "\"${secrets.getProperty("SERVER_URL", "http://10.0.2.2:3000")}\"")
     }
 

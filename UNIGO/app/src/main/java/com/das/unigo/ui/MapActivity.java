@@ -631,7 +631,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         new Thread(() -> {
             try {
                 String token = JwtUtils.generateEuskalmetToken(BuildConfig.EUSKALMET_PRIVATE_KEY,
-                        "gonzaloperezgo@gmail.com");
+                        BuildConfig.EUSKALMET_EMAIL);
                 if (token == null) {
                     Log.e("Weather", "No se pudo generar el token JWT");
                     return;
