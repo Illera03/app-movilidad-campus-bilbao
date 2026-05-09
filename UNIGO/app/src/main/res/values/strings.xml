@@ -44,8 +44,8 @@
     <!-- Map info bar -->
     <string name="weather_label">Tiempo: %1$s °C</string>
     <string name="weather_loading">Tiempo: …</string>
-    <string name="pollution_label">Contaminación: %1$s</string>
-    <string name="pollution_loading">Contaminación: …</string>
+    <string name="pollution_label">Calidad del aire: %1$s</string>
+    <string name="pollution_loading">Calidad del aire: …</string>
     <string name="air_quality_good">Buena</string>
     <string name="air_quality_moderate">Moderada</string>
     <string name="air_quality_unhealthy_sensitive">Mala (sensibles)</string>
@@ -62,4 +62,7 @@
     <string name="station_origin_fallback">Estación Origen</string>
     <string name="station_destination_fallback">Estación Destino</string>
     <string name="permission_denied_location">Permiso denegado. No verás tu posición en el mapa.</string>
+    <string name="time_hour_singular">hora</string>
+    <string name="time_hour_plural">horas</string>
+    <string name="time_minute">min</string>
 </resources>

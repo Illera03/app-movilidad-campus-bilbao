@@ -89,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
     private double currentUserLat, currentUserLon;
     private boolean userLocationCached = false;
 
+    // Controla si la ruta a pie es tan corta que anula las demás opciones
+    private boolean walkIsOptimal = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,6 +174,9 @@ public class MainActivity extends AppCompatActivity {
                     rbTram.setEnabled(true);
                     btnConfirmar.setVisibility(View.VISIBLE);
 
+                    // Reseteamos la bandera siempre que busquemos una nueva ruta
+                    walkIsOptimal = false;
+
                     rbWalk.setText(getString(R.string.transport_walk) + " (" + getString(R.string.calculating) + ")");
                     rbBus.setText(getString(R.string.transport_bus) + " (" + getString(R.string.calculating) + ")");
                     rbBike.setText(getString(R.string.transport_bike) + " (" + getString(R.string.calculating) + ")");
@@ -198,6 +204,8 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+
 
         spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -297,9 +305,10 @@ public class MainActivity extends AppCompatActivity {
             int startIdx = tiempoAEnviar.lastIndexOf("(");
             int endIdx = tiempoAEnviar.lastIndexOf(")");
             if (startIdx != -1 && endIdx != -1 && startIdx < endIdx) {
-                tiempoAEnviar = tiempoAEnviar.substring(startIdx + 1, endIdx);
+                // Limpiamos el sufijo " - Óptimo" si existe
+                tiempoAEnviar = tiempoAEnviar.substring(startIdx + 1, endIdx).replace(" - Óptimo", "");
             } else {
-                tiempoAEnviar = "-- mins";
+                tiempoAEnviar = "--";
             }
 
             intent.putExtra("MODO_TRANSPORTE", modoTransporte);
@@ -358,7 +367,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 CancellationTokenSource cts = new CancellationTokenSource();
                 fusedLocationClient.getCurrentLocation(
-                        Priority.PRIORITY_HIGH_ACCURACY, cts.getToken())
+                                Priority.PRIORITY_HIGH_ACCURACY, cts.getToken())
                         .addOnSuccessListener(loc -> {
                             if (loc != null) {
                                 currentUserLat = loc.getLatitude();
@@ -389,14 +398,41 @@ public class MainActivity extends AppCompatActivity {
                     new DirectionsApiClient.RouteCallback() {
                         @Override
                         public void onSuccess(List<LatLng> r, String d) {
-                            rbWalk.setText(getString(R.string.transport_walk) + " (" + d + ")");
+                            int walkMins = parseDurationToMinutes(d);
+                            String formattedWalkTime = formatDuration(walkMins);
+
+                            // Si la distancia es menor a 10 min, anulamos el resto de transportes
+                            if (walkMins > 0 && walkMins < 10) {
+                                walkIsOptimal = true;
+                                rbWalk.setText(getString(R.string.transport_walk) + " (" + formattedWalkTime + " - Óptimo)");
+
+                                rbBus.setText(getString(R.string.transport_bus) + " (Distancia corta)");
+                                rbBus.setEnabled(false);
+                                rbBus.setClickable(false);
+
+                                rbBike.setText(getString(R.string.transport_bike) + " (Distancia corta)");
+                                rbBike.setEnabled(false);
+                                rbBike.setClickable(false);
+
+                                rbTram.setText(getString(R.string.transport_tram) + " (Distancia corta)");
+                                rbTram.setEnabled(false);
+                                rbTram.setClickable(false);
+
+                                // Forzamos el salto a 'Andar' y desmarcamos lo que estuviera puesto
+                                rgTransport.check(R.id.rb_walk);
+                                radioSeleccionadoId = R.id.rb_walk;
+                            } else {
+                                walkIsOptimal = false;
+                                rbWalk.setText(getString(R.string.transport_walk) + " (" + formattedWalkTime + ")");
+                            }
+
                             encodedWalkPath = PolyUtil.encode(r);
                         }
 
                         @Override
                         public void onComplexSuccess(List<LatLng> walk1, String d1,
-                                List<LatLng> bike, String d2,
-                                List<LatLng> walk2, String d3, String totalDuration) {
+                                                     List<LatLng> bike, String d2,
+                                                     List<LatLng> walk2, String d3, String totalDuration) {
                             // No aplica para ruta simple
                         }
 
@@ -442,10 +478,17 @@ public class MainActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onComplexSuccess(List<LatLng> walk1, String d1,
-                                        List<LatLng> bike, String d2,
-                                        List<LatLng> walk2, String d3, String totalDuration) {
+                                                             List<LatLng> bike, String d2,
+                                                             List<LatLng> walk2, String d3, String totalDuration) {
+
+                                    // Si el trayecto andando era muy corto, abortamos sobrescribir UI
+                                    if (walkIsOptimal) return;
+
+                                    int bikeMins = parseDurationToMinutes(totalDuration);
+                                    String formattedBikeTime = formatDuration(bikeMins);
+
                                     rbBike.setText(getString(R.string.transport_bike)
-                                            + " (" + totalDuration + ")");
+                                            + " (" + formattedBikeTime + ")");
                                     encodedBikeWalk1 = PolyUtil.encode(walk1);
                                     encodedBikePath = PolyUtil.encode(bike);
                                     encodedBikeWalk2 = PolyUtil.encode(walk2);
@@ -453,6 +496,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onError(String errorMessage) {
+                                    if (walkIsOptimal) return;
                                     rbBike.setText(getString(R.string.transport_bike) + " (-)");
                                 }
                             });
@@ -480,7 +524,10 @@ public class MainActivity extends AppCompatActivity {
 
             List<String> activeServices = db.transitDao().getActiveServiceIds(gtfsDay, hoyDate);
             if (activeServices == null || activeServices.isEmpty()) {
-                runOnUiThread(() -> rbTram.setText(getString(R.string.transport_tram) + " (- mins)"));
+                runOnUiThread(() -> {
+                    if (walkIsOptimal) return;
+                    rbTram.setText(getString(R.string.transport_tram) + " (-)");
+                });
                 return;
             }
 
@@ -493,6 +540,7 @@ public class MainActivity extends AppCompatActivity {
                 destinoIds.add(dStop.stopId);
 
             int bestTotalTimeSeconds = Integer.MAX_VALUE;
+            int bestScore = Integer.MAX_VALUE; // FIX: Variable para penalizar el exceso de caminata
 
             for (StopEntity oStop : origenStops) {
                 float[] res1 = new float[1];
@@ -503,41 +551,44 @@ public class MainActivity extends AppCompatActivity {
                 cal.setTimeInMillis(System.currentTimeMillis() + (walkSecondsToOrigen * 1000L));
                 String arrivalAtStopStr = sdfTime.format(cal.getTime());
 
-                ViajeOptimo viaje = db.transitDao().getMejorConexion(
-                        oStop.stopId, destinoIds, activeServices, arrivalAtStopStr);
+                for (StopEntity dStop : destinoStops) {
+                    ViajeOptimo viaje = db.transitDao().getMejorConexion(
+                            oStop.stopId, java.util.Collections.singletonList(dStop.stopId), activeServices, arrivalAtStopStr);
 
-                if (viaje == null) {
-                    continue;
-                }
+                    if (viaje == null) {
+                        continue;
+                    }
 
-                float[] res2 = new float[1];
-                android.location.Location.distanceBetween(
-                        viaje.destLat, viaje.destLon, destino.stopLat, destino.stopLon, res2);
-                int walkSecondsToCampus = (int) ((res2[0] * 1.5f) / 1.4f);
+                    float[] res2 = new float[1];
+                    android.location.Location.distanceBetween(
+                            viaje.destLat, viaje.destLon, destino.stopLat, destino.stopLon, res2);
+                    int walkSecondsToCampus = (int) ((res2[0] * 1.5f) / 1.4f);
 
-                int horaLlegadaDestinoTram = timeStringToSeconds(viaje.horaLlegada);
-                int horaActual = timeStringToSeconds(ahoraTime);
-                int totalSeconds = (horaLlegadaDestinoTram - horaActual) + walkSecondsToCampus;
+                    int horaLlegadaDestinoTram = timeStringToSeconds(viaje.horaLlegada);
+                    int horaActual = timeStringToSeconds(ahoraTime);
+                    int totalSeconds = (horaLlegadaDestinoTram - horaActual) + walkSecondsToCampus;
 
-                if (totalSeconds > 0 && totalSeconds < bestTotalTimeSeconds) {
-                    bestTotalTimeSeconds = totalSeconds;
-                    this.mejorViajeTram = viaje;
-                    // FIX: guardamos también la parada de origen (subida) para enviarla a
-                    // MapActivity
-                    this.mejorViajeTram.origenLat = oStop.stopLat;
-                    this.mejorViajeTram.origenLon = oStop.stopLon;
+                    // FIX: Penalizamos caminar (* 10) para evitar que el algoritmo
+                    // obligue al usuario a caminar a paradas lejanas solo para interceptar un viaje anterior.
+                    int score = totalSeconds + (walkSecondsToOrigen * 10) + (walkSecondsToCampus * 10);
+
+                    if (totalSeconds > 0 && score < bestScore) {
+                        bestScore = score;
+                        bestTotalTimeSeconds = totalSeconds;
+                        this.mejorViajeTram = viaje;
+                        this.mejorViajeTram.origenLat = oStop.stopLat;
+                        this.mejorViajeTram.origenLon = oStop.stopLon;
+                    }
                 }
             }
 
             if (this.mejorViajeTram != null) {
-                Log.d("TramDebug", "origenLat=" + mejorViajeTram.origenLat + " origenLon=" + mejorViajeTram.origenLon);
-                Log.d("TramDebug", "destLat=" + mejorViajeTram.destLat + " destLon=" + mejorViajeTram.destLon);
-                Log.d("TramDebug", "shapeId=" + mejorViajeTram.shapeId);
-                Log.d("TramDebug", "origenId=" + mejorViajeTram.origenId + " destinoId=" + mejorViajeTram.destinoId);
                 int mins = bestTotalTimeSeconds / 60;
+                String formattedTramTime = formatDuration(mins);
+
                 runOnUiThread(() -> {
-                    rbTram.setText(
-                            getString(R.string.transport_tram) + " (" + mins + " mins)");
+                    if (walkIsOptimal) return;
+                    rbTram.setText(getString(R.string.transport_tram) + " (" + formattedTramTime + ")");
                     rbTram.setEnabled(true);
                     rbTram.setClickable(true);
                 });
@@ -547,7 +598,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Tiempo: " + mins + " mins");
             } else {
                 runOnUiThread(() -> {
-                    rbTram.setText(getString(R.string.transport_tram) + " (- mins)");
+                    if (walkIsOptimal) return;
+                    rbTram.setText(getString(R.string.transport_tram) + " (-)");
                     rbTram.setEnabled(false);
                     rbTram.setClickable(false);
                 });
@@ -575,7 +627,10 @@ public class MainActivity extends AppCompatActivity {
 
             List<String> activeServices = db.transitDao().getActiveServiceIds(gtfsDay, hoyDate);
             if (activeServices == null || activeServices.isEmpty()) {
-                runOnUiThread(() -> rbBus.setText(getString(R.string.transport_bus) + " (- mins)"));
+                runOnUiThread(() -> {
+                    if (walkIsOptimal) return;
+                    rbBus.setText(getString(R.string.transport_bus) + " (-)");
+                });
                 return;
             }
 
@@ -583,11 +638,28 @@ public class MainActivity extends AppCompatActivity {
             List<StopEntity> destinoStops = db.transitDao().getNearbyBusStops(
                     destino.stopLat, destino.stopLon, 0.01, 0.01);
 
+            // Ordenar por cercanía
+            java.util.Collections.sort(origenStops, (s1, s2) -> {
+                float[] r1 = new float[1]; android.location.Location.distanceBetween(latOrigen, lngOrigen, s1.stopLat, s1.stopLon, r1);
+                float[] r2 = new float[1]; android.location.Location.distanceBetween(latOrigen, lngOrigen, s2.stopLat, s2.stopLon, r2);
+                return Float.compare(r1[0], r2[0]);
+            });
+            java.util.Collections.sort(destinoStops, (s1, s2) -> {
+                float[] r1 = new float[1]; android.location.Location.distanceBetween(destino.stopLat, destino.stopLon, s1.stopLat, s1.stopLon, r1);
+                float[] r2 = new float[1]; android.location.Location.distanceBetween(destino.stopLat, destino.stopLon, s2.stopLat, s2.stopLon, r2);
+                return Float.compare(r1[0], r2[0]);
+            });
+
+            // Quedarnos solo con las 30 más cercanas para no saturar la BD
+            if (origenStops.size() > 30) origenStops = origenStops.subList(0, 30);
+            if (destinoStops.size() > 30) destinoStops = destinoStops.subList(0, 30);
+
             List<String> destinoIds = new ArrayList<>();
             for (StopEntity dStop : destinoStops)
                 destinoIds.add(dStop.stopId);
 
             int bestTotalTimeSeconds = Integer.MAX_VALUE;
+            int bestScore = Integer.MAX_VALUE; // FIX: Variable para penalizar el exceso de andar
 
             for (StopEntity oStop : origenStops) {
                 float[] res1 = new float[1];
@@ -598,28 +670,33 @@ public class MainActivity extends AppCompatActivity {
                 cal.setTimeInMillis(System.currentTimeMillis() + (walkSecondsToOrigen * 1000L));
                 String arrivalAtStopStr = sdfTime.format(cal.getTime());
 
-                ViajeOptimo viaje = db.transitDao().getMejorConexion(
-                        oStop.stopId, destinoIds, activeServices, arrivalAtStopStr);
+                for (StopEntity dStop : destinoStops) {
+                    ViajeOptimo viaje = db.transitDao().getMejorConexion(
+                            oStop.stopId, java.util.Collections.singletonList(dStop.stopId), activeServices, arrivalAtStopStr);
 
-                if (viaje == null)
-                    continue;
+                    if (viaje == null)
+                        continue;
 
-                float[] res2 = new float[1];
-                android.location.Location.distanceBetween(
-                        viaje.destLat, viaje.destLon, destino.stopLat, destino.stopLon, res2);
-                int walkSecondsToCampus = (int) ((res2[0] * 1.5f) / 1.4f);
+                    float[] res2 = new float[1];
+                    android.location.Location.distanceBetween(
+                            viaje.destLat, viaje.destLon, destino.stopLat, destino.stopLon, res2);
+                    int walkSecondsToCampus = (int) ((res2[0] * 1.5f) / 1.4f);
 
-                int horaLlegadaDestinoBus = timeStringToSeconds(viaje.horaLlegada);
-                int horaActual = timeStringToSeconds(ahoraTime);
-                int totalSeconds = (horaLlegadaDestinoBus - horaActual) + walkSecondsToCampus;
+                    int horaLlegadaDestinoBus = timeStringToSeconds(viaje.horaLlegada);
+                    int horaActual = timeStringToSeconds(ahoraTime);
+                    int totalSeconds = (horaLlegadaDestinoBus - horaActual) + walkSecondsToCampus;
 
-                if (totalSeconds > 0 && totalSeconds < bestTotalTimeSeconds) {
-                    bestTotalTimeSeconds = totalSeconds;
-                    this.mejorViajeBus = viaje;
-                    // FIX: guardamos también la parada de origen (subida) para enviarla a
-                    // MapActivity
-                    this.mejorViajeBus.origenLat = oStop.stopLat;
-                    this.mejorViajeBus.origenLon = oStop.stopLon;
+                    // FIX: Penalizamos caminar (* 10) para evitar que el algoritmo
+                    // obligue al usuario a caminar a paradas intermedias para interceptar transportes.
+                    int score = totalSeconds + (walkSecondsToOrigen * 10) + (walkSecondsToCampus * 10);
+
+                    if (totalSeconds > 0 && score < bestScore) {
+                        bestScore = score;
+                        bestTotalTimeSeconds = totalSeconds;
+                        this.mejorViajeBus = viaje;
+                        this.mejorViajeBus.origenLat = oStop.stopLat;
+                        this.mejorViajeBus.origenLon = oStop.stopLon;
+                    }
                 }
             }
 
@@ -628,10 +705,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("BusDebug", "destLat=" + mejorViajeBus.destLat + " destLon=" + mejorViajeBus.destLon);
                 Log.d("BusDebug", "shapeId=" + mejorViajeBus.shapeId);
                 Log.d("BusDebug", "origenId=" + mejorViajeBus.origenId + " destinoId=" + mejorViajeBus.destinoId);
+
                 int mins = bestTotalTimeSeconds / 60;
+                String formattedBusTime = formatDuration(mins);
+
                 runOnUiThread(() -> {
-                    rbBus.setText(
-                            getString(R.string.transport_bus) + " (" + mins + " mins)");
+                    if (walkIsOptimal) return;
+                    rbBus.setText(getString(R.string.transport_bus) + " (" + formattedBusTime + ")");
                     rbBus.setEnabled(true);
                     rbBus.setClickable(true);
                 });
@@ -641,12 +721,60 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Tiempo: " + mins + " mins");
             } else {
                 runOnUiThread(() -> {
-                    rbBus.setText(getString(R.string.transport_bus) + " (- mins)");
+                    if (walkIsOptimal) return;
+                    rbBus.setText(getString(R.string.transport_bus) + " (-)");
                     rbBus.setEnabled(false);
                     rbBus.setClickable(false);
                 });
             }
         });
+    }
+
+    /**
+     * Convierte los minutos a un String localizado utilizando los recursos strings.xml
+     * que cambian automáticamente según el idioma de la app.
+     */
+    private String formatDuration(int totalMins) {
+        if (totalMins <= 0) return "-";
+
+        int hours = totalMins / 60;
+        int minutes = totalMins % 60;
+
+        String hStr = (hours == 1) ? getString(R.string.time_hour_singular) : getString(R.string.time_hour_plural);
+        String mStr = getString(R.string.time_minute);
+
+        if (hours > 0) {
+            if (minutes > 0) {
+                return hours + " " + hStr + " " + minutes + " " + mStr;
+            } else {
+                return hours + " " + hStr;
+            }
+        } else {
+            return minutes + " " + mStr;
+        }
+    }
+
+    /**
+     * Utilidad para extraer matemáticamente el número de minutos del string de Google Maps
+     * evitando problemas con idiomas (ej. extrae el 17 tanto de "17 mins" como de "17 minutos")
+     */
+    private int parseDurationToMinutes(String durationText) {
+        if (durationText == null) return 0;
+        int totalMins = 0;
+
+        // Buscamos las horas
+        java.util.regex.Matcher hMatcher = java.util.regex.Pattern.compile("(\\d+)\\s*(h|hour|hora)").matcher(durationText.toLowerCase());
+        if (hMatcher.find()) {
+            totalMins += Integer.parseInt(hMatcher.group(1)) * 60;
+        }
+
+        // Buscamos los minutos
+        java.util.regex.Matcher mMatcher = java.util.regex.Pattern.compile("(\\d+)\\s*(m|min|minute|minuto)").matcher(durationText.toLowerCase());
+        if (mMatcher.find()) {
+            totalMins += Integer.parseInt(mMatcher.group(1));
+        }
+
+        return totalMins;
     }
 
     private int timeStringToSeconds(String time) {
@@ -677,7 +805,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE && grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -711,4 +839,5 @@ public class MainActivity extends AppCompatActivity {
             position = 2;
         spinnerLang.setSelection(position);
     }
+
 }
