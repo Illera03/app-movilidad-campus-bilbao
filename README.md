@@ -48,10 +48,29 @@ Para obtener una clave privada, regístrate en [Euskalmet OpenData](https://open
    ```
 3. Sincroniza el proyecto en Android Studio.
 
+## Despliegue del Servidor (Analytics Dashboard)
+
+El servidor se encarga de recibir los logs de uso de la aplicación y mostrar el dashboard de analíticas. Se puede desplegar fácilmente usando Docker.
+
+### Requisitos previos
+
+- Tener [Docker](https://www.docker.com/) instalado.
+- Definir en `secrets.properties` SERVER_URL=[IP_ADDRESS]:3000 (ip del PC donde se ejecuta el servidor)
+
+### Despliegue con Docker
+
+1. Navega a la carpeta del servidor:
+   ```bash
+   cd server
+   ```
+2. Levanta el contenedor:
+   ```bash
+   docker-compose up -d --build
+   ```
+   El servidor estará disponible en [http://localhost:3000](http://localhost:3000).
+
 ## Dashboard
 
 Accede al dashboard en:
 
 [http://34.68.1.253:3000/demo](http://34.68.1.253:3000/demo)
-
-
