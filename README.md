@@ -71,6 +71,10 @@ El servidor se encarga de recibir los logs de uso de la aplicación y mostrar el
 
 ## Dashboard
 
-Accede al dashboard en:
+Con el fin de visualizar el uso de la aplicación, se ha implementado un sitio web que integra un panel de control con diversas métricas estadísticas. Dichos datos se refrescan íntegramente cada 24 horas y el servicio se encuentra actualmente en funcionamiento en una instancia del servidor.
 
+Puedes consultar el dashboard a través del siguiente enlace:
+[http://34.68.1.253:3000/](http://34.68.1.253:3000/)
+
+Además se proporciona otra instancia con mayor número de datos (sintéticos) para visualizar mejor la utilidad de la página:
 [http://34.68.1.253:3000/demo](http://34.68.1.253:3000/demo)
