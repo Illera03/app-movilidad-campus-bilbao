@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                     rbWalk.setEnabled(true);
                     rbBus.setEnabled(true);
                     rbBike.setEnabled(true);
+                    rbBike.setClickable(true);
                     rbTram.setEnabled(true);
                     btnConfirmar.setVisibility(View.VISIBLE);
 
