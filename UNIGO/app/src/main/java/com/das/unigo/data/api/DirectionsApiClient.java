@@ -25,8 +25,8 @@ public class DirectionsApiClient {
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     public interface RouteCallback {
-        void onSuccess(List<LatLng> routeDecoded, String duration);
-        void onComplexSuccess(List<LatLng> walk1, String d1, List<LatLng> bike, String d2, List<LatLng> walk2, String d3, String totalDuration);
+        void onSuccess(List<LatLng> routeDecoded, String duration, int durationSeconds);
+        void onComplexSuccess(List<LatLng> walk1, String d1, int s1, List<LatLng> bike, String d2, int s2, List<LatLng> walk2, String d3, int s3, String totalDuration, int totalSeconds);
         void onError(String errorMessage);
     }
 
@@ -48,10 +48,10 @@ public class DirectionsApiClient {
                     String totalDuration = Math.round((float) totalSeconds / 60) + " min";
 
                     mainHandler.post(() -> callback.onComplexSuccess(
-                            r1.path, r1.durationText,
-                            r2.path, r2.durationText,
-                            r3.path, r3.durationText,
-                            totalDuration));
+                            r1.path, r1.durationText, r1.durationSeconds,
+                            r2.path, r2.durationText, r2.durationSeconds,
+                            r3.path, r3.durationText, r3.durationSeconds,
+                            totalDuration, totalSeconds));
                 } else {
                     mainHandler.post(() -> callback.onError("Error al calcular la ruta multimodal"));
                 }
@@ -69,9 +69,9 @@ public class DirectionsApiClient {
             try {
                 RouteSyncRes result = fetchRouteSync(latOrigen, lngOrigen, latDest, lngDest, mode, apiKey);
                 if (result.success) {
-                    mainHandler.post(() -> callback.onSuccess(result.path, result.durationText));
+                    mainHandler.post(() -> callback.onSuccess(result.path, result.durationText, result.durationSeconds));
                 } else {
-                    mainHandler.post(() -> callback.onError("No se encontraron rutas"));
+                    mainHandler.post(() -> callback.onError(result.errorMessage != null ? result.errorMessage : "No se encontraron rutas"));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -87,47 +87,68 @@ public class DirectionsApiClient {
         List<LatLng> path = new ArrayList<>();
         int durationSeconds = 0;
         String durationText = "";
+        String errorMessage = null;
     }
 
     /**
      * Realiza una petición HTTP síncrona a la API de Directions.
+     * Validamos el campo "status" devuelto por Google y establecemos timeouts
+     * para no bloquear el hilo indefinidamente.
      */
     private RouteSyncRes fetchRouteSync(double lat1, double lng1, double lat2, double lng2, String mode, String apiKey) throws Exception {
         RouteSyncRes res = new RouteSyncRes();
         String urlString = "https://maps.googleapis.com/maps/api/directions/json" +
                 "?origin=" + lat1 + "," + lng1 +
                 "&destination=" + lat2 + "," + lng2 +
-                "&mode=" + mode + "&key=" + apiKey;
+                "&mode=" + mode + "&language=es" +
+                "&key=" + apiKey;
 
         URL url = new URL(urlString);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
+        conn.setConnectTimeout(10000);
+        conn.setReadTimeout(20000);
 
-        if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) response.append(line);
+        try {
+            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) response.append(line);
 
-            JSONObject jsonObject = new JSONObject(response.toString());
-            JSONArray routes = jsonObject.getJSONArray("routes");
+                JSONObject jsonObject = new JSONObject(response.toString());
 
-            if (routes.length() > 0) {
-                JSONObject firstLeg = routes.getJSONObject(0).getJSONArray("legs").getJSONObject(0);
-
-                // Capturamos tanto los segundos como el texto (ej: "12 min")
-                res.durationSeconds = firstLeg.getJSONObject("duration").getInt("value");
-                res.durationText = firstLeg.getJSONObject("duration").getString("text");
-
-                JSONArray steps = firstLeg.getJSONArray("steps");
-                for (int i = 0; i < steps.length(); i++) {
-                    String poly = steps.getJSONObject(i).getJSONObject("polyline").getString("points");
-                    res.path.addAll(PolylineDecoder.decode(poly));
+                // Comprobar el estado devuelto por la API de Google
+                String status = jsonObject.optString("status", "");
+                if (!"OK".equals(status)) {
+                    res.errorMessage = "Google Directions status: " + status;
+                    return res;
                 }
-                res.success = true;
+
+                JSONArray routes = jsonObject.getJSONArray("routes");
+
+                if (routes.length() > 0) {
+                    JSONObject firstLeg = routes.getJSONObject(0).getJSONArray("legs").getJSONObject(0);
+
+                    // Capturamos tanto los segundos como el texto (ej: "12 min")
+                    res.durationSeconds = firstLeg.getJSONObject("duration").getInt("value");
+                    res.durationText = firstLeg.getJSONObject("duration").getString("text");
+
+                    JSONArray steps = firstLeg.getJSONArray("steps");
+                    for (int i = 0; i < steps.length(); i++) {
+                        String poly = steps.getJSONObject(i).getJSONObject("polyline").getString("points");
+                        res.path.addAll(PolylineDecoder.decode(poly));
+                    }
+                    res.success = true;
+                } else {
+                    res.errorMessage = "Sin rutas en la respuesta";
+                }
+            } else {
+                res.errorMessage = "HTTP " + conn.getResponseCode();
             }
+        } finally {
+            conn.disconnect();
         }
-        conn.disconnect();
         return res;
     }
 }

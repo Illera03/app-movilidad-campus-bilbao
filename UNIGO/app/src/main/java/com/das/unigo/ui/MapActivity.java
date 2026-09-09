@@ -332,7 +332,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             DirectionsApiClient.RouteCallback callbackW1 = new DirectionsApiClient.RouteCallback() {
                 @Override
-                public void onSuccess(List<LatLng> route, String duration) {
+                public void onSuccess(List<LatLng> route, String duration, int durationSeconds) {
                     walkRoutes[0] = route;
                     if (pendingCalls.decrementAndGet() == 0)
                         dibujarTodo(walkRoutes[0], busRoute, walkRoutes[1],
@@ -340,8 +340,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
 
                 @Override
-                public void onComplexSuccess(List<LatLng> w1, String d1, List<LatLng> b,
-                        String d2, List<LatLng> w2, String d3, String total) {
+                public void onComplexSuccess(List<LatLng> w1, String d1, int s1, List<LatLng> b,
+                        String d2, int s2, List<LatLng> w2, String d3, int s3, String total, int totalSeconds) {
                 }
 
                 @Override
@@ -357,7 +357,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             DirectionsApiClient.RouteCallback callbackW2 = new DirectionsApiClient.RouteCallback() {
                 @Override
-                public void onSuccess(List<LatLng> route, String duration) {
+                public void onSuccess(List<LatLng> route, String duration, int durationSeconds) {
                     walkRoutes[1] = route;
                     if (pendingCalls.decrementAndGet() == 0)
                         dibujarTodo(walkRoutes[0], busRoute, walkRoutes[1],
@@ -365,8 +365,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
 
                 @Override
-                public void onComplexSuccess(List<LatLng> w1, String d1, List<LatLng> b,
-                        String d2, List<LatLng> w2, String d3, String total) {
+                public void onComplexSuccess(List<LatLng> w1, String d1, int s1, List<LatLng> b,
+                        String d2, int s2, List<LatLng> w2, String d3, int s3, String total, int totalSeconds) {
                 }
 
                 @Override
@@ -458,7 +458,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             DirectionsApiClient.RouteCallback callbackW1 = new DirectionsApiClient.RouteCallback() {
                 @Override
-                public void onSuccess(List<LatLng> route, String duration) {
+                public void onSuccess(List<LatLng> route, String duration, int durationSeconds) {
                     walkRoutes[0] = route;
                     if (pendingCalls.decrementAndGet() == 0)
                         dibujarTodo(walkRoutes[0], tramRoute, walkRoutes[1],
@@ -466,8 +466,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
 
                 @Override
-                public void onComplexSuccess(List<LatLng> w1, String d1, List<LatLng> b,
-                        String d2, List<LatLng> w2, String d3, String total) {
+                public void onComplexSuccess(List<LatLng> w1, String d1, int s1, List<LatLng> b,
+                        String d2, int s2, List<LatLng> w2, String d3, int s3, String total, int totalSeconds) {
                 }
 
                 @Override
@@ -483,7 +483,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             DirectionsApiClient.RouteCallback callbackW2 = new DirectionsApiClient.RouteCallback() {
                 @Override
-                public void onSuccess(List<LatLng> route, String duration) {
+                public void onSuccess(List<LatLng> route, String duration, int durationSeconds) {
                     walkRoutes[1] = route;
                     if (pendingCalls.decrementAndGet() == 0)
                         dibujarTodo(walkRoutes[0], tramRoute, walkRoutes[1],
@@ -491,8 +491,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
 
                 @Override
-                public void onComplexSuccess(List<LatLng> w1, String d1, List<LatLng> b,
-                        String d2, List<LatLng> w2, String d3, String total) {
+                public void onComplexSuccess(List<LatLng> w1, String d1, int s1, List<LatLng> b,
+                        String d2, int s2, List<LatLng> w2, String d3, int s3, String total, int totalSeconds) {
                 }
 
                 @Override
