@@ -46,6 +46,7 @@
     <string name="weather_loading">Eguraldia: …</string>
     <string name="pollution_label">Airearen kalitatea: %1$s</string>
     <string name="pollution_loading">Airearen kalitatea: …</string>
+    <string name="pollution_no_data">Airearen kalitatea: daturik gabe</string>
     <string name="air_quality_good">Ona</string>
     <string name="air_quality_moderate">Ertaina</string>
     <string name="air_quality_unhealthy_sensitive">Txarra (sentikorrak)</string>

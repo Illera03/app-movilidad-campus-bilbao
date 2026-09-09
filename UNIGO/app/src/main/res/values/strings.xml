@@ -46,6 +46,7 @@
     <string name="weather_loading">Tiempo: …</string>
     <string name="pollution_label">Calidad del aire: %1$s</string>
     <string name="pollution_loading">Calidad del aire: …</string>
+    <string name="pollution_no_data">Calidad del aire: sin datos</string>
     <string name="air_quality_good">Buena</string>
     <string name="air_quality_moderate">Moderada</string>
     <string name="air_quality_unhealthy_sensitive">Mala (sensibles)</string>
