@@ -398,8 +398,8 @@ public class MainActivity extends AppCompatActivity {
                     "walking", apiKey,
                     new DirectionsApiClient.RouteCallback() {
                         @Override
-                        public void onSuccess(List<LatLng> r, String d) {
-                            int walkMins = parseDurationToMinutes(d);
+                        public void onSuccess(List<LatLng> r, String d, int durationSeconds) {
+                            int walkMins = (int) Math.ceil(durationSeconds / 60.0);
                             String formattedWalkTime = formatDuration(walkMins);
 
                             // Si la distancia es menor a 10 min, anulamos el resto de transportes
@@ -431,9 +431,10 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onComplexSuccess(List<LatLng> walk1, String d1,
-                                                     List<LatLng> bike, String d2,
-                                                     List<LatLng> walk2, String d3, String totalDuration) {
+                        public void onComplexSuccess(List<LatLng> walk1, String d1, int s1,
+                                                     List<LatLng> bike, String d2, int s2,
+                                                     List<LatLng> walk2, String d3, int s3,
+                                                     String totalDuration, int totalSeconds) {
                             // No aplica para ruta simple
                         }
 
@@ -474,18 +475,19 @@ public class MainActivity extends AppCompatActivity {
                             apiKey,
                             new DirectionsApiClient.RouteCallback() {
                                 @Override
-                                public void onSuccess(List<LatLng> routeDecoded, String duration) {
+                                public void onSuccess(List<LatLng> routeDecoded, String duration, int durationSeconds) {
                                 }
 
                                 @Override
-                                public void onComplexSuccess(List<LatLng> walk1, String d1,
-                                                             List<LatLng> bike, String d2,
-                                                             List<LatLng> walk2, String d3, String totalDuration) {
+                                public void onComplexSuccess(List<LatLng> walk1, String d1, int s1,
+                                                             List<LatLng> bike, String d2, int s2,
+                                                             List<LatLng> walk2, String d3, int s3,
+                                                             String totalDuration, int totalSeconds) {
 
                                     // Si el trayecto andando era muy corto, abortamos sobrescribir UI
                                     if (walkIsOptimal) return;
 
-                                    int bikeMins = parseDurationToMinutes(totalDuration);
+                                    int bikeMins = (int) Math.ceil(totalSeconds / 60.0);
                                     String formattedBikeTime = formatDuration(bikeMins);
 
                                     rbBike.setText(getString(R.string.transport_bike)
@@ -753,29 +755,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return minutes + " " + mStr;
         }
-    }
-
-    /**
-     * Utilidad para extraer matemáticamente el número de minutos del string de Google Maps
-     * evitando problemas con idiomas (ej. extrae el 17 tanto de "17 mins" como de "17 minutos")
-     */
-    private int parseDurationToMinutes(String durationText) {
-        if (durationText == null) return 0;
-        int totalMins = 0;
-
-        // Buscamos las horas
-        java.util.regex.Matcher hMatcher = java.util.regex.Pattern.compile("(\\d+)\\s*(h|hour|hora)").matcher(durationText.toLowerCase());
-        if (hMatcher.find()) {
-            totalMins += Integer.parseInt(hMatcher.group(1)) * 60;
-        }
-
-        // Buscamos los minutos
-        java.util.regex.Matcher mMatcher = java.util.regex.Pattern.compile("(\\d+)\\s*(m|min|minute|minuto)").matcher(durationText.toLowerCase());
-        if (mMatcher.find()) {
-            totalMins += Integer.parseInt(mMatcher.group(1));
-        }
-
-        return totalMins;
     }
 
     private int timeStringToSeconds(String time) {
