@@ -668,39 +668,58 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                 java.util.Calendar cal = java.util.Calendar.getInstance();
-                cal.add(java.util.Calendar.DAY_OF_YEAR, -1);
-                String yesterday = sdf.format(cal.getTime());
-                cal.add(java.util.Calendar.DAY_OF_YEAR, 2);
-                String tomorrow = sdf.format(cal.getTime());
+
+                // La API de Euskadi publica los datos diarios con varios días de
+                // retraso, así que consultamos un rango amplio hacia el pasado y
+                // tomamos la medición más reciente disponible en ese rango.
+                cal.add(java.util.Calendar.DAY_OF_YEAR, -14);
+                String start = sdf.format(cal.getTime());
+                cal.add(java.util.Calendar.DAY_OF_YEAR, 15);
+                String end = sdf.format(cal.getTime());
 
                 String aqiUrl = "https://api.euskadi.eus/air-quality/measurements/daily/counties/48/municipalities/020/from/"
-                        + yesterday + "/to/" + tomorrow;
+                        + start + "/to/" + end;
                 Log.d("AirQuality", "URL: " + aqiUrl);
 
                 String json = httpGet(aqiUrl);
                 JSONArray rootArray = new JSONArray(json);
 
                 if (rootArray.length() > 0) {
-                    JSONObject dayEntry = rootArray.getJSONObject(rootArray.length() - 1);
-                    JSONArray stations = dayEntry.getJSONArray("station");
+                    // Elegir la entrada con la fecha más reciente (las fechas vienen
+                    // en formato ISO y son comparables lexicográficamente).
+                    JSONObject dayEntry = rootArray.getJSONObject(0);
+                    String newestDate = dayEntry.optString("date", "");
+                    for (int i = 1; i < rootArray.length(); i++) {
+                        JSONObject candidate = rootArray.getJSONObject(i);
+                        String candidateDate = candidate.optString("date", "");
+                        if (candidateDate.compareTo(newestDate) > 0) {
+                            newestDate = candidateDate;
+                            dayEntry = candidate;
+                        }
+                    }
+
+                    JSONArray stations = dayEntry.optJSONArray("station");
 
                     double pm25 = -1;
                     double pm10 = -1;
 
-                    for (int i = 0; i < stations.length(); i++) {
-                        JSONObject station = stations.getJSONObject(i);
-                        JSONArray measurements = station.getJSONArray("measurements");
-                        for (int j = 0; j < measurements.length(); j++) {
-                            JSONObject m = measurements.getJSONObject(j);
-                            String name = m.getString("name");
-                            double value = m.getDouble("value");
-                            if ("PM2,5".equals(name) && value > 0 && pm25 < 0)
-                                pm25 = value;
-                            if ("PM10".equals(name) && value > 0 && pm10 < 0)
-                                pm10 = value;
+                    if (stations != null) {
+                        for (int i = 0; i < stations.length(); i++) {
+                            JSONObject station = stations.getJSONObject(i);
+                            JSONArray measurements = station.optJSONArray("measurements");
+                            if (measurements == null) continue;
+                            for (int j = 0; j < measurements.length(); j++) {
+                                JSONObject m = measurements.getJSONObject(j);
+                                String name = m.optString("name", "");
+                                double value = m.optDouble("value", 0);
+                                if ("PM2,5".equals(name) && value > 0 && pm25 < 0)
+                                    pm25 = value;
+                                if ("PM10".equals(name) && value > 0 && pm10 < 0)
+                                    pm10 = value;
+                            }
+                            if (pm25 > 0)
+                                break;
                         }
-                        if (pm25 > 0)
-                            break;
                     }
 
                     String qualityLabel;
@@ -721,9 +740,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         tvPollution.setText(label);
                         tvPollutionIcon.setText(emoji);
                     });
+                } else {
+                    // Sin datos disponibles en el rango consultado
+                    runOnUiThread(() -> {
+                        tvPollution.setText(getString(R.string.pollution_no_data));
+                        tvPollutionIcon.setText("❓");
+                    });
                 }
             } catch (Exception e) {
                 Log.e("AirQuality", "Error al obtener calidad del aire", e);
+                runOnUiThread(() -> {
+                    tvPollution.setText(getString(R.string.pollution_no_data));
+                    tvPollutionIcon.setText("❓");
+                });
             }
         }).start();
     }
